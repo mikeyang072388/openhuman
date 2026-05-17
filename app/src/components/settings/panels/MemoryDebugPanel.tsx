@@ -95,7 +95,9 @@ const MemoryDebugPanel = () => {
   const handleDelete = useCallback(
     async (doc: MemoryDebugDocument) => {
       const confirmed = window.confirm(
-        `Delete document "${doc.documentId}" in namespace "${doc.namespace}"?`
+        t('memoryDebug.confirmDeleteDocument')
+          .replace('{id}', doc.documentId)
+          .replace('{ns}', doc.namespace)
       );
       if (!confirmed) return;
 
@@ -149,7 +151,7 @@ const MemoryDebugPanel = () => {
     if (!ns) return;
 
     const confirmed = window.confirm(
-      `This will permanently delete ALL documents in namespace "${ns}". Continue?`
+      t('memoryDebug.confirmClearNamespace').replace('{ns}', ns)
     );
     if (!confirmed) return;
 
@@ -183,20 +185,20 @@ const MemoryDebugPanel = () => {
       <div className="p-4 space-y-4">
         {/* Documents */}
         <section className="space-y-2">
-          <h3 className="text-sm font-semibold text-stone-900">Documents</h3>
+          <h3 className="text-sm font-semibold text-stone-900">{t('memoryDebug.documents')}</h3>
           <div className="flex gap-2">
             <input
               value={documentsNamespaceFilter}
               onChange={e => setDocumentsNamespaceFilter(e.target.value)}
               className="flex-1 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-700 placeholder:text-stone-400"
-              placeholder="Filter by namespace..."
+              placeholder={t('memoryDebug.filterByNamespace')}
             />
             <button
               type="button"
               onClick={() => void loadDocuments()}
               disabled={documentsLoading}
               className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50">
-              {documentsLoading ? '...' : 'Refresh'}
+              {documentsLoading ? t('common.loading') : t('memoryDebug.refresh')}
             </button>
           </div>
           {documentsError && (
@@ -205,7 +207,7 @@ const MemoryDebugPanel = () => {
             </div>
           )}
           {documents.length === 0 && !documentsLoading ? (
-            <p className="text-xs text-stone-400">No documents found.</p>
+            <p className="text-xs text-stone-400">{t('memoryDebug.noDocuments')}</p>
           ) : (
             <div className="space-y-1">
               {documents.map(doc => (
@@ -224,14 +226,14 @@ const MemoryDebugPanel = () => {
                     disabled={Boolean(deleteLoadingId)}
                     onClick={() => void handleDelete(doc)}
                     className="shrink-0 rounded border border-stone-200 px-2 py-1 text-[10px] text-stone-500 hover:bg-stone-100 disabled:opacity-50">
-                    {deleteLoadingId === doc.documentId ? '...' : 'Delete'}
+                    {deleteLoadingId === doc.documentId ? t('common.loading') : t('common.delete')}
                   </button>
                 </div>
               ))}
             </div>
           )}
           <details className="text-xs">
-            <summary className="cursor-pointer text-stone-400">Raw response</summary>
+            <summary className="cursor-pointer text-stone-400">{t('memoryDebug.rawResponse')}</summary>
             <pre className="mt-1 max-h-32 overflow-auto rounded-lg border border-stone-200 bg-stone-950 p-2 text-[11px] text-stone-100 whitespace-pre-wrap break-words">
               {JSON.stringify(documentsRaw, null, 2)}
             </pre>
@@ -241,13 +243,13 @@ const MemoryDebugPanel = () => {
         {/* Namespaces */}
         <section className="space-y-2">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-stone-900">Namespaces</h3>
+            <h3 className="text-sm font-semibold text-stone-900">{t('memoryDebug.namespaces')}</h3>
             <button
               type="button"
               onClick={() => void loadNamespaces()}
               disabled={namespacesLoading}
               className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1 text-[11px] font-medium text-stone-600 hover:bg-stone-100 disabled:opacity-50">
-              {namespacesLoading ? '...' : 'Refresh'}
+              {namespacesLoading ? t('common.loading') : t('memoryDebug.refresh')}
             </button>
           </div>
           {namespacesError && (
@@ -266,25 +268,25 @@ const MemoryDebugPanel = () => {
               ))}
             </div>
           ) : (
-            <p className="text-xs text-stone-400">No namespaces found.</p>
+            <p className="text-xs text-stone-400">{t('memoryDebug.noNamespaces')}</p>
           )}
         </section>
 
         {/* Query & Recall */}
         <section className="space-y-2">
-          <h3 className="text-sm font-semibold text-stone-900">Query & Recall</h3>
+          <h3 className="text-sm font-semibold text-stone-900">{t('memoryDebug.queryRecall')}</h3>
           <input
             value={namespaceInput}
             onChange={e => setNamespaceInput(e.target.value)}
             className="w-full rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-700 placeholder:text-stone-400"
-            placeholder="Namespace"
+            placeholder={t('memoryDebug.namespace')}
           />
           <textarea
             value={queryInput}
             onChange={e => setQueryInput(e.target.value)}
             className="w-full rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-700 placeholder:text-stone-400"
             rows={2}
-            placeholder="Query text..."
+            placeholder={t('memoryDebug.queryText')}
           />
           <div className="flex items-center gap-2">
             <input
@@ -293,30 +295,38 @@ const MemoryDebugPanel = () => {
               className="w-16 rounded-lg border border-stone-200 bg-stone-50 px-2 py-1.5 text-xs text-stone-700"
               placeholder="10"
             />
-            <span className="text-[11px] text-stone-400">max chunks</span>
+            <span className="text-[11px] text-stone-400">{t('memoryDebug.maxChunks')}</span>
             <div className="flex-1" />
             <button
               type="button"
               onClick={() => void handleQuery()}
               disabled={queryLoading || !namespaceInput.trim() || !queryInput.trim()}
               className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50">
-              {queryLoading ? '...' : 'Query'}
+              {queryLoading ? t('common.loading') : t('memoryDebug.query')}
             </button>
             <button
               type="button"
               onClick={() => void handleRecall()}
               disabled={recallLoading || !namespaceInput.trim()}
               className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50">
-              {recallLoading ? '...' : 'Recall'}
+              {recallLoading ? t('common.loading') : t('memoryDebug.recall')}
             </button>
           </div>
-          {queryError && <div className="text-xs text-coral-600">Query: {queryError}</div>}
-          {recallError && <div className="text-xs text-coral-600">Recall: {recallError}</div>}
+          {queryError && (
+            <div className="text-xs text-coral-600">
+              {t('memoryDebug.queryErrorPrefix')} {queryError}
+            </div>
+          )}
+          {recallError && (
+            <div className="text-xs text-coral-600">
+              {t('memoryDebug.recallErrorPrefix')} {recallError}
+            </div>
+          )}
           {(queryResult || recallResult) && (
             <div className="space-y-2">
               {queryResult && (
                 <div>
-                  <div className="text-[11px] font-medium text-stone-500 mb-1">Query result</div>
+                  <div className="text-[11px] font-medium text-stone-500 mb-1">{t('memoryDebug.queryResult')}</div>
                   <MemoryTextWithEntities
                     text={queryResult.text ?? ''}
                     entities={queryResult.entities}
@@ -326,7 +336,7 @@ const MemoryDebugPanel = () => {
               )}
               {recallResult && (
                 <div>
-                  <div className="text-[11px] font-medium text-stone-500 mb-1">Recall result</div>
+                  <div className="text-[11px] font-medium text-stone-500 mb-1">{t('memoryDebug.recallResult')}</div>
                   <MemoryTextWithEntities
                     text={recallResult.text ?? ''}
                     entities={recallResult.entities}
@@ -340,17 +350,15 @@ const MemoryDebugPanel = () => {
 
         {/* Clear Namespace */}
         <section className="space-y-2">
-          <h3 className="text-sm font-semibold text-stone-900">Clear Namespace</h3>
-          <p className="text-xs text-stone-400">
-            Permanently delete all documents within a namespace.
-          </p>
+          <h3 className="text-sm font-semibold text-stone-900">{t('memoryDebug.clearNamespace')}</h3>
+          <p className="text-xs text-stone-400">{t('memoryDebug.clearNamespaceDesc')}</p>
           <div className="flex gap-2">
             {namespaces.length > 0 ? (
               <select
                 value={clearNamespaceInput}
                 onChange={e => setClearNamespaceInput(e.target.value)}
                 className="flex-1 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-700">
-                <option value="">Select namespace...</option>
+                <option value="">{t('memoryDebug.selectNamespace')}</option>
                 {namespaces.map(ns => (
                   <option key={ns} value={ns}>
                     {ns}
@@ -362,7 +370,7 @@ const MemoryDebugPanel = () => {
                 value={clearNamespaceInput}
                 onChange={e => setClearNamespaceInput(e.target.value)}
                 className="flex-1 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-xs text-stone-700 placeholder:text-stone-400"
-                placeholder="e.g. skill:gmail:user@example.com"
+                placeholder={t('memoryDebug.namespacePlaceholder')}
               />
             )}
             <button
@@ -370,7 +378,7 @@ const MemoryDebugPanel = () => {
               onClick={() => void handleClearNamespace()}
               disabled={clearLoading || !clearNamespaceInput.trim()}
               className="rounded-lg border border-coral-200 bg-coral-50 px-3 py-1.5 text-xs font-medium text-coral-600 hover:bg-coral-100 disabled:opacity-50">
-              {clearLoading ? '...' : 'Clear'}
+              {clearLoading ? t('common.loading') : t('memoryDebug.clear')}
             </button>
           </div>
           {clearSuccess && <div className="text-xs text-sage-600">{clearSuccess}</div>}

@@ -2,6 +2,7 @@ import debug from 'debug';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { AUTH_MODE_LABELS } from '../../lib/channels/definitions';
+import { useT } from '../../lib/i18n/I18nContext';
 import { channelConnectionsApi } from '../../services/api/channelConnectionsApi';
 import { callCoreRpc } from '../../services/coreRpcClient';
 import {
@@ -31,6 +32,7 @@ interface DiscordConfigProps {
 }
 
 const DiscordConfig = ({ definition }: DiscordConfigProps) => {
+  const { t } = useT();
   const dispatch = useAppDispatch();
   const channelConnections = useAppSelector(state => state.channelConnections);
 
@@ -139,7 +141,7 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
           upsertChannelConnection({
             channel: 'discord',
             authMode: 'managed_dm',
-            patch: { status: 'error', lastError: 'Link token expired. Please try again.' },
+            patch: { status: 'error', lastError: t('discord.linkExpired') },
           })
         );
       })();
@@ -169,7 +171,7 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
                 channel: 'discord',
                 authMode: spec.mode,
                 status: 'error',
-                lastError: `${field.label} is required`,
+                lastError: t('discord.fieldRequired').replace('{field}', field.label),
               })
             );
             return;
@@ -234,7 +236,7 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
               })
             );
           } catch {
-            setError('Channel saved. Restart the app to activate it.');
+            setError(t('discord.restartHint'));
           }
         } else {
           dispatch(
@@ -290,9 +292,9 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-medium text-stone-900">
-                  {AUTH_MODE_LABELS[spec.mode] ?? spec.mode}
+                  {t(AUTH_MODE_LABELS[spec.mode] ?? spec.mode)}
                 </p>
-                <p className="text-xs text-stone-500 mt-1">{spec.description}</p>
+                <p className="text-xs text-stone-500 mt-1">{t(spec.description)}</p>
                 {connection?.lastError && (
                   <p className="text-xs text-coral-600 mt-1">{connection.lastError}</p>
                 )}
@@ -318,7 +320,7 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
             {/* Token card — managed_dm connecting state */}
             {spec.mode === 'managed_dm' && linkToken && status === 'connecting' && (
               <div className="mt-3 rounded-lg border border-primary-200 bg-primary-50/60 p-3 space-y-2">
-                <p className="text-xs font-medium text-primary-700">Your one-time link token</p>
+                <p className="text-xs font-medium text-primary-700">{t('discord.tokenCard.title')}</p>
                 <div className="flex items-center gap-2">
                   <code className="flex-1 rounded bg-white border border-primary-200 px-2 py-1 text-xs font-mono text-stone-800 select-all break-all">
                     {linkToken}
@@ -327,15 +329,16 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
                     type="button"
                     onClick={copyToken}
                     className="shrink-0 rounded-lg border border-primary-300 px-2 py-1 text-xs font-medium text-primary-700 hover:bg-primary-100">
-                    {copied ? 'Copied!' : 'Copy'}
+                    {copied ? t('common.copied') : t('common.copy')}
                   </button>
                 </div>
                 <p className="text-xs text-stone-500">
-                  In Discord, send <code className="font-mono font-medium">!start {linkToken}</code>{' '}
-                  to the OpenHuman bot. Token expires in 5 minutes.
+                  {t('discord.tokenCard.hint')
+                    .replace('{cmd}', `!start ${linkToken}`)
+                    .replace('{minutes}', '5')}
                 </p>
                 <p className="text-xs text-amber-600 font-medium">
-                  Save this command — this token is shown only once.
+                  {t('discord.tokenCard.warning')}
                 </p>
               </div>
             )}
@@ -343,13 +346,13 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
             {/* Connected state for managed_dm — show only Disconnect */}
             {spec.mode === 'managed_dm' && status === 'connected' ? (
               <div className="mt-3 flex items-center justify-between">
-                <p className="text-xs text-sage-700 font-medium">Your Discord account is linked.</p>
+                <p className="text-xs text-sage-700 font-medium">{t('discord.linked')}</p>
                 <button
                   type="button"
                   disabled={busy}
                   onClick={() => handleDisconnect(spec.mode)}
                   className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-medium text-stone-600 hover:border-stone-300 disabled:opacity-50">
-                  Disconnect
+                  {t('discord.disconnect')}
                 </button>
               </div>
             ) : /* Connect / Disconnect buttons for all other modes and states */
@@ -361,7 +364,7 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
                     disabled={busy}
                     onClick={() => handleConnect(spec)}
                     className="rounded-lg bg-primary-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-primary-600 disabled:opacity-50">
-                    Connect
+                    {t('discord.connect')}
                   </button>
                 )}
                 <button
@@ -369,7 +372,7 @@ const DiscordConfig = ({ definition }: DiscordConfigProps) => {
                   disabled={busy || status === 'disconnected'}
                   onClick={() => handleDisconnect(spec.mode)}
                   className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-medium text-stone-600 hover:border-stone-300 disabled:opacity-50">
-                  Disconnect
+                  {t('discord.disconnect')}
                 </button>
               </div>
             ) : null}

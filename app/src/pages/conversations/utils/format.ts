@@ -1,14 +1,14 @@
-export function formatRelativeTime(dateStr: string): string {
+export function formatRelativeTime(dateStr: string, t: (key: string) => string): string {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diffMs = now - then;
-  if (diffMs < 60_000) return 'just now';
+  if (diffMs < 60_000) return t('timeFormat.justNow');
   const mins = Math.floor(diffMs / 60_000);
-  if (mins < 60) return `${mins}m ago`;
+  if (mins < 60) return t('timeFormat.minAgo').replace('{n}', String(mins));
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t('timeFormat.hrAgo').replace('{n}', String(hours));
   const days = Math.floor(hours / 24);
-  return `${days}d ago`;
+  return t('timeFormat.dayAgo').replace('{n}', String(days));
 }
 
 export function getInlineCompletionSuffix(input: string, suggestion: string): string {
@@ -134,15 +134,20 @@ export function getAgentBubbleChrome(position: AgentBubblePosition): string {
   return 'rounded-2xl rounded-tl-md rounded-bl-md';
 }
 
-export function formatResetTime(isoStr: string): string {
+export function formatResetTime(isoStr: string, t: (key: string) => string): string {
   const ms = new Date(isoStr).getTime() - Date.now();
-  if (ms <= 0) return 'now';
+  if (ms <= 0) return t('timeFormat.now');
   const mins = Math.ceil(ms / 60_000);
-  if (mins < 60) return `in ${mins}m`;
+  if (mins < 60) return t('timeFormat.inMinutes').replace('{n}', String(mins));
   const hours = Math.floor(mins / 60);
   const remMins = mins % 60;
-  if (hours < 24) return remMins > 0 ? `in ${hours}h ${remMins}m` : `in ${hours}h`;
+  if (hours < 24)
+    return remMins > 0
+      ? t('timeFormat.inHoursMinutes').replace('{n}', String(hours)).replace('{m}', String(remMins))
+      : t('timeFormat.inHours').replace('{n}', String(hours));
   const days = Math.floor(hours / 24);
   const remHours = hours % 24;
-  return remHours > 0 ? `in ${days}d ${remHours}h` : `in ${days}d`;
+  return remHours > 0
+    ? t('timeFormat.inDaysHours').replace('{n}', String(days)).replace('{h}', String(remHours))
+    : t('timeFormat.inDays').replace('{n}', String(days));
 }

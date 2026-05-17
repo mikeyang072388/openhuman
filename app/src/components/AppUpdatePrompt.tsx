@@ -16,8 +16,11 @@
 import { useCallback, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useT } from '../lib/i18n/I18nContext';
 import { useAppUpdate } from '../hooks/useAppUpdate';
 import { formatBytes } from '../utils/localAiHelpers';
+
+type TFunc = ReturnType<typeof useT>['t'];
 
 interface AppUpdatePromptProps {
   /** Override auto-check defaults (mostly for tests). */
@@ -42,14 +45,46 @@ function shouldShow(phase: ReturnType<typeof useAppUpdate>['phase']): boolean {
   );
 }
 
+function headerLabel(phase: ReturnType<typeof useAppUpdate>['phase'], t: TFunc): string {
+  switch (phase) {
+    case 'ready_to_install':
+      return t('updatePrompt.readyToInstall');
+    case 'installing':
+      return t('updatePrompt.installing');
+    case 'restarting':
+      return t('updatePrompt.restarting');
+    case 'error':
+      return t('updatePrompt.failed');
+    default:
+      return t('updatePrompt.title');
+  }
+}
+
+function progressDetail(
+  phase: ReturnType<typeof useAppUpdate>['phase'],
+  downloaded: number,
+  total: number | null,
+  percent: number | null,
+  t: TFunc
+): string {
+  if (phase === 'installing') return t('updatePrompt.installingNewVersion');
+  if (phase === 'restarting') return t('updatePrompt.relaunching');
+  if (total != null && total > 0) {
+    return `${formatBytes(downloaded)} / ${formatBytes(total)}`;
+  }
+  if (downloaded > 0) return t('updatePrompt.downloaded').replace('{bytes}', formatBytes(downloaded));
+  return percent != null ? `${percent}%` : t('updatePrompt.working');
+}
+
 const AppUpdatePrompt = (props: AppUpdatePromptProps) => {
+  const { t } = useT();
   const { phase, info, bytesDownloaded, totalBytes, error, install, download, reset } =
     useAppUpdate(props);
 
   const [dismissed, setDismissed] = useState(false);
   const [prevPhase, setPrevPhase] = useState(phase);
   const dismissedErrorRef = useRef<string | null>(null);
-  const currentErrorKey = error ?? 'Update failed. See logs for details.';
+  const currentErrorKey = error ?? t('updatePrompt.failedWithLogs');
   // Re-show on every transition INTO a visible non-error phase, or when a new
   // error differs from the one the user already dismissed this session.
   if (phase !== prevPhase) {
@@ -100,13 +135,13 @@ const AppUpdatePrompt = (props: AppUpdatePromptProps) => {
         <div className="flex items-center justify-between px-4 pt-3 pb-1">
           <div className="flex items-center gap-2">
             <UpdateIcon className="w-4 h-4 text-primary-400" />
-            <span className="text-sm font-medium text-white">{headerLabel(phase)}</span>
+            <span className="text-sm font-medium text-white">{headerLabel(phase, t)}</span>
           </div>
           {(phase === 'ready_to_install' || phase === 'error') && (
             <button
               onClick={phase === 'error' ? handleDismissError : handleLater}
               className="p-1 text-stone-500 hover:text-stone-300 transition-colors"
-              aria-label="Dismiss update notification">
+              aria-label={t('common.dismiss')}>
               <CloseIcon className="w-3.5 h-3.5" />
             </button>
           )}
@@ -118,27 +153,26 @@ const AppUpdatePrompt = (props: AppUpdatePromptProps) => {
             <>
               <p className="text-xs text-stone-300 leading-relaxed">
                 {newVersion
-                  ? `Version ${newVersion} is ready to install.`
-                  : 'A new version is ready to install.'}
+                  ? t('updatePrompt.versionReady').replace('{version}', newVersion)
+                  : t('updatePrompt.newVersionReady')}
                 {currentVersion && (
-                  <span className="text-stone-500"> Currently on {currentVersion}.</span>
+                  <span className="text-stone-500"> {t('updatePrompt.currentlyOn').replace('{version}', currentVersion)}</span>
                 )}
               </p>
-              {info?.body && <ReleaseNotes body={info.body} />}
+              {info?.body && <ReleaseNotes body={info.body} t={t} />}
               <p className="mt-2 text-[11px] text-stone-500 leading-relaxed">
-                Restarting will close any open conversations briefly. The new build launches
-                automatically.
+                {t('updatePrompt.restartWarning')}
               </p>
               <div className="mt-3 flex gap-2">
                 <button
                   onClick={handleInstall}
                   className="flex-1 px-3 py-1.5 rounded-lg bg-primary-500 hover:bg-primary-400 text-white text-xs font-medium transition-colors">
-                  Restart now
+                  {t('updatePrompt.restartNow')}
                 </button>
                 <button
                   onClick={handleLater}
                   className="px-3 py-1.5 rounded-lg border border-stone-700 text-stone-300 hover:bg-stone-800 text-xs transition-colors">
-                  Later
+                  {t('updatePrompt.later')}
                 </button>
               </div>
             </>
@@ -148,7 +182,7 @@ const AppUpdatePrompt = (props: AppUpdatePromptProps) => {
             <>
               <ProgressBar indeterminate />
               <div className="mt-2 flex items-center justify-between text-[11px] text-stone-400">
-                <span>{progressDetail(phase, bytesDownloaded, totalBytes, percent)}</span>
+                <span>{progressDetail(phase, bytesDownloaded, totalBytes, percent, t)}</span>
                 {newVersion && <span className="text-stone-500">v{newVersion}</span>}
               </div>
             </>
@@ -157,18 +191,18 @@ const AppUpdatePrompt = (props: AppUpdatePromptProps) => {
           {phase === 'error' && (
             <>
               <p className="text-xs text-coral-300 leading-relaxed">
-                {error ?? 'Something went wrong while updating.'}
+                {error ?? t('updatePrompt.somethingWentWrong')}
               </p>
               <div className="mt-3 flex gap-2">
                 <button
                   onClick={handleRetryDownload}
                   className="flex-1 px-3 py-1.5 rounded-lg bg-primary-500 hover:bg-primary-400 text-white text-xs font-medium transition-colors">
-                  Try again
+                  {t('updatePrompt.tryAgain')}
                 </button>
                 <button
                   onClick={handleDismissError}
                   className="px-3 py-1.5 rounded-lg border border-stone-700 text-stone-300 hover:bg-stone-800 text-xs transition-colors">
-                  Dismiss
+                  {t('common.dismiss')}
                 </button>
               </div>
             </>
@@ -179,36 +213,6 @@ const AppUpdatePrompt = (props: AppUpdatePromptProps) => {
     document.body
   );
 };
-
-function headerLabel(phase: ReturnType<typeof useAppUpdate>['phase']): string {
-  switch (phase) {
-    case 'ready_to_install':
-      return 'Update ready to install';
-    case 'installing':
-      return 'Installing update';
-    case 'restarting':
-      return 'Restarting…';
-    case 'error':
-      return 'Update failed';
-    default:
-      return 'Update';
-  }
-}
-
-function progressDetail(
-  phase: ReturnType<typeof useAppUpdate>['phase'],
-  downloaded: number,
-  total: number | null,
-  percent: number | null
-): string {
-  if (phase === 'installing') return 'Installing the new version…';
-  if (phase === 'restarting') return 'Relaunching the app…';
-  if (total != null && total > 0) {
-    return `${formatBytes(downloaded)} / ${formatBytes(total)}`;
-  }
-  if (downloaded > 0) return `${formatBytes(downloaded)} downloaded`;
-  return percent != null ? `${percent}%` : 'Working…';
-}
 
 const ProgressBar = ({
   indeterminate,
@@ -230,7 +234,7 @@ const ProgressBar = ({
   );
 };
 
-const ReleaseNotes = ({ body }: { body: string }) => {
+const ReleaseNotes = ({ body, t }: { body: string; t: TFunc }) => {
   const [expanded, setExpanded] = useState(false);
   const trimmed = body.trim();
   if (!trimmed) return null;
@@ -244,7 +248,7 @@ const ReleaseNotes = ({ body }: { body: string }) => {
           type="button"
           onClick={() => setExpanded(prev => !prev)}
           className="mt-1 text-[11px] text-primary-300 hover:text-primary-200 transition-colors">
-          {expanded ? 'Show less' : 'Show more'}
+          {expanded ? t('common.showLess') : t('common.showMore')}
         </button>
       )}
     </div>

@@ -135,7 +135,7 @@ describe('getComposerBlockedSendFeedback', () => {
       showLimitModal: true,
       error: {
         code: 'usage_limit_reached',
-        message: 'Usage limit reached. Upgrade or wait for reset.',
+        message: 'composerSend.usageLimitReached',
       },
     });
   });
@@ -145,8 +145,7 @@ describe('getComposerBlockedSendFeedback', () => {
       showLimitModal: false,
       error: {
         code: 'socket_disconnected',
-        message:
-          'Realtime socket is not connected — responses cannot be delivered without a client ID.',
+        message: 'composerSend.socketDisconnected',
       },
     });
   });

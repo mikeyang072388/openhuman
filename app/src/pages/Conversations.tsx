@@ -704,7 +704,7 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
         setShowLimitModal(true);
       }
       if (blockedFeedback) {
-        setSendError(chatSendError(blockedFeedback.error.code, blockedFeedback.error.message));
+        setSendError(chatSendError(blockedFeedback.error.code, t(blockedFeedback.error.message)));
       }
       return;
     }
@@ -1326,7 +1326,7 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
                   </div>
                   {/* <div className="flex items-center gap-2 mt-0.5">
                     <span className="text-[10px] text-stone-400">
-                      {formatRelativeTime(thread.lastMessageAt)}
+                      {formatRelativeTime(thread.lastMessageAt, t)}
                     </span>
                     {thread.messageCount > 0 && (
                       <span className="text-[10px] text-stone-400">
@@ -1575,7 +1575,7 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
                           })()}
                           {latestVisibleMessage?.id === msg.id && (
                             <p className="px-1 text-[10px] text-stone-400">
-                              {formatRelativeTime(msg.createdAt)}
+                              {formatRelativeTime(msg.createdAt, t)}
                             </p>
                           )}
                         </div>
@@ -1584,7 +1584,7 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
                           <BubbleMarkdown content={msg.content} tone="user" />
                           {latestVisibleMessage?.id === msg.id && (
                             <p className="mt-1 text-[10px] text-white/60">
-                              {formatRelativeTime(msg.createdAt)}
+                              {formatRelativeTime(msg.createdAt, t)}
                             </p>
                           )}
                         </div>
@@ -1862,9 +1862,9 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
                   <p className="text-xs text-coral-600 truncate">
                     {shouldShowBudgetCompletedMessage
                       ? teamUsage.cycleBudgetUsd > 0
-                        ? `${t('chat.weeklyLimitHit')}${teamUsage.cycleEndsAt ? ` ${t('chat.resets')} ${formatResetTime(teamUsage.cycleEndsAt)}.` : ''} ${t('chat.topUpToContinue')}`
+                        ? `${t('chat.weeklyLimitHit')}${teamUsage.cycleEndsAt ? ` ${t('chat.resets')} ${formatResetTime(teamUsage.cycleEndsAt, t)}.` : ''} ${t('chat.topUpToContinue')}`
                         : t('chat.budgetComplete')
-                      : `${t('chat.rateLimitReached')}${teamUsage.fiveHourResetsAt ? ` ${t('chat.resets')} ${formatResetTime(teamUsage.fiveHourResetsAt)}.` : ''}`}
+                      : `${t('chat.rateLimitReached')}${teamUsage.fiveHourResetsAt ? ` ${t('chat.resets')} ${formatResetTime(teamUsage.fiveHourResetsAt, t)}.` : ''}`}
                   </p>
                 </div>
                 {shouldShowBudgetCompletedMessage && (
@@ -1925,7 +1925,7 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
                               {(teamUsage.fiveHourCapUsd ?? 0).toFixed(2)}
                               {teamUsage.fiveHourResetsAt && (
                                 <span className="text-stone-400 ml-1">
-                                  — {t('chat.resets')} {formatResetTime(teamUsage.fiveHourResetsAt)}
+                                  — {t('chat.resets')} {formatResetTime(teamUsage.fiveHourResetsAt, t)}
                                 </span>
                               )}
                             </span>
@@ -1938,7 +1938,7 @@ const Conversations = ({ variant = 'page', composer = 'text' }: ConversationsPro
                             {(teamUsage.cycleBudgetUsd ?? 0).toFixed(2)} {t('chat.left')}
                             {teamUsage.cycleEndsAt && (
                               <span className="text-stone-400 ml-1">
-                                — {t('chat.resets')} {formatResetTime(teamUsage.cycleEndsAt)}
+                                — {t('chat.resets')} {formatResetTime(teamUsage.cycleEndsAt, t)}
                               </span>
                             )}
                           </span>

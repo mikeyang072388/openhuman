@@ -9,6 +9,7 @@
 
 import { useEffect, useState } from 'react';
 
+import { useT } from '../../lib/i18n/I18nContext';
 import {
   joinMeetingViaMascotBot,
   SERVER_OVERLOADED_MESSAGE,
@@ -56,6 +57,8 @@ export default function MeetingBotsCard({ onToast }: Props) {
 }
 
 function MeetingBotsBanner({ onClick }: { onClick: () => void }) {
+  const { t } = useT();
+
   return (
     <button
       type="button"
@@ -87,15 +90,14 @@ function MeetingBotsBanner({ onClick }: { onClick: () => void }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-semibold text-stone-900">
-              Send OpenHuman to a meeting
+              {t('meetingBots.title')}
             </h2>
             <span className="rounded-full bg-primary-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary-700">
-              New
+              {t('meetingBots.newBadge')}
             </span>
           </div>
           <p className="mt-0.5 line-clamp-1 text-[11px] leading-relaxed text-stone-600">
-            Drop a Google Meet link and OpenHuman joins as a guest, talks, listens, and waves
-            back.
+            {t('meetingBots.bannerDescription')}
           </p>
         </div>
 
@@ -115,6 +117,7 @@ interface ModalProps {
 }
 
 function MeetingBotsModal({ onClose, onToast }: ModalProps) {
+  const { t } = useT();
   const [platform, setPlatform] = useState<MascotMeetPlatform>('gmeet');
   const [meetUrl, setMeetUrl] = useState('');
   const [displayName, setDisplayName] = useState('OpenHuman');
@@ -139,7 +142,7 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
     setError(null);
     setCapacityGated(false);
     if (isComingSoon) {
-      setError(`${selected.label} support is coming soon.`);
+      setError(t('meetingBots.comingSoonPlatform').replace('{platform}', selected.label));
       return;
     }
     setSubmitting(true);
@@ -147,8 +150,8 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
       await joinMeetingViaMascotBot({ platform, meetUrl, displayName });
       onToast?.({
         type: 'success',
-        title: 'OpenHuman is joining the meeting',
-        message: 'It should appear as a participant in a few seconds.',
+        title: t('meetingBots.joiningTitle'),
+        message: t('meetingBots.joiningMessage'),
       });
       setMeetUrl('');
       onClose();
@@ -159,13 +162,13 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
         setError(message);
         onToast?.({
           type: 'error',
-          title: err.isCapacityGated ? 'OpenHuman is busy' : 'Could not start OpenHuman',
+          title: err.isCapacityGated ? t('meetingBots.busyTitle') : t('meetingBots.couldNotStart'),
           message,
         });
       } else {
-        const message = err instanceof Error ? err.message : 'Failed to start OpenHuman.';
+        const message = err instanceof Error ? err.message : t('meetingBots.failedToStart');
         setError(message);
-        onToast?.({ type: 'error', title: 'Could not start OpenHuman', message });
+        onToast?.({ type: 'error', title: t('meetingBots.couldNotStart'), message });
       }
     } finally {
       setSubmitting(false);
@@ -176,7 +179,7 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Send OpenHuman to a meeting"
+      aria-label={t('meetingBots.title')}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
       onClick={onClose}>
       <div
@@ -188,14 +191,13 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label={t('common.close')}
             className="absolute right-3 top-3 rounded-full p-1 text-stone-500 hover:bg-white/80 hover:text-stone-800">
             ✕
           </button>
-          <h2 className="text-base font-semibold text-stone-900">Send OpenHuman to a meeting</h2>
+          <h2 className="text-base font-semibold text-stone-900">{t('meetingBots.title')}</h2>
           <p className="mt-1 text-xs leading-relaxed text-stone-600">
-            OpenHuman joins as an anonymous guest, streams its video into the call, and replies
-            via the agent.
+            {t('meetingBots.modalDescription')}
           </p>
         </div>
 
@@ -217,7 +219,7 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
                       : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
                   }`}>
                   {p.label}
-                  {p.comingSoon && <span className="ml-1 opacity-70">· soon</span>}
+                  {p.comingSoon && <span className="ml-1 opacity-70">· {t('meetingBots.soon')}</span>}
                 </button>
               );
             })}
@@ -226,7 +228,7 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
           <form onSubmit={handleSubmit} className="space-y-3">
             <label className="block">
               <span className="text-[10px] font-medium uppercase tracking-wide text-stone-500">
-                Meeting link
+                {t('meetingBots.meetingLink')}
               </span>
               <input
                 type="url"
@@ -245,7 +247,7 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
 
             <label className="block">
               <span className="text-[10px] font-medium uppercase tracking-wide text-stone-500">
-                Display name
+                {t('meetingBots.displayName')}
               </span>
               <input
                 type="text"
@@ -274,17 +276,17 @@ function MeetingBotsModal({ onClose, onToast }: ModalProps) {
                 type="button"
                 onClick={onClose}
                 className="rounded-xl px-3 py-2 text-sm font-medium text-stone-600 hover:bg-stone-100">
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 type="submit"
                 disabled={submitting || isComingSoon || !meetUrl.trim()}
                 className="rounded-xl bg-primary-500 px-4 py-2 text-sm font-semibold text-white hover:bg-primary-600 disabled:cursor-not-allowed disabled:bg-stone-200 disabled:text-stone-400">
                 {isComingSoon
-                  ? `${selected.label} coming soon`
+                  ? t('meetingBots.platformComingSoon').replace('{platform}', selected.label)
                   : submitting
-                    ? 'Starting…'
-                    : `Send to ${selected.label}`}
+                    ? t('meetingBots.starting')
+                    : t('meetingBots.sendToPlatform').replace('{platform}', selected.label)}
               </button>
             </div>
           </form>

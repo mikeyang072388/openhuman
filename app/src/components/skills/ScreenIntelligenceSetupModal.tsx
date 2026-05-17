@@ -9,6 +9,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
+import { useT } from '../../lib/i18n/I18nContext';
 import { useScreenIntelligenceState } from '../../features/screen-intelligence/useScreenIntelligenceState';
 import { openhumanUpdateScreenIntelligenceSettings } from '../../utils/tauriCommands';
 
@@ -22,6 +23,8 @@ interface Props {
   initialStep?: Step;
 }
 
+type TFunc = ReturnType<typeof useT>['t'];
+
 // ─── Permission badge (reusable) ──────────────────────────────────────────────
 
 const PermissionRow = ({
@@ -29,11 +32,13 @@ const PermissionRow = ({
   value,
   onRequest,
   isRequesting,
+  t,
 }: {
   label: string;
   value: string;
   onRequest: () => void;
   isRequesting: boolean;
+  t: TFunc;
 }) => {
   const granted = value === 'granted';
   const badgeColor = granted
@@ -58,7 +63,7 @@ const PermissionRow = ({
       </div>
       {granted ? (
         <span className={`rounded-md border px-2 py-0.5 text-[10px] uppercase tracking-wide ${badgeColor}`}>
-          Granted
+          {t('screenIntelligence.setup.granted')}
         </span>
       ) : (
         <button
@@ -66,7 +71,7 @@ const PermissionRow = ({
           disabled={isRequesting}
           onClick={onRequest}
           className="rounded-lg border border-primary-300 bg-primary-50 px-2.5 py-1 text-[11px] font-medium text-primary-700 hover:bg-primary-100 disabled:opacity-50 transition-colors">
-          {isRequesting ? 'Opening...' : 'Grant'}
+          {isRequesting ? t('screenIntelligence.setup.opening') : t('screenIntelligence.setup.grant')}
         </button>
       )}
     </div>
@@ -76,6 +81,7 @@ const PermissionRow = ({
 // ─── Modal ────────────────────────────────────────────────────────────────────
 
 export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: Props) {
+  const { t } = useT();
   const navigate = useNavigate();
   const {
     status,
@@ -136,7 +142,7 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
       await refreshStatus();
       setStep('success');
     } catch (error) {
-      setEnableError(error instanceof Error ? error.message : 'Failed to enable Screen Intelligence');
+      setEnableError(error instanceof Error ? error.message : t('screenIntelligence.setup.failedToEnable'));
     } finally {
       setIsEnabling(false);
     }
@@ -166,11 +172,11 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5h18v12H3zM8 21h8m-4-4v4" />
                 </svg>
               </div>
-              <h2 id="si-setup-title" className="text-sm font-semibold text-stone-900">Screen Intelligence</h2>
+              <h2 id="si-setup-title" className="text-sm font-semibold text-stone-900">{t('screenIntelligence.title')}</h2>
             </div>
             <button
               type="button"
-              aria-label="Close"
+              aria-label={t('common.close')}
               onClick={onClose}
               className="w-7 h-7 rounded-lg flex items-center justify-center text-stone-400 hover:text-stone-600 hover:bg-stone-100 transition-colors">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,13 +186,13 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
           </div>
           <div className="px-5 py-6 space-y-4">
             <p className="text-sm text-stone-600 leading-relaxed">
-              Screen Intelligence is currently available on macOS only.
+              {t('screenIntelligence.setup.macosOnly')}
             </p>
             <button
               type="button"
               onClick={onClose}
               className="w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-100 transition-colors">
-              Close
+              {t('common.close')}
             </button>
           </div>
         </div>
@@ -215,11 +221,11 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
               </svg>
             </div>
             <div>
-              <h2 id="si-setup-title" className="text-sm font-semibold text-stone-900">Screen Intelligence</h2>
+              <h2 id="si-setup-title" className="text-sm font-semibold text-stone-900">{t('screenIntelligence.title')}</h2>
               <p className="text-xs text-stone-500">
-                {step === 'permissions' && 'Grant permissions'}
-                {step === 'enable' && 'Enable the skill'}
-                {step === 'success' && 'Ready to go'}
+                {step === 'permissions' && t('screenIntelligence.setup.grantPermissions')}
+                {step === 'enable' && t('screenIntelligence.setup.enableSkill')}
+                {step === 'success' && t('screenIntelligence.setup.readyToGo')}
               </p>
             </div>
           </div>
@@ -239,36 +245,39 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
           {step === 'permissions' && (
             <div className="space-y-3">
               <p className="text-xs text-stone-500 leading-relaxed">
-                Screen Intelligence needs macOS permissions to capture your screen and provide context to your agent.
+                {t('screenIntelligence.setup.permissionsDescription')}
               </p>
 
               <div className="space-y-2">
                 <PermissionRow
-                  label="Screen Recording"
+                  label={t('screenIntelligence.setup.permScreenRecording')}
                   value={status?.permissions.screen_recording ?? 'unknown'}
                   onRequest={() => void requestPermission('screen_recording')}
                   isRequesting={isRequestingPermissions}
+                  t={t}
                 />
                 <PermissionRow
-                  label="Accessibility"
+                  label={t('screenIntelligence.setup.permAccessibility')}
                   value={status?.permissions.accessibility ?? 'unknown'}
                   onRequest={() => void requestPermission('accessibility')}
                   isRequesting={isRequestingPermissions}
+                  t={t}
                 />
                 <PermissionRow
-                  label="Input Monitoring"
+                  label={t('screenIntelligence.setup.permInputMonitoring')}
                   value={status?.permissions.input_monitoring ?? 'unknown'}
                   onRequest={() => void requestPermission('input_monitoring')}
                   isRequesting={isRequestingPermissions}
+                  t={t}
                 />
               </div>
 
               {anyDenied && (
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-700 leading-relaxed">
-                  <p>After granting permissions in System Settings, click below to restart and pick up the changes.</p>
+                  <p>{t('screenIntelligence.setup.restartHint')}</p>
                   {status?.permission_check_process_path && (
                     <p className="mt-1 opacity-75 text-[10px]">
-                      macOS applies privacy to:{' '}
+                      {t('screenIntelligence.setup.macosPrivacyTo')}{' '}
                       <span className="font-mono break-all text-stone-600">
                         {status.permission_check_process_path}
                       </span>
@@ -296,7 +305,7 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
                     onClick={() => void refreshPermissionsWithRestart()}
                     disabled={isRestartingCore}
                     className="flex-1 rounded-xl border border-amber-300 bg-amber-50 px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-100 disabled:opacity-50 transition-colors">
-                    {isRestartingCore ? 'Restarting...' : 'Restart & Refresh'}
+                    {isRestartingCore ? t('screenIntelligence.setup.restarting') : t('screenIntelligence.setup.restartAndRefresh')}
                   </button>
                 ) : (
                   <button
@@ -304,7 +313,7 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
                     onClick={() => void refreshStatus()}
                     disabled={isRestartingCore}
                     className="flex-1 rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-100 disabled:opacity-50 transition-colors">
-                    Refresh Status
+                    {t('screenIntelligence.setup.refreshStatus')}
                   </button>
                 )}
               </div>
@@ -318,24 +327,24 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
                 <svg className="w-4 h-4 text-sage-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
-                <span className="text-xs text-sage-700">All permissions granted</span>
+                <span className="text-xs text-sage-700">{t('screenIntelligence.setup.allPermissionsGranted')}</span>
               </div>
 
               <p className="text-xs text-stone-500 leading-relaxed">
-                Enable Screen Intelligence to continuously capture what's on your screen and feed useful context into your agent's memory.
+                {t('screenIntelligence.setup.enableDescription')}
               </p>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5">
-                  <span className="text-sm text-stone-700">Capture mode</span>
-                  <span className="text-xs text-stone-500">All windows (configurable later)</span>
+                  <span className="text-sm text-stone-700">{t('screenIntelligence.setup.captureMode')}</span>
+                  <span className="text-xs text-stone-500">{t('screenIntelligence.setup.allWindowsConfigurableLater')}</span>
                 </div>
                 <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5">
-                  <span className="text-sm text-stone-700">Vision model</span>
-                  <span className="text-xs text-stone-500">Enabled</span>
+                  <span className="text-sm text-stone-700">{t('screenIntelligence.setup.visionModel')}</span>
+                  <span className="text-xs text-stone-500">{t('screenIntelligence.setup.enabled')}</span>
                 </div>
                 <div className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5">
-                  <span className="text-sm text-stone-700">Panic hotkey</span>
+                  <span className="text-sm text-stone-700">{t('screenIntelligence.setup.panicHotkey')}</span>
                   <span className="text-xs font-mono text-stone-500">{status?.session.panic_hotkey ?? 'Cmd+Shift+.'}</span>
                 </div>
               </div>
@@ -351,7 +360,7 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
                 onClick={() => void handleEnable()}
                 disabled={isEnabling}
                 className="w-full rounded-xl bg-primary-500 px-4 py-2.5 text-sm font-medium text-white hover:bg-primary-600 disabled:opacity-50 transition-colors">
-                {isEnabling ? 'Enabling...' : 'Enable Screen Intelligence'}
+                {isEnabling ? t('screenIntelligence.setup.enabling') : t('screenIntelligence.setup.enableButton')}
               </button>
             </div>
           )}
@@ -366,9 +375,9 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold text-stone-900">Screen Intelligence is Enabled</h3>
+                <h3 className="text-sm font-semibold text-stone-900">{t('screenIntelligence.setup.active')}</h3>
                 <p className="mt-1 text-xs text-stone-500 leading-relaxed">
-                  Screen Intelligence is now enabled. Start a session from the settings panel to begin capturing screen context for your agent.
+                  {t('screenIntelligence.setup.activeDescription')}
                 </p>
               </div>
 
@@ -377,13 +386,13 @@ export default function ScreenIntelligenceSetupModal({ onClose, initialStep }: P
                   type="button"
                   onClick={handleGoToSettings}
                   className="w-full rounded-xl border border-primary-200 bg-primary-50 px-4 py-2.5 text-sm font-medium text-primary-700 hover:bg-primary-100 transition-colors">
-                  Advanced Settings
+                  {t('screenIntelligence.setup.advancedSettings')}
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
                   className="w-full rounded-xl border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm font-medium text-stone-600 hover:bg-stone-100 transition-colors">
-                  Done
+                  {t('screenIntelligence.setup.done')}
                 </button>
               </div>
             </div>

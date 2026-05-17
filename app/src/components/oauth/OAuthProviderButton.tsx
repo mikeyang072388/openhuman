@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { useT } from '../../lib/i18n/I18nContext';
 import { getBackendUrl } from '../../services/backendUrl';
 import { getDeepLinkAuthState } from '../../store/deepLinkAuthState';
 import type { OAuthProviderConfig } from '../../types/oauth';
@@ -19,12 +20,15 @@ interface OAuthProviderButtonProps {
 // redirect fails so the `openhuman://` deep link never fires.
 const OAUTH_LOADING_TIMEOUT_MS = 90_000;
 
-const getOAuthStartupFailureMessage = (provider: OAuthProviderConfig): string => {
+const getOAuthStartupFailureMessage = (
+  provider: OAuthProviderConfig,
+  t: (key: string) => string,
+): string => {
   if (provider.id === 'twitter') {
-    return 'Twitter/X sign-in could not start. Check that the Twitter OAuth app callback URL, client ID/secret, and requested scopes match the OpenHuman backend, then try again.';
+    return t('oauth.twitterStartupFailed');
   }
 
-  return `${provider.name} sign-in could not start. Please try again.`;
+  return t('oauth.signInStartupFailed').replace('{provider}', provider.name);
 };
 
 const summarizeOAuthStartupError = (error: unknown): string => {
@@ -47,6 +51,7 @@ const OAuthProviderButton = ({
   disabled: externalDisabled = false,
   onClickOverride,
 }: OAuthProviderButtonProps) => {
+  const { t } = useT();
   const [isLoading, setIsLoading] = useState(false);
   const [startupError, setStartupError] = useState<string | null>(null);
 
@@ -132,7 +137,7 @@ const OAuthProviderButton = ({
         window.location.href = loginUrl;
       }
     } catch (error) {
-      const message = getOAuthStartupFailureMessage(provider);
+      const message = getOAuthStartupFailureMessage(provider, t);
       console.error(`[oauth-button][${provider.id}] OAuth startup failed`, {
         provider: provider.id,
         providerName: provider.name,
@@ -158,7 +163,7 @@ const OAuthProviderButton = ({
         ) : (
           <IconComponent className="w-5 h-5" />
         )}
-        <span className={provider.textColor}>{isLoading ? 'Connecting...' : provider.name}</span>
+        <span className={provider.textColor}>{isLoading ? t('oauth.connecting') : provider.name}</span>
       </button>
       {startupError ? (
         <p role="alert" className="mt-2 text-xs leading-5 text-red-600">

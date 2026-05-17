@@ -1,5 +1,7 @@
+import { useT } from '../../lib/i18n/I18nContext';
 import PillTabBar from '../PillTabBar';
 import type { SkillCategory } from './skillCategories';
+import { SKILL_CATEGORY_LABELS } from './skillCategories';
 import {
   skillCategoryChipClassName,
   SkillCategoryIcon,
@@ -13,9 +15,13 @@ interface SkillCategoryFilterProps {
 }
 
 const SkillCategoryFilter = ({ categories, selected, onChange }: SkillCategoryFilterProps) => {
+  const { t } = useT();
   return (
     <PillTabBar
-      items={categories.map(category => ({ label: category, value: category }))}
+      items={categories.map(category => ({
+        label: t(SKILL_CATEGORY_LABELS[category]),
+        value: category,
+      }))}
       selected={selected}
       onChange={onChange}
       renderItem={(item, active) => (

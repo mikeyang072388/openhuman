@@ -149,13 +149,15 @@ const TeamMembersPanel = () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                 />
               </svg>
-              Refreshing members...
+              {t('team.refreshingMembers')}
             </div>
           )}
 
           {/* Member count */}
           <p className="text-xs text-stone-500 px-1">
-            {members.length} member{members.length !== 1 ? 's' : ''}
+            {members.length === 1
+              ? t('team.oneMember').replace('{n}', String(members.length))
+              : t('team.manyMembers').replace('{n}', String(members.length))}
           </p>
 
           {/* Full loading state - only when loading and no existing data */}
@@ -176,7 +178,7 @@ const TeamMembersPanel = () => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                 />
               </svg>
-              <span className="ml-3 text-sm text-stone-500">Loading members...</span>
+              <span className="ml-3 text-sm text-stone-500">{t('team.loadingMembers')}</span>
             </div>
           ) : (
             <div className="space-y-2">
@@ -197,7 +199,7 @@ const TeamMembersPanel = () => {
                           {displayName(member)}
                         </span>
                         {isCurrentUser(member) && (
-                          <span className="text-[10px] text-stone-500">(You)</span>
+                          <span className="text-[10px] text-stone-500">{t('team.you')}</span>
                         )}
                       </div>
                       {member.user.username && (
@@ -233,7 +235,7 @@ const TeamMembersPanel = () => {
                         onClick={() => handleRemoveMember(member)}
                         disabled={removingId === member._id}
                         className="p-1 rounded-lg text-stone-500 hover:text-coral-400 hover:bg-coral-500/10 transition-colors disabled:opacity-50"
-                        aria-label={`Remove ${displayName(member)}`}>
+                        aria-label={t('team.removeMemberAria').replace('{name}', displayName(member))}>
                         <svg
                           className="w-4 h-4"
                           fill="none"
@@ -254,7 +256,7 @@ const TeamMembersPanel = () => {
 
               {members.length === 0 && !isLoadingMembers && (
                 <div className="text-center py-8">
-                  <p className="text-sm text-stone-500">No members found</p>
+                  <p className="text-sm text-stone-500">{t('team.noMembersFound')}</p>
                 </div>
               )}
             </div>
@@ -264,7 +266,7 @@ const TeamMembersPanel = () => {
           {memberToRemove && (
             <div className="fixed inset-0 bg-stone-900/50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-6 w-full max-w-md border border-stone-200">
-                <h3 className="text-sm font-semibold text-stone-900 mb-4">Remove Team Member</h3>
+                <h3 className="text-sm font-semibold text-stone-900 mb-4">{t('team.removeMemberTitle')}</h3>
 
                 {error && (
                   <div className="rounded-xl bg-coral-500/10 border border-coral-500/20 p-3 mb-4">
@@ -275,12 +277,10 @@ const TeamMembersPanel = () => {
                 <div className="space-y-4">
                   <div className="text-sm text-stone-400">
                     <p>
-                      Are you sure you want to remove{' '}
-                      <strong className="text-stone-900">{displayName(memberToRemove)}</strong> from
-                      the team?
+                      {t('team.removeMemberConfirm').replace('{name}', displayName(memberToRemove))}
                     </p>
                     <p className="mt-2 text-coral-400">
-                      They will lose access to the team and all team resources.
+                      {t('team.removeMemberWarning')}
                     </p>
                   </div>
 
@@ -289,13 +289,13 @@ const TeamMembersPanel = () => {
                       onClick={() => setMemberToRemove(null)}
                       disabled={removingId === memberToRemove._id}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors disabled:opacity-50">
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       onClick={confirmRemoveMember}
                       disabled={removingId === memberToRemove._id}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-coral-500 hover:bg-coral-600 text-white transition-colors disabled:opacity-50">
-                      {removingId === memberToRemove._id ? 'Removing...' : 'Remove Member'}
+                      {removingId === memberToRemove._id ? t('team.removing') : t('team.removeMemberAction')}
                     </button>
                   </div>
                 </div>
@@ -307,7 +307,7 @@ const TeamMembersPanel = () => {
           {roleChangeConfirmation && (
             <div className="fixed inset-0 bg-stone-900/50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-6 w-full max-w-md border border-stone-200">
-                <h3 className="text-sm font-semibold text-stone-900 mb-4">Change Member Role</h3>
+                <h3 className="text-sm font-semibold text-stone-900 mb-4">{t('team.changeRoleTitle')}</h3>
 
                 {error && (
                   <div className="rounded-xl bg-coral-500/10 border border-coral-500/20 p-3 mb-4">
@@ -318,30 +318,19 @@ const TeamMembersPanel = () => {
                 <div className="space-y-4">
                   <div className="text-sm text-stone-400">
                     <p>
-                      Change{' '}
-                      <strong className="text-stone-900 font-semibold">
-                        {displayName(roleChangeConfirmation.member)}
-                      </strong>
-                      's role from{' '}
-                      <span className="text-amber-400 font-medium">
-                        {roleChangeConfirmation.oldRole}
-                      </span>{' '}
-                      to{' '}
-                      <span className="text-primary-400 font-medium">
-                        {roleChangeConfirmation.newRole}
-                      </span>
-                      ?
+                      {t('team.changeRoleConfirm')
+                        .replace('{name}', displayName(roleChangeConfirmation.member))
+                        .replace('{oldRole}', roleChangeConfirmation.oldRole)
+                        .replace('{newRole}', roleChangeConfirmation.newRole)}
                     </p>
                     {roleChangeConfirmation.newRole === 'ADMIN' && (
                       <p className="mt-2 text-amber-400">
-                        This will grant them full admin permissions including the ability to manage
-                        team members.
+                        {t('team.changeRoleAdminWarning')}
                       </p>
                     )}
                     {roleChangeConfirmation.oldRole === 'ADMIN' && (
                       <p className="mt-2 text-coral-400">
-                        This will remove their admin permissions and they will no longer be able to
-                        manage the team.
+                        {t('team.changeRoleDemoteWarning')}
                       </p>
                     )}
                   </div>
@@ -351,15 +340,15 @@ const TeamMembersPanel = () => {
                       onClick={() => setRoleChangeConfirmation(null)}
                       disabled={changingRoleId === roleChangeConfirmation.member._id}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-stone-700/50 hover:bg-stone-700 text-stone-300 transition-colors disabled:opacity-50">
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       onClick={confirmChangeRole}
                       disabled={changingRoleId === roleChangeConfirmation.member._id}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-primary-500 hover:bg-primary-600 text-white transition-colors disabled:opacity-50">
                       {changingRoleId === roleChangeConfirmation.member._id
-                        ? 'Changing...'
-                        : 'Change Role'}
+                        ? t('team.changing')
+                        : t('team.changeRoleAction')}
                     </button>
                   </div>
                 </div>

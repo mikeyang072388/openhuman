@@ -119,7 +119,11 @@ const Mnemonic = () => {
     const n = filledWords.length;
 
     if (!BIP39_IMPORT_LENGTHS.includes(n as (typeof BIP39_IMPORT_LENGTHS)[number])) {
-      setError(`Recovery phrase must be ${BIP39_IMPORT_LENGTHS.join(', ')} words (you have ${n}).`);
+      setError(
+        t('mnemonic.invalidWordCount')
+          .replace('{expected}', BIP39_IMPORT_LENGTHS.join(', '))
+          .replace('{actual}', String(n)),
+      );
       setImportValid(false);
       return false;
     }
@@ -128,7 +132,7 @@ const Mnemonic = () => {
     setImportValid(isValid);
 
     if (!isValid) {
-      setError('Invalid recovery phrase. Please check your words and try again.');
+      setError(t('mnemonic.invalidPhrase'));
       return false;
     }
 
@@ -158,7 +162,7 @@ const Mnemonic = () => {
       }
 
       if (!user?._id) {
-        const msg = 'User not loaded. Please sign in again or refresh the page.';
+        const msg = t('mnemonic.userNotLoaded');
         setError(msg);
         console.error('[Mnemonic] Cannot save encryption key: user not loaded');
         return;
@@ -170,7 +174,7 @@ const Mnemonic = () => {
       });
       navigate('/home');
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong. Please try again.');
+      setError(e instanceof Error ? e.message : t('mnemonic.somethingWentWrong'));
     } finally {
       setLoading(false);
     }
@@ -193,11 +197,9 @@ const Mnemonic = () => {
           {mode === 'generate' ? (
             <>
               <div className="text-center mb-4">
-                <h1 className="text-xl font-bold mb-2">Your Recovery Phrase</h1>
+                <h1 className="text-xl font-bold mb-2">{t('mnemonic.generateTitle')}</h1>
                 <p className="opacity-70 text-sm">
-                  Write down these {MNEMONIC_GENERATE_WORD_COUNT} words in order and store them
-                  somewhere safe. This phrase unlocks your local encryption key and your EVM, BTC,
-                  Solana, and Tron wallet identities, and can never be recovered if lost.
+                  {t('mnemonic.generateDescription').replace('{count}', String(MNEMONIC_GENERATE_WORD_COUNT))}
                 </p>
               </div>
 
@@ -231,7 +233,7 @@ const Mnemonic = () => {
                       strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    <span className="text-sage-600">Copied to Clipboard</span>
+                    <span className="text-sage-600">{t('mnemonic.copiedToClipboard')}</span>
                   </>
                 ) : (
                   <>
@@ -247,7 +249,7 @@ const Mnemonic = () => {
                         d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
                       />
                     </svg>
-                    <span>Copy to Clipboard</span>
+                    <span>{t('mnemonic.copyToClipboard')}</span>
                   </>
                 )}
               </button>
@@ -268,14 +270,14 @@ const Mnemonic = () => {
                   className="mt-0.5 w-4 h-4 rounded border-stone-300 text-primary-500 focus:ring-primary-500"
                 />
                 <span className="text-sm text-stone-600">
-                  I saved this phrase and consent to using it for local wallet setup on this device
+                  {t('mnemonic.consentSavedOnDevice')}
                 </span>
               </label>
             </>
           ) : (
             <>
               <div className="text-center mb-4">
-                <h1 className="text-xl font-bold mb-2">Import Recovery Phrase</h1>
+                <h1 className="text-xl font-bold mb-2">{t('mnemonic.importTitle')}</h1>
                 <p className="opacity-70 text-sm">{t('mnemonic.copyWarning')}</p>
               </div>
 
@@ -321,7 +323,7 @@ const Mnemonic = () => {
                     strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                   </svg>
-                  <span>Valid recovery phrase</span>
+                  <span>{t('mnemonic.validPhrase')}</span>
                 </div>
               )}
 
@@ -343,10 +345,10 @@ const Mnemonic = () => {
             className="w-full flex items-center justify-center space-x-3 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-2.5 text-sm rounded-xl transition-all duration-300 hover:shadow-medium">
             <span>
               {loading
-                ? 'Securing Your Data...'
+                ? t('mnemonic.securingData')
                 : mode === 'import'
-                  ? 'Import & Continue'
-                  : "I'm Ready! Let's Go!"}
+                  ? t('mnemonic.importContinue')
+                  : t('mnemonic.readyToGo')}
             </span>
           </button>
         </div>

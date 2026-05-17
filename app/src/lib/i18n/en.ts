@@ -89,18 +89,30 @@ const en: TranslationMap = {
   'settings.languageDesc': 'Display language for the app interface',
   'settings.alerts': 'Alerts',
   'settings.alertsDesc': 'View recent alerts and activity in your inbox',
+  'settings.betaBuild': 'Beta build - v{version}',
+  'settings.sectionAccountDesc': 'Recovery phrase, team, connections, and privacy settings.',
+  'settings.sectionFeaturesDesc': 'Screen awareness, messaging, and tools.',
+  'settings.sectionAIDesc': 'Language model providers, local Ollama, and voice (STT / TTS).',
+  'settings.voiceSectionTitle': 'Voice',
 
   // Settings: Account
   'settings.account.recoveryPhrase': 'Recovery Phrase',
   'settings.account.recoveryPhraseDesc': 'View and back up your account recovery phrase',
+  'settings.account.recoveryPhraseSectionDesc':
+    'Manage your BIP39 recovery phrase for encryption and wallet access',
   'settings.account.team': 'Team',
   'settings.account.teamDesc': 'Manage team members and permissions',
+  'settings.account.teamSectionDesc': 'Manage your team, members, and invites',
   'settings.account.connections': 'Connections',
   'settings.account.connectionsDesc': 'Manage linked accounts and services',
+  'settings.account.connectionsSectionDesc': 'Review and manage linked account connections',
   'settings.account.privacy': 'Privacy',
   'settings.account.privacyDesc': 'Control what data leaves your computer',
+  'settings.account.privacySectionDesc': 'Manage data sharing and anonymized usage preferences',
 
   // Settings: Notifications
+  'settings.features.notificationsSectionDesc':
+    'Choose which categories surface in the notification center',
   'settings.notifications.doNotDisturb': 'Do Not Disturb',
   'settings.notifications.doNotDisturbDesc': 'Pause all notifications for a set period',
   'settings.notifications.channelControls': 'Per-Channel Controls',
@@ -110,16 +122,27 @@ const en: TranslationMap = {
   // Settings: Features
   'settings.features.screenAwareness': 'Screen Awareness',
   'settings.features.screenAwarenessDesc': 'Let the assistant see your active window',
+  'settings.features.screenAwarenessSectionDesc':
+    'Screen capture permissions, monitoring policy, and session controls',
   'settings.features.messaging': 'Messaging',
   'settings.features.messagingDesc': 'Channel and messaging integration settings',
+  'settings.features.messagingChannels': 'Messaging Channels',
+  'settings.features.messagingChannelsSectionDesc':
+    'Configure Telegram/Discord auth modes and default channel routing',
   'settings.features.tools': 'Tools',
   'settings.features.toolsDesc': 'Manage connected tools and integrations',
+  'settings.features.toolsSectionDesc':
+    'Enable or disable capabilities OpenHuman can use on your behalf',
 
   // Settings: AI & Models
   'settings.ai.localSetup': 'Local AI Setup',
   'settings.ai.localSetupDesc': 'Download and configure local AI models',
   'settings.ai.llmProvider': 'LLM Provider',
   'settings.ai.llmProviderDesc': 'Choose and configure your AI provider',
+  'settings.llmSectionDesc':
+    'Cloud providers, local Ollama models, and per-workload routing (reasoning, agentic, memory, …)',
+  'settings.voiceSectionDesc':
+    'Speech-to-text (Whisper) and text-to-speech (Piper) — cloud vs local provider selection',
 
   // Clear App Data modal
   'clearData.title': 'Clear App Data',
@@ -668,6 +691,17 @@ const en: TranslationMap = {
   'mnemonic.userNotLoaded': 'User not loaded. Please sign in again or refresh the page.',
   'mnemonic.invalidPhrase': 'Invalid recovery phrase. Please check your words and try again.',
   'mnemonic.somethingWentWrong': 'Something went wrong. Please try again.',
+  'mnemonic.generateTitle': 'Your Recovery Phrase',
+  'mnemonic.generateDescription':
+    'Write down these {count} words in order and store them somewhere safe. This phrase unlocks your local encryption key and your EVM, BTC, Solana, and Tron wallet identities, and can never be recovered if lost.',
+  'mnemonic.copiedToClipboard': 'Copied to Clipboard',
+  'mnemonic.consentSavedOnDevice':
+    'I saved this phrase and consent to using it for local wallet setup on this device',
+  'mnemonic.importTitle': 'Import Recovery Phrase',
+  'mnemonic.importContinue': 'Import & Continue',
+  'mnemonic.readyToGo': "I'm Ready! Let's Go!",
+  'mnemonic.invalidWordCount':
+    'Recovery phrase must be {expected} words (you have {actual}).',
 
   // Team
   'team.failedToCreate': 'Failed to create team',
@@ -1848,6 +1882,458 @@ const en: TranslationMap = {
     'This message looks like a prompt-injection attempt and will likely be blocked by server-side security checks.',
   'promptInjection.reviewMessage':
     'This message may be unsafe and could be rejected by server-side security checks. Please rephrase.',
+
+  // NotificationCard
+  'notificationCard.secondsAgo': '{s}s ago',
+  'notificationCard.minutesAgo': '{m}m ago',
+  'notificationCard.hoursAgo': '{h}h ago',
+  'notificationCard.daysAgo': '{d}d ago',
+  'notificationCard.importance': 'Importance: {pct}%',
+  'notificationCard.dismissAria': 'Dismiss notification',
+
+  // ConnectionBadge
+  'connectionBadge.composio': 'Composio',
+  'connectionBadge.messaging': 'Messaging',
+
+  // ConnectionIndicator
+  'connectionIndicator.connected': 'Connected to OpenHuman AI',
+  'connectionIndicator.offline': 'Offline',
+  'connectionIndicator.coreOffline': 'Core offline',
+  'connectionIndicator.reconnecting': 'Reconnecting…',
+  'connectionIndicator.connecting': 'Connecting',
+  'connectionIndicator.disconnected': 'Disconnected',
+
+  // OAuth
+  'oauth.continueWith': 'Continue with',
+  'oauth.connecting': 'Connecting...',
+  'oauth.signInStartupFailed': '{provider} sign-in could not start. Please try again.',
+  'oauth.twitterStartupFailed':
+    'Twitter/X sign-in could not start. Check that the Twitter OAuth app callback URL, client ID/secret, and requested scopes match the OpenHuman backend, then try again.',
+
+  // Error Fallback Screen
+  'errorFallback.errorNameDefault': 'Error',
+  'errorFallback.title': 'Something went wrong',
+  'errorFallback.description': 'The application encountered an unexpected error and could not recover.',
+  'errorFallback.helpText': 'If this keeps happening after restart, install the latest version.',
+  'errorFallback.componentStack': 'Component stack',
+  'errorFallback.tryToRecover': 'Try to Recover',
+  'errorFallback.reloadApp': 'Reload App',
+  'errorFallback.downloadLatest': 'Download Latest',
+
+  // Route Loading Screen
+  'routeLoading.initializing': 'Initializing OpenHuman...',
+
+  // Home Banners
+  'homeBanners.promoCreditsMessage': 'You have {amount} of promotional credits.',
+  'homeBanners.giveASpin': "Give OpenHuman a spin, and when you're ready for more,",
+  'homeBanners.getSubscription': 'get a subscription',
+  'homeBanners.tenXUsage': 'and get 10x more usage.',
+  'homeBanners.dismissEarlyBird': 'Dismiss early bird banner',
+  'homeBanners.firstThousand': 'The first 1,000 users get 60% off.',
+  'homeBanners.useDiscountCode': 'Use discount code',
+  'homeBanners.onYour': 'on your',
+  'homeBanners.firstSubscription': 'first subscription.',
+  'homeBanners.joinDiscord': 'Join Our Discord',
+  'homeBanners.discordDescription': 'Get updates, free merch, credits, report bugs, and be part of the OpenHuman community.',
+
+  // Service Blocking Gate
+  'serviceBlockingGate.retryFailed': 'Retry failed. Download the latest app build and try again.',
+  'serviceBlockingGate.unavailableTitle': 'OpenHuman core is unavailable',
+  'serviceBlockingGate.unavailableDescription':
+    'We could not recover the local core service after multiple attempts. This can happen after a critical crash or binary mismatch.',
+  'serviceBlockingGate.downloadToRestore': 'Download the latest app build to restore a healthy core runtime.',
+  'serviceBlockingGate.retrying': 'Retrying...',
+  'serviceBlockingGate.retryCore': 'Retry Core',
+  'serviceBlockingGate.downloadLatestVersion': 'Download Latest Version',
+
+  // Link Modal: Messaging Setup Bridge
+  'linkModal.loadingChannelSetup': 'Loading channel setup…',
+  'linkModal.telegramNotAvailable':
+    "Telegram channel definition isn't available right now. Try again from Settings → Messaging.",
+  'linkModal.settingNotReady':
+    "This setting isn't ready in the popup yet. Open the full settings page when you're ready.",
+
+  // Link Modal: Titles
+  'linkModal.title.allowNotifications': 'Allow notifications',
+  'linkModal.title.billingCredits': 'Billing & credits',
+  'linkModal.title.connectChatChannel': 'Connect a chat channel',
+  'linkModal.title.joinCommunity': 'Join the community',
+  'linkModal.title.connectYourApps': 'Connect your apps',
+  'linkModal.title.settings': 'Settings',
+
+  // Link Modal: Notifications
+  'linkModal.notifications.desktopOnly': 'Native notifications are only available in the desktop app (run `pnpm dev:app`).',
+  'linkModal.notifications.permissionOff':
+    'Notification permission is off. Enable OpenHuman in System Settings → Notifications, then retry.',
+  'linkModal.notifications.testTitle': 'OpenHuman is good to go',
+  'linkModal.notifications.testBody': 'You will get pings here when something needs your attention.',
+  'linkModal.notifications.couldNotTrigger':
+    'OpenHuman could not trigger a system notification. Check OS notification settings and retry.',
+  'linkModal.notifications.description':
+    'OpenHuman uses native notifications so it can ping you when something needs your attention, even when the chat window is hidden.',
+  'linkModal.notifications.blocked': 'Notifications are currently blocked.',
+  'linkModal.notifications.blockedStep1': '1. Open System Settings → Notifications → OpenHuman',
+  'linkModal.notifications.blockedStep2': '2. Turn on Allow Notifications',
+  'linkModal.notifications.blockedStep3': '3. Return here and tap Retry test notification',
+  'linkModal.notifications.firstStep':
+    'First step: tap Send test notification and allow permission in the macOS prompt.',
+  'linkModal.notifications.askingOS': 'Asking your OS…',
+  'linkModal.notifications.retryTest': 'Retry test notification',
+  'linkModal.notifications.sendTest': 'Send test notification',
+  'linkModal.notifications.testSent':
+    "Test notification sent. If you didn’t receive it, go to System Settings → Notifications → OpenHuman, turn on Allow Notifications, and set Banner Style to Persistent.",
+  'linkModal.notifications.couldntSend': "Couldn't send: {error}",
+
+  // Link Modal: Billing
+  'linkModal.billing.trialCredit': 'Trial credit',
+  'linkModal.billing.trialDescription':
+    'More than enough to play around. Top up or pick a plan when you want real usage.',
+  'linkModal.billing.openDashboard': 'Open dashboard in browser',
+  'linkModal.billing.stayOnTrial': 'Stay on trial',
+
+  // Link Modal: Discord
+  'linkModal.discord.description':
+    "Hop into our Discord and link your OpenHuman account. You'll get exclusive early access to features, free credits to play with, a great community to nerd out with, and yes, free merch.",
+  'linkModal.discord.featureAccess': 'Exclusive feature access',
+  'linkModal.discord.freeCredits': 'Free credits for active members',
+  'linkModal.discord.community': 'Community of builders and operators',
+  'linkModal.discord.freeMerch': 'Free merch when you stick around',
+  'linkModal.discord.openInvite': 'Open Discord invite',
+  'linkModal.discord.maybeLater': 'Maybe later',
+
+  // Link Modal: Accounts Setup
+  'linkModal.accounts.description':
+    "Pick the chat apps and inboxes you already use. We'll add them as built-in webviews here so you can ditch six browser tabs and stick with one app, and the agent can listen in across all of them in the background.",
+  'linkModal.accounts.continueWith': 'Continue with {label} sign-in',
+  'linkModal.accounts.done': 'Done',
+  'linkModal.accounts.toggleHint':
+    "Toggling on adds a private webview. You'll sign in the first time you open it — credentials stay on your device.",
+  'linkModal.accounts.disconnect': 'Disconnect',
+  'linkModal.accounts.connect': 'Connect',
+  'linkModal.accounts.status.connected': 'Connected',
+  'linkModal.accounts.status.loading': 'Loading…',
+  'linkModal.accounts.status.needsSignIn': 'Needs sign-in',
+  'linkModal.accounts.status.timedOut': 'Timed out',
+  'linkModal.accounts.status.error': 'Error',
+  'linkModal.accounts.status.closed': 'Closed',
+
+  // Link Modal: Footer
+  'linkModal.footer.done': 'Done',
+  'linkModal.footer.skipForNow': 'Skip for now',
+
+  // Persist Rehydration Screen
+  'persistRehydration.title': 'OpenHuman is taking longer than usual to load.',
+  'persistRehydration.description':
+    "Local app state may be corrupted. Resetting will sign you out and clear cached data on this device; you'll reconnect your accounts on next launch. Your data on the server is not affected.",
+  'persistRehydration.resetting': 'Resetting…',
+  'persistRehydration.resetLocalState': 'Reset local state',
+
+  // Autocomplete Setup Modal
+  'autocomplete.setup.title': 'Text Auto-Complete',
+  'autocomplete.setup.enableSubtitle': 'Enable inline completions',
+  'autocomplete.setup.readyToGo': 'Ready to go',
+  'autocomplete.setup.description':
+    'Text Auto-Complete suggests inline completions as you type across any app. Suggestions appear as an overlay you can accept with Tab.',
+  'autocomplete.setup.platformNotSupported':
+    'Auto-complete is not supported on this platform.',
+  'autocomplete.setup.stylePreset': 'Style preset',
+  'autocomplete.setup.balancedConfigurableLater': 'Balanced (configurable later)',
+  'autocomplete.setup.acceptKey': 'Accept key',
+  'autocomplete.setup.debounce': 'Debounce',
+  'autocomplete.setup.enabling': 'Enabling...',
+  'autocomplete.setup.enableButton': 'Enable Auto-Complete',
+  'autocomplete.setup.active': 'Auto-Complete is Active',
+  'autocomplete.setup.activeDescription':
+    'Start typing in any app and suggestions will appear as an inline overlay. Press Tab to accept.',
+  'autocomplete.setup.customizeSettings': 'Customize Settings',
+  'autocomplete.setup.done': 'Done',
+  'autocomplete.setup.failedToEnable': 'Failed to enable autocomplete',
+
+  // Voice Setup Modal
+  'voiceSetup.title': 'Voice Intelligence',
+  'voiceSetup.setupSubtitle': 'Model download required',
+  'voiceSetup.enableSubtitle': 'Start voice server',
+  'voiceSetup.readyToGo': 'Ready to go',
+  'voiceSetup.sttModelNotReady': 'Speech-to-text model not ready',
+  'voiceSetup.sttModelNotReadyDesc':
+    'Voice Intelligence requires a local Whisper model for transcription. Download it from the Local Model settings.',
+  'voiceSetup.sttModelNotReadyHint':
+    'Once the STT model is downloaded, you can return here to enable voice dictation and voice-driven AI chat.',
+  'voiceSetup.downloadSttModel': 'Download STT Model',
+  'voiceSetup.sttModelReady': 'Speech-to-text model ready',
+  'voiceSetup.enableDescription':
+    'Start the voice server to use dictation and voice-driven chat. Press the hotkey to toggle recording.',
+  'voiceSetup.hotkey': 'Hotkey',
+  'voiceSetup.activation': 'Activation',
+  'voiceSetup.pushToTalk': 'Push-to-talk',
+  'voiceSetup.tapToToggle': 'Tap to toggle',
+  'voiceSetup.starting': 'Starting...',
+  'voiceSetup.startVoiceServer': 'Start Voice Server',
+  'voiceSetup.active': 'Voice Intelligence is Active',
+  'voiceSetup.activeDescription':
+    'Press {hotkey} to start dictating. Your voice will be transcribed and sent to your agent.',
+  'voiceSetup.customizeSettings': 'Customize Settings',
+  'voiceSetup.done': 'Done',
+  'voiceSetup.failedToStart': 'Failed to start voice server',
+
+  // Screen Intelligence Setup Modal
+  'screenIntelligence.title': 'Screen Intelligence',
+  'screenIntelligence.setup.grantPermissions': 'Grant permissions',
+  'screenIntelligence.setup.enableSkill': 'Enable the skill',
+  'screenIntelligence.setup.readyToGo': 'Ready to go',
+  'screenIntelligence.setup.permissionsDescription':
+    'Screen Intelligence needs macOS permissions to capture your screen and provide context to your agent.',
+  'screenIntelligence.setup.permScreenRecording': 'Screen Recording',
+  'screenIntelligence.setup.permAccessibility': 'Accessibility',
+  'screenIntelligence.setup.permInputMonitoring': 'Input Monitoring',
+  'screenIntelligence.setup.granted': 'Granted',
+  'screenIntelligence.setup.grant': 'Grant',
+  'screenIntelligence.setup.opening': 'Opening...',
+  'screenIntelligence.setup.restartHint':
+    'After granting permissions in System Settings, click below to restart and pick up the changes.',
+  'screenIntelligence.setup.macosPrivacyTo': 'macOS applies privacy to:',
+  'screenIntelligence.setup.restarting': 'Restarting...',
+  'screenIntelligence.setup.restartAndRefresh': 'Restart & Refresh',
+  'screenIntelligence.setup.refreshStatus': 'Refresh Status',
+  'screenIntelligence.setup.allPermissionsGranted': 'All permissions granted',
+  'screenIntelligence.setup.enableDescription':
+    "Enable Screen Intelligence to continuously capture what's on your screen and feed useful context into your agent's memory.",
+  'screenIntelligence.setup.captureMode': 'Capture mode',
+  'screenIntelligence.setup.allWindowsConfigurableLater':
+    'All windows (configurable later)',
+  'screenIntelligence.setup.visionModel': 'Vision model',
+  'screenIntelligence.setup.enabled': 'Enabled',
+  'screenIntelligence.setup.panicHotkey': 'Panic hotkey',
+  'screenIntelligence.setup.enabling': 'Enabling...',
+  'screenIntelligence.setup.enableButton': 'Enable Screen Intelligence',
+  'screenIntelligence.setup.active': 'Screen Intelligence is Enabled',
+  'screenIntelligence.setup.activeDescription':
+    'Screen Intelligence is now enabled. Start a session from the settings panel to begin capturing screen context for your agent.',
+  'screenIntelligence.setup.advancedSettings': 'Advanced Settings',
+  'screenIntelligence.setup.done': 'Done',
+  'screenIntelligence.setup.macosOnly':
+    'Screen Intelligence is currently available on macOS only.',
+  'screenIntelligence.setup.failedToEnable': 'Failed to enable Screen Intelligence',
+
+  // Meeting Bots Card
+  'meetingBots.title': 'Send OpenHuman to a meeting',
+  'meetingBots.newBadge': 'New',
+  'meetingBots.bannerDescription':
+    'Drop a Google Meet link and OpenHuman joins as a guest, talks, listens, and waves back.',
+  'meetingBots.joiningTitle': 'OpenHuman is joining the meeting',
+  'meetingBots.joiningMessage':
+    'It should appear as a participant in a few seconds.',
+  'meetingBots.busyTitle': 'OpenHuman is busy',
+  'meetingBots.couldNotStart': 'Could not start OpenHuman',
+  'meetingBots.failedToStart': 'Failed to start OpenHuman.',
+  'meetingBots.soon': 'soon',
+  'meetingBots.modalDescription':
+    'OpenHuman joins as an anonymous guest, streams its video into the call, and replies via the agent.',
+  'meetingBots.meetingLink': 'Meeting link',
+  'meetingBots.displayName': 'Display name',
+  'meetingBots.comingSoonPlatform': '{platform} support is coming soon.',
+  'meetingBots.starting': 'Starting…',
+  'meetingBots.sendToPlatform': 'Send to {platform}',
+  'meetingBots.platformComingSoon': '{platform} coming soon',
+
+  // App Update Prompt
+  'updatePrompt.title': 'Update',
+  'updatePrompt.readyToInstall': 'Update ready to install',
+  'updatePrompt.installing': 'Installing update',
+  'updatePrompt.restarting': 'Restarting…',
+  'updatePrompt.failed': 'Update failed',
+  'updatePrompt.failedWithLogs': 'Update failed. See logs for details.',
+  'updatePrompt.versionReady': 'Version {version} is ready to install.',
+  'updatePrompt.newVersionReady': 'A new version is ready to install.',
+  'updatePrompt.currentlyOn': 'Currently on {version}.',
+  'updatePrompt.restartWarning':
+    'Restarting will close any open conversations briefly. The new build launches automatically.',
+  'updatePrompt.restartNow': 'Restart now',
+  'updatePrompt.later': 'Later',
+  'updatePrompt.somethingWentWrong': 'Something went wrong while updating.',
+  'updatePrompt.tryAgain': 'Try again',
+  'updatePrompt.installingNewVersion': 'Installing the new version…',
+  'updatePrompt.relaunching': 'Relaunching the app…',
+  'updatePrompt.downloaded': '{bytes} downloaded',
+  'updatePrompt.working': 'Working…',
+
+  // Local AI Download Snackbar
+  'localAI.installing': 'Installing...',
+  'localAI.preparing': 'Preparing...',
+  'localAI.expandDownload': 'Expand download progress',
+  'localAI.collapseDownload': 'Collapse download progress',
+  'localAI.dismissDownload': 'Dismiss download notification',
+
+  // Upsell Banner
+  'upsell.dismissAriaLabel': 'Dismiss',
+
+  // Accounts
+  'accounts.allConnected': "You've connected every supported app.",
+
+  // Channels — auth modes
+  'channels.authMode.managedDm': 'Managed DM',
+  'channels.authMode.oauth': 'OAuth',
+  'channels.authMode.botToken': 'Bot Token',
+  'channels.authMode.apiKey': 'API Key',
+
+  // Channels — definitions (fallback when backend unreachable)
+  'channels.telegram.desc': 'Connect Telegram to chat with your agent directly.',
+  'channels.telegram.managedDmDesc': 'Sign in with your Telegram account to let the agent listen and respond.',
+  'channels.telegram.botTokenDesc': 'Configure a bot token to bridge Telegram messages through the agent.',
+  'channels.telegram.botTokenLabel': 'Bot Token',
+  'channels.telegram.allowedUsersLabel': 'Allowed User IDs',
+  'channels.discord.desc': 'Connect Discord to chat with your agent in your servers.',
+  'channels.discord.botTokenDesc': 'Configure a bot token to bridge Discord messages through the agent.',
+  'channels.discord.botTokenLabel': 'Bot Token',
+  'channels.discord.guildIdLabel': 'Guild (Server) ID',
+  'channels.discord.oauthDesc': 'Sign in with Discord to link your account.',
+  'channels.discord.managedDmDesc': 'Sign in with Discord to let the agent send and receive DMs.',
+  'channels.web.desc': 'The web channel is always available and requires no setup.',
+  'channels.web.managedDmDesc': 'Chat with your agent directly in the web app.',
+  'channel.webAlwaysAvailable': 'Web is always available and requires no configuration.',
+
+  // Discord
+  'discord.fieldRequired': '{field} is required',
+  'discord.linkExpired': 'Link expired. Please restart the connection flow.',
+  'discord.restartHint': 'To restart: click Connect again.',
+  'discord.tokenCard.title': 'Bot Token',
+  'discord.tokenCard.hint': 'Run {cmd} in a Discord server where you have admin permissions to generate a bot token.',
+  'discord.tokenCard.warning': 'Keep your bot token private. Anyone with your token can control your bot.',
+  'discord.linked': 'Your Discord account is linked.',
+  'discord.connect': 'Connect',
+  'discord.disconnect': 'Disconnect',
+
+  // Telegram
+  'telegram.managedDmConnecting': 'Connecting to Telegram...',
+  'telegram.managedDmTimeout': 'Connection timed out. Please try again.',
+  'telegram.fieldRequired': '{field} is required',
+  'telegram.restartHint': 'To restart: click Connect again.',
+  'telegram.reconnect': 'Reconnect',
+  'telegram.connect': 'Connect',
+  'telegram.disconnect': 'Disconnect',
+
+  // Unsubscribe
+  'unsubscribe.title': 'Unsubscribe Request',
+  'unsubscribe.processing': 'Processing...',
+  'unsubscribe.approve': 'Approve',
+  'unsubscribe.deny': 'Deny',
+  'unsubscribe.success': 'Successfully unsubscribed.',
+  'unsubscribe.denied': 'Unsubscribe request denied.',
+  'unsubscribe.permissionError': 'You do not have permission to manage unsubscribe requests.',
+
+  // Composer Send
+  'composerSend.usageLimitReached': 'Usage limit reached. Upgrade or wait for reset.',
+  'composerSend.socketDisconnected': 'Realtime socket is not connected — responses cannot be delivered without a client ID.',
+
+  // Time Format
+  'timeFormat.justNow': 'just now',
+  'timeFormat.minAgo': '{n}min ago',
+  'timeFormat.hrAgo': '{n}h ago',
+  'timeFormat.dayAgo': '{n}d ago',
+  'timeFormat.now': 'now',
+  'timeFormat.inMinutes': 'in {n}min',
+  'timeFormat.inHours': 'in {n}h',
+  'timeFormat.inHoursMinutes': 'in {n}h {m}min',
+  'timeFormat.inDays': 'in {n}d',
+  'timeFormat.inDaysHours': 'in {n}d {h}h',
+
+  // Skill Categories
+  'skillCategories.all': 'All',
+  'skillCategories.builtIn': 'Built-in',
+  'skillCategories.channels': 'Channels',
+  'skillCategories.chat': 'Chat',
+  'skillCategories.productivity': 'Productivity',
+  'skillCategories.toolsAutomation': 'Tools & Automation',
+  'skillCategories.social': 'Social',
+  'skillCategories.platform': 'Platform',
+  'skillCategories.other': 'Other',
+
+  // Memory Debug
+  'memoryDebug.documents': 'Documents',
+  'memoryDebug.filterByNamespace': 'Filter by namespace...',
+  'memoryDebug.refresh': 'Refresh',
+  'memoryDebug.noDocuments': 'No documents found.',
+  'memoryDebug.rawResponse': 'Raw response',
+  'memoryDebug.namespaces': 'Namespaces',
+  'memoryDebug.noNamespaces': 'No namespaces found.',
+  'memoryDebug.queryRecall': 'Query & Recall',
+  'memoryDebug.namespace': 'Namespace',
+  'memoryDebug.queryText': 'Query text...',
+  'memoryDebug.maxChunks': 'max chunks',
+  'memoryDebug.query': 'Query',
+  'memoryDebug.recall': 'Recall',
+  'memoryDebug.queryErrorPrefix': 'Query error:',
+  'memoryDebug.recallErrorPrefix': 'Recall error:',
+  'memoryDebug.queryResult': 'Query result',
+  'memoryDebug.recallResult': 'Recall result',
+  'memoryDebug.clearNamespace': 'Clear Namespace',
+  'memoryDebug.clearNamespaceDesc': 'Permanently delete all documents in a namespace. This action cannot be undone.',
+  'memoryDebug.selectNamespace': 'Select namespace...',
+  'memoryDebug.namespacePlaceholder': 'Namespace name...',
+  'memoryDebug.clear': 'Clear',
+  'memoryDebug.confirmDeleteDocument': 'Are you sure you want to delete this document?',
+  'memoryDebug.confirmClearNamespace': 'Are you sure you want to clear all documents from {ns}?',
+
+  // Core Job List
+  'coreJobList.title': 'Core Cron Jobs',
+  'coreJobList.description': 'Manage scheduled background tasks that run inside the core.',
+  'coreJobList.loading': 'Loading jobs...',
+  'coreJobList.noJobs': 'No cron jobs registered.',
+  'coreJobList.enabled': 'Enabled',
+  'coreJobList.paused': 'Paused',
+  'coreJobList.schedule': 'Schedule',
+  'coreJobList.nextRun': 'Next run',
+  'coreJobList.lastStatus': 'Last status',
+  'coreJobList.everyMs': 'Every {ms}ms',
+  'coreJobList.atTime': 'At {time}',
+  'coreJobList.saving': 'Saving...',
+  'coreJobList.pause': 'Pause',
+  'coreJobList.resume': 'Resume',
+  'coreJobList.running': 'Running...',
+  'coreJobList.runNow': 'Run Now',
+  'coreJobList.loadingRuns': 'Loading...',
+  'coreJobList.viewRuns': 'View Runs',
+  'coreJobList.removing': 'Removing...',
+  'coreJobList.remove': 'Remove',
+  'coreJobList.recentRuns': 'Recent Runs',
+
+  // Memory Chunk
+  'memoryChunk.mentioned': 'mentioned',
+  'memoryChunk.oneChunk': '{n} chunk',
+  'memoryChunk.manyChunks': '{n} chunks',
+  'memoryChunk.whyKept': 'why kept',
+  'memoryChunk.kept': 'kept',
+  'memoryChunk.dropped': 'dropped',
+  'memoryChunk.atThreshold': 'at {threshold}',
+
+  // Tool Timeline
+  'toolTimeline.workerThread': 'worker thread',
+  'toolTimeline.turnOf': 'turn {n}/{total}',
+  'toolTimeline.oneTurn': '{n} turn',
+  'toolTimeline.manyTurns': '{n} turns',
+
+  // Team Members — additions
+  'team.refreshingMembers': 'Refreshing members...',
+  'team.oneMember': '{n} member',
+  'team.manyMembers': '{n} members',
+  'team.loadingMembers': 'Loading members...',
+  'team.you': '(You)',
+  'team.removeMemberAria': 'Remove {name}',
+  'team.noMembersFound': 'No members found',
+  'team.removeMemberTitle': 'Remove Team Member',
+  'team.removeMemberConfirm': 'Are you sure you want to remove {name} from the team?',
+  'team.removeMemberWarning': 'They will lose access to the team and all team resources.',
+  'team.removeMemberAction': 'Remove Member',
+  'team.removing': 'Removing...',
+  'team.changeRoleTitle': 'Change Member Role',
+  'team.changeRoleConfirm': "Change {name}'s role from {oldRole} to {newRole}?",
+  'team.changeRoleAdminWarning': 'This will grant them full admin permissions including the ability to manage team members.',
+  'team.changeRoleDemoteWarning': 'This will remove their admin permissions and they will no longer be able to manage the team.',
+  'team.changeRoleAction': 'Change Role',
+  'team.changing': 'Changing...',
+
+  // Chat Runtime
+  'chatRuntime.agentErrorMessage': "Something went wrong. Please try again.\nThis error has been reported. You can also report it on Discord.\n<openhuman-link path=\"community/discord\">Report on Discord</openhuman-link>",
 };
 
 export default en;

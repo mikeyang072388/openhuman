@@ -1,3 +1,4 @@
+import { useT } from '../../../lib/i18n/I18nContext';
 import type { SubagentActivity, ToolTimelineEntry } from '../../../store/chatRuntimeSlice';
 import { formatTimelineEntry } from '../../../utils/toolTimelineFormatting';
 import { parseWorkerThreadRef } from '../utils/workerThreadRef';
@@ -35,13 +36,22 @@ function workerStatusFromEntry(
  * `subagent_*` socket events from a current core.
  */
 export function SubagentActivityBlock({ subagent }: { subagent: SubagentActivity }) {
+  const { t } = useT();
   const headerBits: string[] = [];
   if (subagent.mode) headerBits.push(subagent.mode);
-  if (subagent.dedicatedThread) headerBits.push('worker thread');
+  if (subagent.dedicatedThread) headerBits.push(t('toolTimeline.workerThread'));
   if (subagent.childIteration != null && subagent.childMaxIterations != null) {
-    headerBits.push(`turn ${subagent.childIteration}/${subagent.childMaxIterations}`);
+    headerBits.push(
+      t('toolTimeline.turnOf')
+        .replace('{n}', String(subagent.childIteration))
+        .replace('{total}', String(subagent.childMaxIterations))
+    );
   } else if (subagent.iterations != null) {
-    headerBits.push(`${subagent.iterations} turn${subagent.iterations === 1 ? '' : 's'}`);
+    headerBits.push(
+      subagent.iterations === 1
+        ? t('toolTimeline.oneTurn').replace('{n}', String(subagent.iterations))
+        : t('toolTimeline.manyTurns').replace('{n}', String(subagent.iterations))
+    );
   }
   if (subagent.elapsedMs != null) {
     headerBits.push(
@@ -82,7 +92,7 @@ export function SubagentActivityBlock({ subagent }: { subagent: SubagentActivity
                 {call.iteration != null ? (
                   <span className="text-[9px] text-stone-400">·t{call.iteration}</span>
                 ) : null}
-                <span className={`text-[9px] ${tone}`}>{call.status}</span>
+                <span className={`text-[9px] ${tone}`}>{t(call.status)}</span>
                 {call.elapsedMs != null && call.status !== 'running' ? (
                   <span className="text-[9px] text-stone-400">
                     {call.elapsedMs >= 1000
@@ -100,6 +110,7 @@ export function SubagentActivityBlock({ subagent }: { subagent: SubagentActivity
 }
 
 export function ToolTimelineBlock({ entries }: { entries: ToolTimelineEntry[] }) {
+  const { t } = useT();
   const latestRunningEntryId = [...entries].reverse().find(entry => entry.status === 'running')?.id;
 
   const normalizeToolBody = (value?: string): string | undefined => {
@@ -157,7 +168,7 @@ export function ToolTimelineBlock({ entries }: { entries: ToolTimelineEntry[] })
                   </span>
                   <span className="font-medium text-stone-600">{formatted.title}</span>
                   <span className={`rounded-full px-2 py-0.5 text-[10px] ${statusTone.pill}`}>
-                    {entry.status}
+                    {t(entry.status)}
                   </span>
                 </summary>
                 {workerRef ? (

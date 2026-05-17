@@ -1,6 +1,7 @@
 import { selectBlockingState } from '../store/connectivitySelectors';
 import { useAppSelector } from '../store/hooks';
 import { selectSocketStatus } from '../store/socketSelectors';
+import { useT } from '../lib/i18n/I18nContext';
 
 interface ConnectionIndicatorProps {
   /**
@@ -31,8 +32,30 @@ const ConnectionIndicator = ({
   status: overrideStatus,
   className = '',
 }: ConnectionIndicatorProps) => {
+  const { t } = useT();
   const blocking = useAppSelector(selectBlockingState);
   const legacyStatus = useAppSelector(selectSocketStatus);
+
+  const legacyMap: Record<'connected' | 'disconnected' | 'connecting', StatusConfig> = {
+    connected: {
+      color: 'bg-sage-500',
+      textColor: 'text-sage-500',
+      text: t('connectionIndicator.connected'),
+      pulse: true,
+    },
+    disconnected: {
+      color: 'bg-coral-500',
+      textColor: 'text-coral-500',
+      text: t('connectionIndicator.disconnected'),
+      pulse: false,
+    },
+    connecting: {
+      color: 'bg-amber-500',
+      textColor: 'text-amber-500',
+      text: t('connectionIndicator.connecting'),
+      pulse: false,
+    },
+  };
 
   const config: StatusConfig = (() => {
     if (overrideStatus) {
@@ -43,28 +66,30 @@ const ConnectionIndicator = ({
         return {
           color: 'bg-sage-500',
           textColor: 'text-sage-500',
-          text: 'Connected to OpenHuman AI 🚀',
+          text: t('connectionIndicator.connected'),
           pulse: true,
         };
       case 'internet-offline':
         return {
           color: 'bg-coral-500',
           textColor: 'text-coral-500',
-          text: 'Offline',
+          text: t('connectionIndicator.offline'),
           pulse: false,
         };
       case 'core-unreachable':
         return {
           color: 'bg-amber-500',
           textColor: 'text-amber-500',
-          text: 'Core offline',
+          text: t('connectionIndicator.coreOffline'),
           pulse: false,
         };
       case 'backend-only':
         return {
           color: 'bg-amber-500',
           textColor: 'text-amber-500',
-          text: legacyStatus === 'connecting' ? 'Connecting' : 'Reconnecting…',
+          text: legacyStatus === 'connecting'
+            ? t('connectionIndicator.connecting')
+            : t('connectionIndicator.reconnecting'),
           pulse: false,
         };
     }
@@ -80,27 +105,6 @@ const ConnectionIndicator = ({
       </div>
     </div>
   );
-};
-
-const legacyMap: Record<'connected' | 'disconnected' | 'connecting', StatusConfig> = {
-  connected: {
-    color: 'bg-sage-500',
-    textColor: 'text-sage-500',
-    text: 'Connected to OpenHuman AI 🚀',
-    pulse: true,
-  },
-  disconnected: {
-    color: 'bg-coral-500',
-    textColor: 'text-coral-500',
-    text: 'Disconnected',
-    pulse: false,
-  },
-  connecting: {
-    color: 'bg-amber-500',
-    textColor: 'text-amber-500',
-    text: 'Connecting',
-    pulse: false,
-  },
 };
 
 export default ConnectionIndicator;

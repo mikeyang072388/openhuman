@@ -88,18 +88,28 @@ const zhCN: TranslationMap = {
   'settings.logOutDesc': '退出当前账户',
   'settings.language': '语言',
   'settings.languageDesc': '应用界面显示语言',
+  'settings.betaBuild': '测试版 - v{version}',
+  'settings.sectionAccountDesc': '恢复短语、团队、连接和隐私设置。',
+  'settings.sectionFeaturesDesc': '屏幕感知、消息与工具。',
+  'settings.sectionAIDesc': '语言模型提供商、本地 Ollama 和语音（STT / TTS）。',
+  'settings.voiceSectionTitle': '语音',
 
   // Settings: Account
   'settings.account.recoveryPhrase': '恢复短语',
   'settings.account.recoveryPhraseDesc': '查看并备份你的账户恢复短语',
+  'settings.account.recoveryPhraseSectionDesc': '管理你的 BIP39 恢复短语，用于加密和钱包访问',
   'settings.account.team': '团队',
   'settings.account.teamDesc': '管理团队成员与权限',
+  'settings.account.teamSectionDesc': '管理你的团队、成员和邀请',
   'settings.account.connections': '连接',
   'settings.account.connectionsDesc': '管理已关联的账户与服务',
+  'settings.account.connectionsSectionDesc': '查看并管理已关联的账户连接',
   'settings.account.privacy': '隐私',
   'settings.account.privacyDesc': '控制哪些数据离开你的电脑',
+  'settings.account.privacySectionDesc': '管理数据分享和匿名使用偏好',
 
   // Settings: Notifications
+  'settings.features.notificationsSectionDesc': '选择哪些类别显示在通知中心',
   'settings.notifications.doNotDisturb': '免打扰',
   'settings.notifications.doNotDisturbDesc': '在一定时间内暂停所有通知',
   'settings.notifications.channelControls': '各渠道控制',
@@ -108,16 +118,23 @@ const zhCN: TranslationMap = {
   // Settings: Features
   'settings.features.screenAwareness': '屏幕感知',
   'settings.features.screenAwarenessDesc': '让助手看到你的活动窗口',
+  'settings.features.screenAwarenessSectionDesc': '屏幕捕获权限、监控策略和会话控制',
   'settings.features.messaging': '消息',
   'settings.features.messagingDesc': '渠道与消息集成设置',
+  'settings.features.messagingChannels': '消息渠道',
+  'settings.features.messagingChannelsSectionDesc': '配置 Telegram/Discord 认证模式和默认渠道路由',
   'settings.features.tools': '工具',
   'settings.features.toolsDesc': '管理已连接的工具与集成',
+  'settings.features.toolsSectionDesc': '启用或禁用 OpenHuman 可代表你使用的能力',
 
   // Settings: AI & Models
   'settings.ai.localSetup': '本地 AI 设置',
   'settings.ai.localSetupDesc': '下载并配置本地 AI 模型',
   'settings.ai.llmProvider': 'LLM 提供商',
   'settings.ai.llmProviderDesc': '选择并配置你的 AI 提供商',
+  'settings.llmSectionDesc':
+    '云端提供商、本地 Ollama 模型以及按工作负载路由（推理、智能体、记忆等）',
+  'settings.voiceSectionDesc': '语音转文字（Whisper）和文字转语音（Piper）——云端与本地提供商选择',
 
   // Clear App Data modal
   'clearData.title': '清除应用数据',
@@ -631,6 +648,15 @@ const zhCN: TranslationMap = {
   'mnemonic.userNotLoaded': '用户未加载。请重新登录或刷新页面。',
   'mnemonic.invalidPhrase': '恢复短语无效。请检查你的单词后重试。',
   'mnemonic.somethingWentWrong': '出了点问题。请重试。',
+  'mnemonic.generateTitle': '你的恢复短语',
+  'mnemonic.generateDescription':
+    '按顺序记下这 {count} 个单词，并将其保存在安全的地方。这个短语可以解锁你的本地加密密钥以及你的 EVM、BTC、Solana 和 Tron 钱包身份，一旦丢失将无法恢复。',
+  'mnemonic.copiedToClipboard': '已复制到剪贴板',
+  'mnemonic.consentSavedOnDevice': '我已保存此短语并同意将其用于此设备上的本地钱包设置',
+  'mnemonic.importTitle': '导入恢复短语',
+  'mnemonic.importContinue': '导入并继续',
+  'mnemonic.readyToGo': '准备好了！开始吧！',
+  'mnemonic.invalidWordCount': '恢复短语必须为 {expected} 个单词（你输入了 {actual} 个）。',
 
   // Team
   'team.failedToCreate': '创建团队失败',
@@ -1777,6 +1803,458 @@ const zhCN: TranslationMap = {
     '此消息看起来像是提示注入攻击，很可能被服务端安全检查拦截。',
   'promptInjection.reviewMessage':
     '此消息可能不安全，可能会被服务端安全检查拒绝。请重新措辞。',
+
+  // NotificationCard
+  'notificationCard.secondsAgo': '{s} 秒前',
+  'notificationCard.minutesAgo': '{m} 分钟前',
+  'notificationCard.hoursAgo': '{h} 小时前',
+  'notificationCard.daysAgo': '{d} 天前',
+  'notificationCard.importance': '重要性：{pct}%',
+  'notificationCard.dismissAria': '忽略通知',
+
+  // ConnectionBadge
+  'connectionBadge.composio': 'Composio',
+  'connectionBadge.messaging': '消息',
+
+  // ConnectionIndicator
+  'connectionIndicator.connected': '已连接到 OpenHuman AI',
+  'connectionIndicator.offline': '离线',
+  'connectionIndicator.coreOffline': '核心离线',
+  'connectionIndicator.reconnecting': '重连中…',
+  'connectionIndicator.connecting': '连接中',
+  'connectionIndicator.disconnected': '已断开',
+
+  // OAuth
+  'oauth.continueWith': '使用以下方式继续',
+  'oauth.connecting': '连接中...',
+  'oauth.signInStartupFailed': '{provider} 登录无法启动。请重试。',
+  'oauth.twitterStartupFailed':
+    'Twitter/X 登录无法启动。请检查 Twitter OAuth 应用的回调 URL、客户端 ID/密钥以及请求的权限范围是否与 OpenHuman 后端匹配，然后重试。',
+
+  // Error Fallback Screen
+  'errorFallback.errorNameDefault': '错误',
+  'errorFallback.title': '出了点问题',
+  'errorFallback.description': '应用程序遇到了意外错误，无法恢复。',
+  'errorFallback.helpText': '如果重启后仍然出现此问题，请安装最新版本。',
+  'errorFallback.componentStack': '组件堆栈',
+  'errorFallback.tryToRecover': '尝试恢复',
+  'errorFallback.reloadApp': '重新加载应用',
+  'errorFallback.downloadLatest': '下载最新版本',
+
+  // Route Loading Screen
+  'routeLoading.initializing': '正在初始化 OpenHuman...',
+
+  // Home Banners
+  'homeBanners.promoCreditsMessage': '你有 {amount} 的促销配额。',
+  'homeBanners.giveASpin': '试用 OpenHuman，当你准备好使用更多时，',
+  'homeBanners.getSubscription': '订阅套餐',
+  'homeBanners.tenXUsage': '获得 10 倍用量。',
+  'homeBanners.dismissEarlyBird': '关闭早鸟横幅',
+  'homeBanners.firstThousand': '前 1,000 名用户享受 6 折优惠。',
+  'homeBanners.useDiscountCode': '使用折扣码',
+  'homeBanners.onYour': '在你的',
+  'homeBanners.firstSubscription': '首次订阅。',
+  'homeBanners.joinDiscord': '加入我们的 Discord',
+  'homeBanners.discordDescription': '获取更新、免费周边、配额、报告错误，成为 OpenHuman 社区的一员。',
+
+  // Service Blocking Gate
+  'serviceBlockingGate.retryFailed': '重试失败。请下载最新应用版本后重试。',
+  'serviceBlockingGate.unavailableTitle': 'OpenHuman 核心不可用',
+  'serviceBlockingGate.unavailableDescription':
+    '经过多次尝试仍无法恢复本地核心服务。可能是因为严重崩溃或二进制文件不匹配。',
+  'serviceBlockingGate.downloadToRestore': '下载最新应用版本以恢复正常的核心运行时。',
+  'serviceBlockingGate.retrying': '重试中...',
+  'serviceBlockingGate.retryCore': '重试核心',
+  'serviceBlockingGate.downloadLatestVersion': '下载最新版本',
+
+  // Link Modal: Messaging Setup Bridge
+  'linkModal.loadingChannelSetup': '正在加载渠道设置…',
+  'linkModal.telegramNotAvailable':
+    'Telegram 渠道定义暂时不可用。请从设置 → 消息中重试。',
+  'linkModal.settingNotReady':
+    '此设置尚不支持在弹窗中使用。请打开完整的设置页面进行操作。',
+
+  // Link Modal: Titles
+  'linkModal.title.allowNotifications': '允许通知',
+  'linkModal.title.billingCredits': '账单与配额',
+  'linkModal.title.connectChatChannel': '连接聊天渠道',
+  'linkModal.title.joinCommunity': '加入社区',
+  'linkModal.title.connectYourApps': '连接你的应用',
+  'linkModal.title.settings': '设置',
+
+  // Link Modal: Notifications
+  'linkModal.notifications.desktopOnly': '原生通知仅在桌面应用中可用（运行 `pnpm dev:app`）。',
+  'linkModal.notifications.permissionOff':
+    '通知权限已关闭。请在系统设置 → 通知中启用 OpenHuman，然后重试。',
+  'linkModal.notifications.testTitle': 'OpenHuman 已就绪',
+  'linkModal.notifications.testBody': '当需要你关注时，你将在此收到通知。',
+  'linkModal.notifications.couldNotTrigger':
+    'OpenHuman 无法触发系统通知。请检查操作系统通知设置后重试。',
+  'linkModal.notifications.description':
+    'OpenHuman 使用原生通知，即使聊天窗口隐藏，也能在有需要你关注的事项时通知你。',
+  'linkModal.notifications.blocked': '通知目前被阻止。',
+  'linkModal.notifications.blockedStep1': '1. 打开系统设置 → 通知 → OpenHuman',
+  'linkModal.notifications.blockedStep2': '2. 开启允许通知',
+  'linkModal.notifications.blockedStep3': '3. 返回此处，点击重试测试通知',
+  'linkModal.notifications.firstStep':
+    '第一步：点击发送测试通知并在 macOS 提示中允许权限。',
+  'linkModal.notifications.askingOS': '正在请求系统权限…',
+  'linkModal.notifications.retryTest': '重试测试通知',
+  'linkModal.notifications.sendTest': '发送测试通知',
+  'linkModal.notifications.testSent':
+    '测试通知已发送。如果没有收到，请前往系统设置 → 通知 → OpenHuman，开启允许通知，并将横幅样式设为持久。',
+  'linkModal.notifications.couldntSend': '无法发送：{error}',
+
+  // Link Modal: Billing
+  'linkModal.billing.trialCredit': '试用配额',
+  'linkModal.billing.trialDescription':
+    '足够让你好好体验一番。想要正式使用时，可以充值或选择套餐。',
+  'linkModal.billing.openDashboard': '在浏览器中打开面板',
+  'linkModal.billing.stayOnTrial': '继续试用',
+
+  // Link Modal: Discord
+  'linkModal.discord.description':
+    '加入我们的 Discord 并关联你的 OpenHuman 账户。你将获得独家功能抢先体验、免费配额、一个很棒的社区可以一起交流，还有免费周边。',
+  'linkModal.discord.featureAccess': '独家功能体验',
+  'linkModal.discord.freeCredits': '活跃成员免费配额',
+  'linkModal.discord.community': '开发者和运营者社区',
+  'linkModal.discord.freeMerch': '留下来就有免费周边',
+  'linkModal.discord.openInvite': '打开 Discord 邀请',
+  'linkModal.discord.maybeLater': '以后再说',
+
+  // Link Modal: Accounts Setup
+  'linkModal.accounts.description':
+    '选择你已经在使用的聊天应用和收件箱。我们会将它们作为内置 Webview 添加到这里，这样你就可以摆脱多个浏览器标签页，只用一个应用，智能体可以在后台监听所有渠道。',
+  'linkModal.accounts.continueWith': '继续使用 {label} 登录',
+  'linkModal.accounts.done': '完成',
+  'linkModal.accounts.toggleHint':
+    '开启后将添加一个私密 Webview。首次打开时你需要登录 — 凭据保存在你的设备上。',
+  'linkModal.accounts.disconnect': '断开连接',
+  'linkModal.accounts.connect': '连接',
+  'linkModal.accounts.status.connected': '已连接',
+  'linkModal.accounts.status.loading': '加载中…',
+  'linkModal.accounts.status.needsSignIn': '需要登录',
+  'linkModal.accounts.status.timedOut': '已超时',
+  'linkModal.accounts.status.error': '错误',
+  'linkModal.accounts.status.closed': '已关闭',
+
+  // Link Modal: Footer
+  'linkModal.footer.done': '完成',
+  'linkModal.footer.skipForNow': '暂时跳过',
+
+  // Persist Rehydration Screen
+  'persistRehydration.title': 'OpenHuman 加载时间比平时更长。',
+  'persistRehydration.description':
+    '本地应用状态可能已损坏。重置将退出你的账户并清除此设备上的缓存数据；你需要在下次启动时重新连接你的账户。服务器上的数据不受影响。',
+  'persistRehydration.resetting': '重置中…',
+  'persistRehydration.resetLocalState': '重置本地状态',
+
+  // Autocomplete Setup Modal
+  'autocomplete.setup.title': '文本自动补全',
+  'autocomplete.setup.enableSubtitle': '启用内联补全',
+  'autocomplete.setup.readyToGo': '准备就绪',
+  'autocomplete.setup.description':
+    '文本自动补全可在任何应用中输入时提供内联补全建议。建议以浮层形式显示，按 Tab 键接受。',
+  'autocomplete.setup.platformNotSupported':
+    '此平台不支持自动补全。',
+  'autocomplete.setup.stylePreset': '风格预设',
+  'autocomplete.setup.balancedConfigurableLater': '均衡（稍后可配置）',
+  'autocomplete.setup.acceptKey': '接受键',
+  'autocomplete.setup.debounce': '防抖延迟',
+  'autocomplete.setup.enabling': '启用中...',
+  'autocomplete.setup.enableButton': '启用自动补全',
+  'autocomplete.setup.active': '自动补全已激活',
+  'autocomplete.setup.activeDescription':
+    '在任何应用中开始输入，内联建议将以浮层形式出现。按 Tab 键接受。',
+  'autocomplete.setup.customizeSettings': '自定义设置',
+  'autocomplete.setup.done': '完成',
+  'autocomplete.setup.failedToEnable': '启用自动补全失败',
+
+  // Voice Setup Modal
+  'voiceSetup.title': '语音智能',
+  'voiceSetup.setupSubtitle': '需要下载模型',
+  'voiceSetup.enableSubtitle': '启动语音服务',
+  'voiceSetup.readyToGo': '准备就绪',
+  'voiceSetup.sttModelNotReady': '语音转文字模型未就绪',
+  'voiceSetup.sttModelNotReadyDesc':
+    '语音智能需要一个本地 Whisper 模型进行转录。请从本地模型设置中下载。',
+  'voiceSetup.sttModelNotReadyHint':
+    'STT 模型下载完成后，你可以返回此处启用语音听写和语音驱动的 AI 对话。',
+  'voiceSetup.downloadSttModel': '下载 STT 模型',
+  'voiceSetup.sttModelReady': '语音转文字模型已就绪',
+  'voiceSetup.enableDescription':
+    '启动语音服务以使用听写和语音驱动对话。按快捷键切换录音。',
+  'voiceSetup.hotkey': '快捷键',
+  'voiceSetup.activation': '激活模式',
+  'voiceSetup.pushToTalk': '按住说话',
+  'voiceSetup.tapToToggle': '点击切换',
+  'voiceSetup.starting': '启动中...',
+  'voiceSetup.startVoiceServer': '启动语音服务',
+  'voiceSetup.active': '语音智能已激活',
+  'voiceSetup.activeDescription':
+    '按 {hotkey} 开始听写。你的语音将被转录并发送给你的智能体。',
+  'voiceSetup.customizeSettings': '自定义设置',
+  'voiceSetup.done': '完成',
+  'voiceSetup.failedToStart': '启动语音服务失败',
+
+  // Screen Intelligence Setup Modal
+  'screenIntelligence.title': '屏幕智能',
+  'screenIntelligence.setup.grantPermissions': '授予权限',
+  'screenIntelligence.setup.enableSkill': '启用技能',
+  'screenIntelligence.setup.readyToGo': '准备就绪',
+  'screenIntelligence.setup.permissionsDescription':
+    '屏幕智能需要 macOS 权限来捕获你的屏幕并为你的智能体提供上下文。',
+  'screenIntelligence.setup.permScreenRecording': '屏幕录制',
+  'screenIntelligence.setup.permAccessibility': '辅助功能',
+  'screenIntelligence.setup.permInputMonitoring': '输入监控',
+  'screenIntelligence.setup.granted': '已授予',
+  'screenIntelligence.setup.grant': '授予',
+  'screenIntelligence.setup.opening': '打开中...',
+  'screenIntelligence.setup.restartHint':
+    '在系统设置中授予权限后，点击下方按钮重启以应用更改。',
+  'screenIntelligence.setup.macosPrivacyTo': 'macOS 隐私权限应用于：',
+  'screenIntelligence.setup.restarting': '重启中...',
+  'screenIntelligence.setup.restartAndRefresh': '重启并刷新',
+  'screenIntelligence.setup.refreshStatus': '刷新状态',
+  'screenIntelligence.setup.allPermissionsGranted': '所有权限已授予',
+  'screenIntelligence.setup.enableDescription':
+    '启用屏幕智能以持续捕获屏幕内容，并为你的智能体记忆提供有用的上下文。',
+  'screenIntelligence.setup.captureMode': '捕获模式',
+  'screenIntelligence.setup.allWindowsConfigurableLater':
+    '所有窗口（稍后可配置）',
+  'screenIntelligence.setup.visionModel': '视觉模型',
+  'screenIntelligence.setup.enabled': '已启用',
+  'screenIntelligence.setup.panicHotkey': '紧急快捷键',
+  'screenIntelligence.setup.enabling': '启用中...',
+  'screenIntelligence.setup.enableButton': '启用屏幕智能',
+  'screenIntelligence.setup.active': '屏幕智能已启用',
+  'screenIntelligence.setup.activeDescription':
+    '屏幕智能现已启用。从设置面板开始会话，即可为你的智能体捕获屏幕上下文。',
+  'screenIntelligence.setup.advancedSettings': '高级设置',
+  'screenIntelligence.setup.done': '完成',
+  'screenIntelligence.setup.macosOnly':
+    '屏幕智能目前仅在 macOS 上可用。',
+  'screenIntelligence.setup.failedToEnable': '启用屏幕智能失败',
+
+  // Meeting Bots Card
+  'meetingBots.title': '让 OpenHuman 参加会议',
+  'meetingBots.newBadge': '新功能',
+  'meetingBots.bannerDescription':
+    '发送一个 Google Meet 链接，OpenHuman 会以访客身份加入，说话、倾听并挥手回应。',
+  'meetingBots.joiningTitle': 'OpenHuman 正在加入会议',
+  'meetingBots.joiningMessage':
+    '它应该在几秒钟内作为参与者出现。',
+  'meetingBots.busyTitle': 'OpenHuman 正忙',
+  'meetingBots.couldNotStart': '无法启动 OpenHuman',
+  'meetingBots.failedToStart': '启动 OpenHuman 失败。',
+  'meetingBots.soon': '即将推出',
+  'meetingBots.modalDescription':
+    'OpenHuman 以匿名访客身份加入，将其视频流传输到会议中，并通过智能体进行回复。',
+  'meetingBots.meetingLink': '会议链接',
+  'meetingBots.displayName': '显示名称',
+  'meetingBots.comingSoonPlatform': '{platform} 支持即将推出。',
+  'meetingBots.starting': '启动中…',
+  'meetingBots.sendToPlatform': '发送到 {platform}',
+  'meetingBots.platformComingSoon': '{platform} 即将推出',
+
+  // App Update Prompt
+  'updatePrompt.title': '更新',
+  'updatePrompt.readyToInstall': '更新已准备就绪',
+  'updatePrompt.installing': '正在安装更新',
+  'updatePrompt.restarting': '重启中…',
+  'updatePrompt.failed': '更新失败',
+  'updatePrompt.failedWithLogs': '更新失败。请查看日志了解详情。',
+  'updatePrompt.versionReady': '版本 {version} 已准备就绪。',
+  'updatePrompt.newVersionReady': '有新版本可供安装。',
+  'updatePrompt.currentlyOn': '当前版本 {version}。',
+  'updatePrompt.restartWarning':
+    '重启将短暂关闭所有打开的对话。新版本会自动启动。',
+  'updatePrompt.restartNow': '立即重启',
+  'updatePrompt.later': '稍后',
+  'updatePrompt.somethingWentWrong': '更新过程中出现错误。',
+  'updatePrompt.tryAgain': '重试',
+  'updatePrompt.installingNewVersion': '正在安装新版本…',
+  'updatePrompt.relaunching': '正在重新启动应用…',
+  'updatePrompt.downloaded': '已下载 {bytes}',
+  'updatePrompt.working': '运行中…',
+
+  // Local AI Download Snackbar
+  'localAI.installing': '安装中...',
+  'localAI.preparing': '准备中...',
+  'localAI.expandDownload': '展开下载进度',
+  'localAI.collapseDownload': '折叠下载进度',
+  'localAI.dismissDownload': '关闭下载通知',
+
+  // Upsell Banner
+  'upsell.dismissAriaLabel': '关闭',
+
+  // Accounts
+  'accounts.allConnected': '你已连接所有支持的应用。',
+
+  // Channels — auth modes
+  'channels.authMode.managedDm': '托管私信',
+  'channels.authMode.oauth': 'OAuth',
+  'channels.authMode.botToken': 'Bot 令牌',
+  'channels.authMode.apiKey': 'API 密钥',
+
+  // Channels — definitions (fallback when backend unreachable)
+  'channels.telegram.desc': '连接 Telegram 与你的智能体直接聊天。',
+  'channels.telegram.managedDmDesc': '使用你的 Telegram 账户登录，让智能体监听和回复。',
+  'channels.telegram.botTokenDesc': '配置 Bot 令牌，通过智能体桥接 Telegram 消息。',
+  'channels.telegram.botTokenLabel': 'Bot 令牌',
+  'channels.telegram.allowedUsersLabel': '允许的用户 ID',
+  'channels.discord.desc': '连接 Discord 在你的服务器中与智能体聊天。',
+  'channels.discord.botTokenDesc': '配置 Bot 令牌，通过智能体桥接 Discord 消息。',
+  'channels.discord.botTokenLabel': 'Bot 令牌',
+  'channels.discord.guildIdLabel': '服务器 ID',
+  'channels.discord.oauthDesc': '使用 Discord 登录以关联你的账户。',
+  'channels.discord.managedDmDesc': '使用 Discord 登录，让智能体收发私信。',
+  'channels.web.desc': 'Web 渠道始终可用，无需设置。',
+  'channels.web.managedDmDesc': '直接在 Web 应用中与你的智能体聊天。',
+  'channel.webAlwaysAvailable': 'Web 始终可用，无需任何配置。',
+
+  // Discord
+  'discord.fieldRequired': '{field} 为必填项',
+  'discord.linkExpired': '链接已过期。请重新开始连接流程。',
+  'discord.restartHint': '重新操作：再次点击连接。',
+  'discord.tokenCard.title': 'Bot 令牌',
+  'discord.tokenCard.hint': '在你拥有管理员权限的 Discord 服务器中运行 {cmd} 来生成 Bot 令牌。',
+  'discord.tokenCard.warning': '请妥善保管你的 Bot 令牌。任何人拿到令牌都可以控制你的 Bot。',
+  'discord.linked': '你的 Discord 账户已关联。',
+  'discord.connect': '连接',
+  'discord.disconnect': '断开连接',
+
+  // Telegram
+  'telegram.managedDmConnecting': '正在连接 Telegram...',
+  'telegram.managedDmTimeout': '连接超时。请重试。',
+  'telegram.fieldRequired': '{field} 为必填项',
+  'telegram.restartHint': '重新操作：再次点击连接。',
+  'telegram.reconnect': '重新连接',
+  'telegram.connect': '连接',
+  'telegram.disconnect': '断开连接',
+
+  // Unsubscribe
+  'unsubscribe.title': '退订请求',
+  'unsubscribe.processing': '处理中...',
+  'unsubscribe.approve': '批准',
+  'unsubscribe.deny': '拒绝',
+  'unsubscribe.success': '已成功退订。',
+  'unsubscribe.denied': '退订请求已拒绝。',
+  'unsubscribe.permissionError': '你没有管理退订请求的权限。',
+
+  // Composer Send
+  'composerSend.usageLimitReached': '用量已达上限。请升级或等待重置。',
+  'composerSend.socketDisconnected': '实时连接已断开 — 没有客户端 ID 无法传递回复。',
+
+  // Time Format
+  'timeFormat.justNow': '刚刚',
+  'timeFormat.minAgo': '{n} 分钟前',
+  'timeFormat.hrAgo': '{n} 小时前',
+  'timeFormat.dayAgo': '{n} 天前',
+  'timeFormat.now': '现在',
+  'timeFormat.inMinutes': '{n} 分钟后',
+  'timeFormat.inHours': '{n} 小时后',
+  'timeFormat.inHoursMinutes': '{n} 小时 {m} 分钟后',
+  'timeFormat.inDays': '{n} 天后',
+  'timeFormat.inDaysHours': '{n} 天 {h} 小时后',
+
+  // Skill Categories
+  'skillCategories.all': '全部',
+  'skillCategories.builtIn': '内置',
+  'skillCategories.channels': '渠道',
+  'skillCategories.chat': '聊天',
+  'skillCategories.productivity': '效率',
+  'skillCategories.toolsAutomation': '工具与自动化',
+  'skillCategories.social': '社交',
+  'skillCategories.platform': '平台',
+  'skillCategories.other': '其他',
+
+  // Memory Debug
+  'memoryDebug.documents': '文档',
+  'memoryDebug.filterByNamespace': '按命名空间筛选...',
+  'memoryDebug.refresh': '刷新',
+  'memoryDebug.noDocuments': '未找到文档。',
+  'memoryDebug.rawResponse': '原始响应',
+  'memoryDebug.namespaces': '命名空间',
+  'memoryDebug.noNamespaces': '未找到命名空间。',
+  'memoryDebug.queryRecall': '查询与召回',
+  'memoryDebug.namespace': '命名空间',
+  'memoryDebug.queryText': '查询文本...',
+  'memoryDebug.maxChunks': '最大块数',
+  'memoryDebug.query': '查询',
+  'memoryDebug.recall': '召回',
+  'memoryDebug.queryErrorPrefix': '查询错误：',
+  'memoryDebug.recallErrorPrefix': '召回错误：',
+  'memoryDebug.queryResult': '查询结果',
+  'memoryDebug.recallResult': '召回结果',
+  'memoryDebug.clearNamespace': '清除命名空间',
+  'memoryDebug.clearNamespaceDesc': '永久删除命名空间中的所有文档。此操作不可撤销。',
+  'memoryDebug.selectNamespace': '选择命名空间...',
+  'memoryDebug.namespacePlaceholder': '命名空间名称...',
+  'memoryDebug.clear': '清除',
+  'memoryDebug.confirmDeleteDocument': '确定要删除此文档吗？',
+  'memoryDebug.confirmClearNamespace': '确定要清除 {ns} 中的所有文档吗？',
+
+  // Core Job List
+  'coreJobList.title': '定时任务',
+  'coreJobList.description': '管理核心内部运行的定时后台任务。',
+  'coreJobList.loading': '加载任务中...',
+  'coreJobList.noJobs': '没有注册的定时任务。',
+  'coreJobList.enabled': '已启用',
+  'coreJobList.paused': '已暂停',
+  'coreJobList.schedule': '调度计划',
+  'coreJobList.nextRun': '下次运行',
+  'coreJobList.lastStatus': '最近状态',
+  'coreJobList.everyMs': '每 {ms} 毫秒',
+  'coreJobList.atTime': '{time}',
+  'coreJobList.saving': '保存中...',
+  'coreJobList.pause': '暂停',
+  'coreJobList.resume': '恢复',
+  'coreJobList.running': '运行中...',
+  'coreJobList.runNow': '立即运行',
+  'coreJobList.loadingRuns': '加载中...',
+  'coreJobList.viewRuns': '查看记录',
+  'coreJobList.removing': '移除中...',
+  'coreJobList.remove': '移除',
+  'coreJobList.recentRuns': '最近运行记录',
+
+  // Memory Chunk
+  'memoryChunk.mentioned': '提及',
+  'memoryChunk.oneChunk': '{n} 个块',
+  'memoryChunk.manyChunks': '{n} 个块',
+  'memoryChunk.whyKept': '保留原因',
+  'memoryChunk.kept': '已保留',
+  'memoryChunk.dropped': '已丢弃',
+  'memoryChunk.atThreshold': '阈值 {threshold}',
+
+  // Tool Timeline
+  'toolTimeline.workerThread': '工作线程',
+  'toolTimeline.turnOf': '第 {n}/{total} 轮',
+  'toolTimeline.oneTurn': '{n} 轮',
+  'toolTimeline.manyTurns': '{n} 轮',
+
+  // Team Members — additions
+  'team.refreshingMembers': '正在刷新成员...',
+  'team.oneMember': '{n} 位成员',
+  'team.manyMembers': '{n} 位成员',
+  'team.loadingMembers': '正在加载成员...',
+  'team.you': '（你）',
+  'team.removeMemberAria': '移除 {name}',
+  'team.noMembersFound': '未找到成员',
+  'team.removeMemberTitle': '移除团队成员',
+  'team.removeMemberConfirm': '确定要将 {name} 从团队中移除吗？',
+  'team.removeMemberWarning': '他们将失去对团队及所有团队资源的访问权限。',
+  'team.removeMemberAction': '移除成员',
+  'team.removing': '正在移除...',
+  'team.changeRoleTitle': '更改成员角色',
+  'team.changeRoleConfirm': '将 {name} 的角色从 {oldRole} 更改为 {newRole}？',
+  'team.changeRoleAdminWarning': '这将授予他们完整的管理员权限，包括管理团队成员的能力。',
+  'team.changeRoleDemoteWarning': '这将移除他们的管理员权限，他们将无法再管理团队。',
+  'team.changeRoleAction': '更改角色',
+  'team.changing': '正在更改...',
+
+  // Chat Runtime
+  'chatRuntime.agentErrorMessage': '出了点问题。请重试。\n此错误已上报。你也可以在 Discord 上报告。\n<openhuman-link path="community/discord">在 Discord 上报告</openhuman-link>',
 };
 
 export default zhCN;

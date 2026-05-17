@@ -14,6 +14,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useChannelDefinitions } from '../hooks/useChannelDefinitions';
+import { useT } from '../lib/i18n/I18nContext';
 import {
   ensureNotificationPermission,
   getNotificationPermissionState,
@@ -41,6 +42,7 @@ interface OpenhumanLinkEvent {
 export const OPENHUMAN_LINK_EVENT = 'openhuman-link';
 
 const OpenhumanLinkModal = () => {
+  const { t } = useT();
   const [activePath, setActivePath] = useState<string | null>(null);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ const OpenhumanLinkModal = () => {
         className="w-full max-w-md rounded-2xl bg-white shadow-xl overflow-hidden"
         onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-stone-100 px-5 py-3">
-          <h2 className="text-sm font-semibold text-stone-900">{titleForPath(activePath)}</h2>
+          <h2 className="text-sm font-semibold text-stone-900">{titleForPath(activePath, t)}</h2>
           <button
             type="button"
             onClick={close}
@@ -89,7 +91,7 @@ const OpenhumanLinkModal = () => {
             </svg>
           </button>
         </div>
-        <div className="p-5">{renderBody(activePath, close)}</div>
+        <div className="p-5">{renderBody(activePath, close, t)}</div>
       </div>
     </div>
   );
@@ -102,6 +104,7 @@ const OpenhumanLinkModal = () => {
  * so the user gets feedback instead of a flashing screen.
  */
 const MessagingSetupBridge = ({ onClose }: { onClose: () => void }) => {
+  const { t } = useT();
   const { definitions, loading } = useChannelDefinitions();
   const telegram = useMemo(() => definitions.find(d => d.id === 'telegram') ?? null, [definitions]);
 
@@ -109,7 +112,7 @@ const MessagingSetupBridge = ({ onClose }: { onClose: () => void }) => {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
         <div className="rounded-2xl bg-white px-6 py-4 text-sm text-stone-600 shadow-xl">
-          Loading channel setup…
+          {t('linkModal.loadingChannelSetup')}
         </div>
       </div>
     );
@@ -124,15 +127,14 @@ const MessagingSetupBridge = ({ onClose }: { onClose: () => void }) => {
           className="rounded-2xl bg-white p-6 text-sm text-stone-700 shadow-xl max-w-sm"
           onClick={e => e.stopPropagation()}>
           <p>
-            Telegram channel definition isn't available right now. Try again from Settings →
-            Messaging.
+            {t('linkModal.telegramNotAvailable')}
           </p>
           <div className="mt-3 flex justify-end">
             <button
               type="button"
               onClick={onClose}
               className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-50">
-              Close
+              {t('common.close')}
             </button>
           </div>
         </div>
@@ -143,24 +145,24 @@ const MessagingSetupBridge = ({ onClose }: { onClose: () => void }) => {
   return <ChannelSetupModal definition={telegram} onClose={onClose} />;
 };
 
-function titleForPath(path: string): string {
+function titleForPath(path: string, t: (key: string) => string): string {
   switch (path) {
     case 'settings/notifications':
-      return 'Allow notifications';
+      return t('linkModal.title.allowNotifications');
     case 'settings/billing':
-      return 'Billing & credits';
+      return t('linkModal.title.billingCredits');
     case 'settings/messaging':
-      return 'Connect a chat channel';
+      return t('linkModal.title.connectChatChannel');
     case 'community/discord':
-      return 'Join the community';
+      return t('linkModal.title.joinCommunity');
     case 'accounts/setup':
-      return 'Connect your apps';
+      return t('linkModal.title.connectYourApps');
     default:
-      return 'Settings';
+      return t('linkModal.title.settings');
   }
 }
 
-function renderBody(path: string, close: () => void) {
+function renderBody(path: string, close: () => void, t: (key: string) => string) {
   switch (path) {
     case 'settings/notifications':
       return <NotificationsBody close={close} />;
@@ -180,10 +182,9 @@ function renderBody(path: string, close: () => void) {
       return (
         <div className="space-y-3 text-sm text-stone-700">
           <p>
-            This setting isn't ready in the popup yet. Open the full settings page when you're
-            ready.
+            {t('linkModal.settingNotReady')}
           </p>
-          <DoneFooter close={close} />
+          <DoneFooter close={close} t={t} />
         </div>
       );
   }
@@ -192,6 +193,7 @@ function renderBody(path: string, close: () => void) {
 // ── Notifications ────────────────────────────────────────────────────────
 
 const NotificationsBody = ({ close }: { close: () => void }) => {
+  const { t } = useT();
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
   const [permissionState, setPermissionState] = useState<NotificationPermissionState>('unknown');
@@ -218,7 +220,7 @@ const NotificationsBody = ({ close }: { close: () => void }) => {
       if (!isTauri()) {
         setStatus('error');
         setError(
-          'Native notifications are only available in the desktop app (run `pnpm dev:app`).'
+          t('linkModal.notifications.desktopOnly')
         );
         return;
       }
@@ -229,20 +231,20 @@ const NotificationsBody = ({ close }: { close: () => void }) => {
         setPermissionState(nextState);
         setStatus('error');
         setError(
-          'Notification permission is off. Enable OpenHuman in System Settings → Notifications, then retry.'
+          t('linkModal.notifications.permissionOff')
         );
         return;
       }
       const sendResult = await showNativeNotification({
-        title: 'OpenHuman is good to go',
-        body: 'You will get pings here when something needs your attention.',
+        title: t('linkModal.notifications.testTitle'),
+        body: t('linkModal.notifications.testBody'),
         tag: 'welcome-notification-test',
       });
       if (!sendResult.delivered) {
         setStatus('error');
         setError(
           sendResult.error ??
-            'OpenHuman could not trigger a system notification. Check OS notification settings and retry.'
+            t('linkModal.notifications.couldNotTrigger')
         );
         return;
       }
@@ -257,23 +259,22 @@ const NotificationsBody = ({ close }: { close: () => void }) => {
   return (
     <div className="space-y-4 text-sm text-stone-700">
       <p>
-        OpenHuman uses native notifications so it can ping you when something needs your attention,
-        even when the chat window is hidden.
+        {t('linkModal.notifications.description')}
       </p>
       {permissionState === 'denied' && (
         <div className="rounded-xl border border-coral-200 bg-coral-50 p-3 text-xs text-coral-700">
-          Notifications are currently blocked.
+          {t('linkModal.notifications.blocked')}
           <br />
-          1. Open System Settings → Notifications → OpenHuman
+          {t('linkModal.notifications.blockedStep1')}
           <br />
-          2. Turn on Allow Notifications
+          {t('linkModal.notifications.blockedStep2')}
           <br />
-          3. Return here and tap Retry test notification
+          {t('linkModal.notifications.blockedStep3')}
         </div>
       )}
       {(permissionState === 'prompt' || permissionState === 'unknown') && (
         <div className="rounded-xl border border-stone-200 bg-stone-50 p-3 text-xs text-stone-700">
-          First step: tap Send test notification and allow permission in the macOS prompt.
+          {t('linkModal.notifications.firstStep')}
         </div>
       )}
       <button
@@ -282,19 +283,18 @@ const NotificationsBody = ({ close }: { close: () => void }) => {
         disabled={status === 'sending'}
         className="w-full rounded-xl bg-primary-500 text-white text-sm font-medium py-2.5 hover:bg-primary-600 transition-colors disabled:opacity-60">
         {status === 'sending'
-          ? 'Asking your OS…'
+          ? t('linkModal.notifications.askingOS')
           : status === 'error'
-            ? 'Retry test notification'
-            : 'Send test notification'}
+            ? t('linkModal.notifications.retryTest')
+            : t('linkModal.notifications.sendTest')}
       </button>
       {status === 'sent' && (
         <p className="text-xs text-sage-700">
-          Test notification sent. If you didn’t receive it, go to System Settings → Notifications →
-          OpenHuman, turn on Allow Notifications, and set Banner Style to Persistent.
+          {t('linkModal.notifications.testSent')}
         </p>
       )}
-      {status === 'error' && <p className="text-xs text-coral-600">Couldn't send: {error}</p>}
-      <DoneFooter close={close} />
+      {status === 'error' && <p className="text-xs text-coral-600">{t('linkModal.notifications.couldntSend').replace('{error}', error ?? '')}</p>}
+      <DoneFooter close={close} t={t} />
     </div>
   );
 };
@@ -302,13 +302,14 @@ const NotificationsBody = ({ close }: { close: () => void }) => {
 // ── Billing ──────────────────────────────────────────────────────────────
 
 const BillingBody = ({ close }: { close: () => void }) => {
+  const { t } = useT();
   return (
     <div className="space-y-4 text-sm text-stone-700">
       <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
-        <p className="text-xs uppercase tracking-wide text-stone-500">Trial credit</p>
+        <p className="text-xs uppercase tracking-wide text-stone-500">{t('linkModal.billing.trialCredit')}</p>
         <p className="mt-1 text-2xl font-semibold text-stone-900">$1.00</p>
         <p className="mt-1 text-xs text-stone-500">
-          More than enough to play around. Top up or pick a plan when you want real usage.
+          {t('linkModal.billing.trialDescription')}
         </p>
       </div>
       <button
@@ -317,9 +318,9 @@ const BillingBody = ({ close }: { close: () => void }) => {
           void openUrl(BILLING_DASHBOARD_URL).catch(() => {});
         }}
         className="w-full rounded-xl bg-primary-500 text-white text-sm font-medium py-2.5 hover:bg-primary-600 transition-colors">
-        Open dashboard in browser
+        {t('linkModal.billing.openDashboard')}
       </button>
-      <DoneFooter close={close} skipLabel="Stay on trial" />
+      <DoneFooter close={close} skipLabel={t('linkModal.billing.stayOnTrial')} t={t} />
     </div>
   );
 };
@@ -329,29 +330,28 @@ const BillingBody = ({ close }: { close: () => void }) => {
 const DISCORD_INVITE_URL = 'https://discord.tinyhumans.ai/';
 
 const DiscordBody = ({ close }: { close: () => void }) => {
+  const { t } = useT();
   return (
     <div className="space-y-4 text-sm text-stone-700">
       <p>
-        Hop into our Discord and link your OpenHuman account. You'll get exclusive early access to
-        features, free credits to play with, a great community to nerd out with, and yes, free
-        merch.
+        {t('linkModal.discord.description')}
       </p>
       <ul className="space-y-1.5 text-xs text-stone-600 pl-1">
         <li className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-          Exclusive feature access
+          {t('linkModal.discord.featureAccess')}
         </li>
         <li className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-          Free credits for active members
+          {t('linkModal.discord.freeCredits')}
         </li>
         <li className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-          Community of builders and operators
+          {t('linkModal.discord.community')}
         </li>
         <li className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-primary-400 flex-shrink-0" />
-          Free merch when you stick around
+          {t('linkModal.discord.freeMerch')}
         </li>
       </ul>
       <button
@@ -360,9 +360,9 @@ const DiscordBody = ({ close }: { close: () => void }) => {
           void openUrl(DISCORD_INVITE_URL).catch(() => {});
         }}
         className="w-full rounded-xl bg-primary-500 text-white text-sm font-medium py-2.5 hover:bg-primary-600 transition-colors">
-        Open Discord invite
+        {t('linkModal.discord.openInvite')}
       </button>
-      <DoneFooter close={close} skipLabel="Maybe later" />
+      <DoneFooter close={close} skipLabel={t('linkModal.discord.maybeLater')} t={t} />
     </div>
   );
 };
@@ -395,29 +395,30 @@ function makeAccountId(): string {
   return `acct-${Date.now().toString(36)}`;
 }
 
-/** Status label + color for a given account lifecycle status. */
-function statusDisplay(status: AccountStatus): { label: string; dotClass: string } {
-  switch (status) {
-    case 'open':
-      return { label: 'Connected', dotClass: 'bg-emerald-500' };
-    case 'loading':
-      return { label: 'Loading…', dotClass: 'bg-amber-400' };
-    case 'pending':
-      return { label: 'Needs sign-in', dotClass: 'bg-amber-400' };
-    case 'timeout':
-      return { label: 'Timed out', dotClass: 'bg-red-400' };
-    case 'error':
-      return { label: 'Error', dotClass: 'bg-red-400' };
-    case 'closed':
-      return { label: 'Closed', dotClass: 'bg-stone-300' };
-  }
-}
-
 const AccountsSetupBody = ({ close }: { close: () => void }) => {
+  const { t } = useT();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const accountsById = useAppSelector(s => s.accounts.accounts);
   const order = useAppSelector(s => s.accounts.order);
+
+  /** Status label + color for a given account lifecycle status. */
+  function statusDisplay(status: AccountStatus): { label: string; dotClass: string } {
+    switch (status) {
+      case 'open':
+        return { label: t('linkModal.accounts.status.connected'), dotClass: 'bg-emerald-500' };
+      case 'loading':
+        return { label: t('linkModal.accounts.status.loading'), dotClass: 'bg-amber-400' };
+      case 'pending':
+        return { label: t('linkModal.accounts.status.needsSignIn'), dotClass: 'bg-amber-400' };
+      case 'timeout':
+        return { label: t('linkModal.accounts.status.timedOut'), dotClass: 'bg-red-400' };
+      case 'error':
+        return { label: t('linkModal.accounts.status.error'), dotClass: 'bg-red-400' };
+      case 'closed':
+        return { label: t('linkModal.accounts.status.closed'), dotClass: 'bg-stone-300' };
+    }
+  }
 
   // Track accounts added during this modal session so "Done" can navigate.
   // Uses state (not ref) so the CTA label re-renders when toggles change.
@@ -478,14 +479,12 @@ const AccountsSetupBody = ({ close }: { close: () => void }) => {
 
   // Dynamic CTA based on what's been toggled on
   const firstNewLabel = [...newlyAdded.values()][0];
-  const doneLabel = firstNewLabel ? `Continue with ${firstNewLabel} sign-in` : 'Done';
+  const doneLabel = firstNewLabel ? t('linkModal.accounts.continueWith').replace('{label}', firstNewLabel) : t('linkModal.accounts.done');
 
   return (
     <div className="space-y-4 text-sm text-stone-700">
       <p>
-        Pick the chat apps and inboxes you already use. We'll add them as built-in webviews here so
-        you can ditch six browser tabs and stick with one app, and the agent can listen in across
-        all of them in the background.
+        {t('linkModal.accounts.description')}
       </p>
       <div className="space-y-2">
         {providerDescriptors.map(p => {
@@ -514,7 +513,7 @@ const AccountsSetupBody = ({ close }: { close: () => void }) => {
                 type="button"
                 role="switch"
                 aria-checked={on}
-                aria-label={`${on ? 'Disconnect' : 'Connect'} ${p.label}`}
+                aria-label={`${on ? t('linkModal.accounts.disconnect') : t('linkModal.accounts.connect')} ${p.label}`}
                 onClick={() => handleToggle(p.id, p.label, on)}
                 className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
                   on ? 'bg-primary-500' : 'bg-stone-200'
@@ -530,10 +529,9 @@ const AccountsSetupBody = ({ close }: { close: () => void }) => {
         })}
       </div>
       <p className="text-xs text-stone-400">
-        Toggling on adds a private webview. You'll sign in the first time you open it — credentials
-        stay on your device.
+        {t('linkModal.accounts.toggleHint')}
       </p>
-      <DoneFooter close={close} onDone={handleDone} doneLabel={doneLabel} />
+      <DoneFooter close={close} onDone={handleDone} doneLabel={doneLabel} t={t} />
     </div>
   );
 };
@@ -543,26 +541,28 @@ const AccountsSetupBody = ({ close }: { close: () => void }) => {
 const DoneFooter = ({
   close,
   onDone,
-  doneLabel = 'Done',
-  skipLabel = 'Skip for now',
+  doneLabel,
+  skipLabel,
+  t,
 }: {
   close: () => void;
   onDone?: () => void;
   doneLabel?: string;
   skipLabel?: string;
+  t: (key: string) => string;
 }) => (
   <div className="flex items-center justify-between gap-3 pt-1">
     <button
       type="button"
       onClick={close}
       className="text-xs font-medium text-stone-500 hover:text-stone-800">
-      {skipLabel}
+      {skipLabel ?? t('linkModal.footer.skipForNow')}
     </button>
     <button
       type="button"
       onClick={onDone ?? close}
       className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-xs font-medium text-stone-700 hover:bg-stone-50">
-      {doneLabel}
+      {doneLabel ?? t('linkModal.footer.done')}
     </button>
   </div>
 );

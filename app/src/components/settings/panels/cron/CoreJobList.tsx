@@ -1,3 +1,4 @@
+import { useT } from '../../../../lib/i18n/I18nContext';
 import type { CoreCronJob, CoreCronRun } from '../../../../utils/tauriCommands';
 
 interface CoreJobListProps {
@@ -21,19 +22,18 @@ const CoreJobList = ({
   onLoadCoreRuns,
   onRemoveCoreJob,
 }: CoreJobListProps) => {
+  const { t } = useT();
   return (
     <section className="rounded-xl border border-stone-200 bg-white">
       <div className="p-4 border-b border-stone-200">
-        <h3 className="text-sm font-semibold text-stone-900">Core Cron Jobs</h3>
-        <p className="text-xs text-stone-500 mt-1">
-          Jobs persisted in the OpenHuman core scheduler database.
-        </p>
+        <h3 className="text-sm font-semibold text-stone-900">{t('coreJobList.title')}</h3>
+        <p className="text-xs text-stone-500 mt-1">{t('coreJobList.description')}</p>
       </div>
 
-      {loading && <div className="p-4 text-sm text-stone-400">Loading cron jobs...</div>}
+      {loading && <div className="p-4 text-sm text-stone-400">{t('coreJobList.loading')}</div>}
 
       {!loading && coreJobs.length === 0 && (
-        <div className="p-4 text-sm text-stone-400">No core cron jobs found.</div>
+        <div className="p-4 text-sm text-stone-400">{t('coreJobList.noJobs')}</div>
       )}
 
       {!loading &&
@@ -54,30 +54,30 @@ const CoreJobList = ({
                       ? 'bg-sage-50 text-sage-700 border-sage-200'
                       : 'bg-stone-100 text-stone-600 border-stone-200'
                   }`}>
-                  {job.enabled ? 'Enabled' : 'Paused'}
+                  {job.enabled ? t('coreJobList.enabled') : t('coreJobList.paused')}
                 </span>
               </div>
 
               <div className="text-xs text-stone-600 space-y-1">
                 <div>
-                  Schedule:{' '}
+                  {t('coreJobList.schedule')}:{' '}
                   <span className="font-medium text-stone-700">
                     {job.schedule.kind === 'cron'
                       ? job.schedule.expr
                       : job.schedule.kind === 'every'
-                        ? `every ${job.schedule.every_ms}ms`
-                        : `at ${job.schedule.at}`}
+                        ? t('coreJobList.everyMs').replace('{ms}', String(job.schedule.every_ms))
+                        : t('coreJobList.atTime').replace('{time}', job.schedule.at)}
                   </span>
                 </div>
                 <div>
-                  Next run:{' '}
+                  {t('coreJobList.nextRun')}:{' '}
                   <span className="font-medium text-stone-700">
                     {new Date(job.next_run).toLocaleString()}
                   </span>
                 </div>
                 {job.last_status && (
                   <div>
-                    Last status:{' '}
+                    {t('coreJobList.lastStatus')}:{' '}
                     <span className="font-medium text-stone-700">{job.last_status}</span>
                   </div>
                 )}
@@ -90,38 +90,38 @@ const CoreJobList = ({
                   disabled={coreBusyKey === `core-toggle:${job.id}`}
                   onClick={() => onToggleCoreJob(job)}>
                   {coreBusyKey === `core-toggle:${job.id}`
-                    ? 'Saving…'
+                    ? t('coreJobList.saving')
                     : job.enabled
-                      ? 'Pause'
-                      : 'Resume'}
+                      ? t('coreJobList.pause')
+                      : t('coreJobList.resume')}
                 </button>
                 <button
                   type="button"
                   className="btn btn-sm btn-outline"
                   disabled={coreBusyKey === `core-run:${job.id}`}
                   onClick={() => onRunCoreJob(job.id)}>
-                  {coreBusyKey === `core-run:${job.id}` ? 'Running…' : 'Run Now'}
+                  {coreBusyKey === `core-run:${job.id}` ? t('coreJobList.running') : t('coreJobList.runNow')}
                 </button>
                 <button
                   type="button"
                   className="btn btn-sm btn-outline"
                   disabled={coreBusyKey === `core-runs:${job.id}`}
                   onClick={() => onLoadCoreRuns(job.id)}>
-                  {coreBusyKey === `core-runs:${job.id}` ? 'Loading…' : 'View Runs'}
+                  {coreBusyKey === `core-runs:${job.id}` ? t('coreJobList.loadingRuns') : t('coreJobList.viewRuns')}
                 </button>
                 <button
                   type="button"
                   className="btn btn-sm btn-error"
                   disabled={coreBusyKey === `core-remove:${job.id}`}
                   onClick={() => onRemoveCoreJob(job.id)}>
-                  {coreBusyKey === `core-remove:${job.id}` ? 'Removing…' : 'Remove'}
+                  {coreBusyKey === `core-remove:${job.id}` ? t('coreJobList.removing') : t('coreJobList.remove')}
                 </button>
               </div>
 
               {runs.length > 0 && (
                 <div className="rounded-lg border border-stone-200 bg-stone-50 p-3 space-y-1">
                   <div className="text-[11px] uppercase tracking-wide text-stone-400">
-                    Recent Runs
+                    {t('coreJobList.recentRuns')}
                   </div>
                   {runs.map(run => (
                     <div key={run.id} className="text-xs text-stone-600">

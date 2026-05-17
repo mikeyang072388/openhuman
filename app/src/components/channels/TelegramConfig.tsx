@@ -2,6 +2,7 @@ import debug from 'debug';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { AUTH_MODE_LABELS } from '../../lib/channels/definitions';
+import { useT } from '../../lib/i18n/I18nContext';
 import { channelConnectionsApi } from '../../services/api/channelConnectionsApi';
 import { callCoreRpc } from '../../services/coreRpcClient';
 import {
@@ -22,14 +23,13 @@ import ChannelFieldInput from './ChannelFieldInput';
 import ChannelStatusBadge from './ChannelStatusBadge';
 
 const log = debug('channels:telegram');
-const MANAGED_DM_CONNECTING_MESSAGE = 'Open Telegram and message the bot to complete setup.';
-const MANAGED_DM_TIMEOUT_MESSAGE = 'Managed DM verification timed out. Try connecting again.';
 
 interface TelegramConfigProps {
   definition: ChannelDefinition;
 }
 
 const TelegramConfig = ({ definition }: TelegramConfigProps) => {
+  const { t } = useT();
   const dispatch = useAppDispatch();
   const channelConnections = useAppSelector(state => state.channelConnections);
 
@@ -122,10 +122,10 @@ const TelegramConfig = ({ definition }: TelegramConfigProps) => {
             upsertChannelConnection({
               channel: 'telegram',
               authMode: 'managed_dm',
-              patch: { status: 'error', lastError: MANAGED_DM_TIMEOUT_MESSAGE },
+              patch: { status: 'error', lastError: t('telegram.managedDmTimeout') },
             })
           );
-          setError(MANAGED_DM_TIMEOUT_MESSAGE);
+          setError(t('telegram.managedDmTimeout'));
         } catch (pollError) {
           if (controller.signal.aborted) return;
 
@@ -172,7 +172,7 @@ const TelegramConfig = ({ definition }: TelegramConfigProps) => {
                 channel: 'telegram',
                 authMode: spec.mode,
                 status: 'error',
-                lastError: `${field.label} is required`,
+                lastError: t('telegram.fieldRequired').replace('{field}', field.label),
               })
             );
             return;
@@ -200,7 +200,7 @@ const TelegramConfig = ({ definition }: TelegramConfigProps) => {
                 upsertChannelConnection({
                   channel: 'telegram',
                   authMode: spec.mode,
-                  patch: { status: 'connecting', lastError: MANAGED_DM_CONNECTING_MESSAGE },
+                  patch: { status: 'connecting', lastError: t('telegram.managedDmConnecting') },
                 })
               );
               startManagedDmPolling(key, loginStart.linkToken);
@@ -262,7 +262,7 @@ const TelegramConfig = ({ definition }: TelegramConfigProps) => {
           } catch (restartErr) {
             const msg = restartErr instanceof Error ? restartErr.message : String(restartErr);
             log('core restart failed: %s', msg);
-            setError('Channel saved. Restart the app to activate it.');
+            setError(t('telegram.restartHint'));
           }
         } else {
           dispatch(
@@ -309,9 +309,9 @@ const TelegramConfig = ({ definition }: TelegramConfigProps) => {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <p className="text-sm font-medium text-stone-900">
-                  {AUTH_MODE_LABELS[spec.mode] ?? spec.mode}
+                  {t(AUTH_MODE_LABELS[spec.mode] ?? spec.mode)}
                 </p>
-                <p className="text-xs text-stone-500 mt-1">{spec.description}</p>
+                <p className="text-xs text-stone-500 mt-1">{t(spec.description)}</p>
                 {connection?.lastError && (
                   <p className="text-xs text-coral-600 mt-1">{connection.lastError}</p>
                 )}
@@ -339,14 +339,14 @@ const TelegramConfig = ({ definition }: TelegramConfigProps) => {
                 disabled={busyKeys[compositeKey]}
                 onClick={() => handleConnect(spec)}
                 className="rounded-lg bg-primary-500 px-3 py-1.5 text-xs font-medium text-white hover:bg-primary-600 disabled:opacity-50">
-                {status === 'connected' ? 'Reconnect' : 'Connect'}
+                {status === 'connected' ? t('telegram.reconnect') : t('telegram.connect')}
               </button>
               <button
                 type="button"
                 disabled={busyKeys[compositeKey] || status === 'disconnected'}
                 onClick={() => handleDisconnect(spec.mode)}
                 className="rounded-lg border border-stone-200 px-3 py-1.5 text-xs font-medium text-stone-600 hover:border-stone-300 disabled:opacity-50">
-                Disconnect
+                {t('telegram.disconnect')}
               </button>
             </div>
           </div>

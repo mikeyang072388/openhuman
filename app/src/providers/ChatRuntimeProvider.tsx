@@ -1,6 +1,7 @@
 import debug from 'debug';
 import { useCallback, useEffect, useRef } from 'react';
 
+import { useT } from '../lib/i18n/I18nContext';
 import { requestUsageRefresh } from '../hooks/usageRefresh';
 import { useRefetchSnapshotOnTurnEnd } from '../hooks/useRefetchSnapshotOnTurnEnd';
 import {
@@ -44,8 +45,7 @@ import { IS_PROD } from '../utils/config';
 import { formatTimelineEntry, promptFromArgsBuffer } from '../utils/toolTimelineFormatting';
 
 const logChatRuntime = debug('openhuman:chat-runtime');
-const USER_FACING_AGENT_ERROR_MESSAGE =
-  'Something went wrong. Please try again.\nThis error has been reported. You can also report it on Discord.\n<openhuman-link path="community/discord">Report on Discord</openhuman-link>';
+export const USER_FACING_AGENT_ERROR_KEY = 'chatRuntime.agentErrorMessage';
 
 const SEGMENT_DELIVERY_TTL_MS = 5 * 60 * 1000;
 const MAX_SEGMENT_DELIVERIES = 100;
@@ -147,6 +147,9 @@ function chatDoneExtraMetadata(event: ChatDoneEvent): Record<string, unknown> | 
 }
 
 const ChatRuntimeProvider = ({ children }: { children: React.ReactNode }) => {
+  const { t } = useT();
+  const tRef = useRef(t);
+  tRef.current = t;
   const dispatch = useAppDispatch();
   const { refetch: refetchSnapshot } = useRefetchSnapshotOnTurnEnd();
   const socketStatus = useAppSelector(selectSocketStatus);
@@ -855,8 +858,8 @@ const ChatRuntimeProvider = ({ children }: { children: React.ReactNode }) => {
           // classify_inference_error() in web.rs and is already user-friendly.
           const errorContent =
             event.error_type === 'inference'
-              ? USER_FACING_AGENT_ERROR_MESSAGE
-              : event.message || USER_FACING_AGENT_ERROR_MESSAGE;
+              ? tRef.current(USER_FACING_AGENT_ERROR_KEY)
+              : event.message || tRef.current(USER_FACING_AGENT_ERROR_KEY);
           if (!(lastMsg?.sender === 'agent' && lastMsg?.content === errorContent)) {
             void dispatch(
               addInferenceResponse({ content: errorContent, threadId: event.thread_id })
