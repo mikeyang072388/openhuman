@@ -22,6 +22,8 @@
 import { type ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useT } from '../../lib/i18n/I18nContext';
+
 import {
   authorize,
   deleteConnection,
@@ -84,9 +86,9 @@ export function isMissingRequiredFieldsError(err: unknown): boolean {
 export function sanitizeAuthError(err: unknown): string {
   if (isMissingRequiredFieldsError(err)) {
     // Never surface raw 612 payloads — callers should handle this separately.
-    return 'A required field is missing. Please provide the missing details and try again.';
+    return 'composio.error.missingRequiredField';
   }
-  if (!err) return 'Something went wrong.';
+  if (!err) return 'composio.error.somethingWentWrong';
   const raw = err instanceof Error ? err.message : String(err);
 
   // Strip any URL that looks like a backend endpoint so it is not displayed.
@@ -118,7 +120,7 @@ export function sanitizeAuthError(err: unknown): string {
       .trim();
   } while (result !== prev);
 
-  return result || 'Authorization failed.';
+  return result || 'composio.error.authFailed';
 }
 
 type Phase =
@@ -148,6 +150,7 @@ export default function ComposioConnectModal({
   onChanged,
   onClose,
 }: ComposioConnectModalProps) {
+  const { t } = useT();
   const modalRef = useRef<HTMLDivElement>(null);
   const pollTimerRef = useRef<number | null>(null);
   const pollDeadlineRef = useRef<number>(0);
@@ -228,9 +231,7 @@ export default function ComposioConnectModal({
       if (Date.now() > pollDeadlineRef.current) {
         stopPolling();
         setPhase('error');
-        setError(
-          'Timed out waiting for OAuth to complete. Please retry or check that the browser finished the flow.'
-        );
+        setError(t('composio.error.oauthTimeout'));
         return;
       }
       inFlightRef.current = true;
@@ -252,7 +253,7 @@ export default function ComposioConnectModal({
           if (state === 'error') {
             stopPolling();
             setPhase('error');
-            setError(`Connection failed (status: ${hit.status}).`);
+            setError(t('composio.error.connectionFailed').replace('{status}', hit.status));
             return;
           }
         }
@@ -290,20 +291,17 @@ export default function ComposioConnectModal({
    */
   const validateRequiredFields = useCallback((): boolean => {
     if (needsWabaId && !wabaId.trim()) {
-      setError('Please enter your WhatsApp Business Account ID (WABA ID) to continue.');
+      setError(t('composio.error.wabaIdRequired'));
       return false;
     }
     if (needsAtlassianSubdomain) {
       const trimmed = atlassianSubdomain.trim();
       if (!trimmed) {
-        setSubdomainError('Please enter your Atlassian subdomain to continue.');
+        setSubdomainError(t('composio.error.atlassianSubdomainRequired'));
         return false;
       }
       if (!isValidAtlassianSubdomain(trimmed)) {
-        setSubdomainError(
-          'Enter the short subdomain only (e.g. "acme"), not the full URL. ' +
-            'It should contain only letters, numbers, and hyphens.'
-        );
+        setSubdomainError(t('composio.error.invalidSubdomain'));
         return false;
       }
     }
@@ -369,15 +367,13 @@ export default function ComposioConnectModal({
           setError(null);
         } else {
           setPhase('error');
-          setError(
-            'This connection requires additional configuration. Please contact support for assistance.'
-          );
+          setError(t('composio.error.needsAdditionalConfig'));
         }
         return;
       }
 
       setPhase('error');
-      setError(sanitizeAuthError(err));
+      setError(t(sanitizeAuthError(err)));
     }
   }, [
     validateRequiredFields,
@@ -403,7 +399,7 @@ export default function ComposioConnectModal({
       } catch (err) {
         if (!cancelled) {
           const msg = err instanceof Error ? err.message : String(err);
-          setScopeError(`Couldn't load scope preferences: ${msg}`);
+          setScopeError(t('composio.error.couldNotLoadScopes').replace('{msg}', msg));
         }
       }
     })();
@@ -453,7 +449,7 @@ export default function ComposioConnectModal({
           err
         );
         setScopes(scopes);
-        setScopeError(`Couldn't save ${key} scope: ${msg}`);
+        setScopeError(t('composio.error.couldNotSaveScope').replace('{key}', key).replace('{msg}', msg));
       } finally {
         setSavingScope(null);
       }
@@ -473,7 +469,7 @@ export default function ComposioConnectModal({
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       setPhase('error');
-      setError(`Disconnect failed: ${msg}`);
+      setError(t('composio.error.disconnectFailed').replace('{msg}', msg));
     }
   }, [activeConnection, onChanged]);
 
@@ -481,7 +477,10 @@ export default function ComposioConnectModal({
     if (e.target === e.currentTarget) onClose();
   };
 
-  const headerTitle = phase === 'connected' ? `Manage ${toolkit.name}` : `Connect ${toolkit.name}`;
+  const headerTitle =
+    phase === 'connected'
+      ? t('composio.modal.manageToolkit').replace('{name}', toolkit.name)
+      : t('composio.modal.connectToolkit').replace('{name}', toolkit.name);
 
   const modalContent = (
     <div
@@ -516,7 +515,7 @@ export default function ComposioConnectModal({
               type="button"
               onClick={onClose}
               className="p-1 text-stone-400 hover:text-stone-900 transition-colors rounded-lg hover:bg-stone-100 flex-shrink-0"
-              aria-label="Close">
+              aria-label={t('common.close')}>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
@@ -534,15 +533,13 @@ export default function ComposioConnectModal({
           {phase === 'idle' && (
             <>
               <p className="text-sm text-stone-600">
-                Connect your {toolkit.name} account. We&apos;ll open a browser window, you approve
-                access there, and this app will detect the connection automatically.
+                {t('composio.modal.connectDescription').replace('{name}', toolkit.name)}
               </p>
               <div className="rounded-xl border border-stone-200 bg-stone-50 p-3">
                 <p className="mt-1 text-xs leading-relaxed text-stone-600">
-                  {toolkit.name} can expose{' '}
-                  <span className="font-medium">{toolkit.permissionLabel}</span>. After you connect,
-                  OpenHuman&apos;s own agent permissions are controlled below as read, write, and
-                  admin toggles.
+                  {t('composio.modal.permissionInfo')
+                    .replace('{name}', toolkit.name)
+                    .replace('{permissionLabel}', toolkit.permissionLabel)}
                 </p>
               </div>
               {needsWabaId && (
@@ -550,7 +547,7 @@ export default function ComposioConnectModal({
                   <label
                     htmlFor="waba-id-input"
                     className="block text-xs font-medium text-stone-700">
-                    WhatsApp Business Account ID (WABA ID)
+                    {t('composio.modal.wabaIdLabel')}
                     <span className="ml-1 text-coral-500">*</span>
                   </label>
                   <input
@@ -561,15 +558,11 @@ export default function ComposioConnectModal({
                       setWabaId(e.target.value);
                       if (error) setError(null);
                     }}
-                    placeholder="e.g. 123456789012345"
+                    placeholder={t('composio.modal.wabaIdPlaceholder')}
                     className="w-full rounded-xl border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
                   />
                   <p className="text-[11px] leading-relaxed text-stone-400">
-                    Find it via <span className="font-mono">GET /me/businesses</span> then{' '}
-                    <span className="font-mono">
-                      GET /&#123;business_id&#125;/owned_whatsapp_business_accounts
-                    </span>{' '}
-                    using your Meta access token.
+                    {t('composio.modal.wabaIdHint')}
                   </p>
                 </div>
               )}
@@ -588,7 +581,7 @@ export default function ComposioConnectModal({
                 type="button"
                 onClick={() => void handleConnect()}
                 className="w-full rounded-xl bg-primary-500 text-white text-sm font-medium py-2.5 hover:bg-primary-600 transition-colors">
-                Connect {toolkit.name}
+                {t('composio.modal.connectButton').replace('{name}', toolkit.name)}
               </button>
             </>
           )}
@@ -596,9 +589,7 @@ export default function ComposioConnectModal({
           {phase === 'needs-subdomain' && (
             <>
               <p className="text-sm text-stone-600">
-                To connect {toolkit.name}, enter your Atlassian subdomain (e.g.{' '}
-                <span className="font-mono">acme</span> for{' '}
-                <span className="font-mono">acme.atlassian.net</span>) and try again.
+                {t('composio.modal.needsSubdomainDesc').replace('{name}', toolkit.name)}
               </p>
               <AtlassianSubdomainInput
                 value={atlassianSubdomain}
@@ -613,7 +604,7 @@ export default function ComposioConnectModal({
                 type="button"
                 onClick={() => void handleConnect()}
                 className="w-full rounded-xl bg-primary-500 text-white text-sm font-medium py-2.5 hover:bg-primary-600 transition-colors">
-                Retry connection
+                {t('composio.modal.retryConnection')}
               </button>
               <button
                 type="button"
@@ -623,32 +614,31 @@ export default function ComposioConnectModal({
                   setError(null);
                 }}
                 className="w-full rounded-xl border border-stone-200 bg-white text-stone-600 text-xs font-medium py-2 hover:bg-stone-50 transition-colors">
-                Cancel
+                {t('common.cancel')}
               </button>
             </>
           )}
 
           {phase === 'authorizing' && (
-            <p className="text-sm text-stone-500">Requesting connect URL…</p>
+            <p className="text-sm text-stone-500">{t('composio.modal.requestingUrl')}</p>
           )}
 
           {phase === 'waiting' && (
             <>
               <div className="flex items-center gap-2 text-sm text-stone-700">
                 <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
-                Waiting for {toolkit.name} OAuth to complete…
+                {t('composio.modal.waitingOAuth').replace('{name}', toolkit.name)}
               </div>
               {connectUrl && (
                 <button
                   type="button"
                   onClick={() => void openUrl(connectUrl)}
                   className="w-full rounded-xl border border-stone-200 bg-stone-50 text-stone-700 text-xs font-medium py-2 hover:bg-stone-100 transition-colors">
-                  Reopen browser
+                  {t('composio.modal.reopenBrowser')}
                 </button>
               )}
               <p className="text-xs text-stone-400">
-                Complete the sign-in in your browser. This window will update when the connection is
-                active.
+                {t('composio.modal.completeSignIn')}
               </p>
             </>
           )}

@@ -118,14 +118,14 @@ export default function SkillResourcePreview({ skillId, relativePath, onDismiss 
               d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
             />
           </svg>
-          <span>Loading preview…</span>
+          <span>{t('skills.resources.loadingPreview')}</span>
         </div>
       ) : null}
 
       {state.status === 'error' ? (
         <div className="border-t border-coral-200 bg-coral-50 px-3 py-3">
           <p className="text-[11px] font-semibold uppercase tracking-wide text-coral-900">
-            Preview failed
+            {t('skills.resources.previewFailed')}
           </p>
           <p className="mt-1 break-words font-mono text-[11px] leading-relaxed text-coral-800">
             {state.error}

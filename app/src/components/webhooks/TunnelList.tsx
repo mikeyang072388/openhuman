@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import type { TunnelRegistration } from '../../features/webhooks/types';
 import { useBackendUrl } from '../../hooks/useBackendUrl';
+import { useT } from '../../lib/i18n/I18nContext';
 import { type Tunnel, tunnelsApi } from '../../services/api/tunnelsApi';
 
 interface TunnelListProps {
@@ -29,6 +30,7 @@ export default function TunnelList({
   onRegisterEcho,
   onUnregisterEcho,
 }: TunnelListProps) {
+  const { t } = useT();
   const [showCreate, setShowCreate] = useState(false);
   const [newName, setNewName] = useState('');
   const [newDesc, setNewDesc] = useState('');
@@ -46,7 +48,7 @@ export default function TunnelList({
       setNewDesc('');
       setShowCreate(false);
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : 'Failed to create tunnel');
+      setActionError(err instanceof Error ? err.message : t('webhooks.failedCreateTunnel'));
     } finally {
       setCreating(false);
     }
@@ -60,18 +62,18 @@ export default function TunnelList({
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-stone-900">Webhook Tunnels</h3>
+        <h3 className="text-lg font-semibold text-stone-900">{t('webhooks.tunnels')}</h3>
         <div className="flex gap-2">
           <button
             onClick={onRefresh}
             disabled={loading}
             className="px-3 py-1.5 text-sm text-stone-600 hover:text-stone-900 rounded-lg hover:bg-stone-100 transition-colors">
-            {loading ? 'Loading...' : 'Refresh'}
+            {loading ? t('common.loading') : t('common.refresh')}
           </button>
           <button
             onClick={() => setShowCreate(true)}
             className="px-3 py-1.5 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 transition-colors">
-            + New Tunnel
+            {t('webhooks.newTunnel')}
           </button>
         </div>
       </div>
@@ -81,7 +83,7 @@ export default function TunnelList({
         <div className="p-4 rounded-xl border border-stone-200 bg-white space-y-3">
           <input
             type="text"
-            placeholder="Tunnel name (e.g. telegram-bot)"
+            placeholder={t('webhooks.tunnelNamePlaceholder')}
             value={newName}
             onChange={e => setNewName(e.target.value)}
             className="w-full px-3 py-2 text-sm border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500"
@@ -89,7 +91,7 @@ export default function TunnelList({
           />
           <input
             type="text"
-            placeholder="Description (optional)"
+            placeholder={t('webhooks.descriptionOptional')}
             value={newDesc}
             onChange={e => setNewDesc(e.target.value)}
             className="w-full px-3 py-2 text-sm border border-stone-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500"
@@ -98,13 +100,13 @@ export default function TunnelList({
             <button
               onClick={() => setShowCreate(false)}
               className="px-3 py-1.5 text-sm text-stone-600 hover:text-stone-900 rounded-lg">
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               onClick={handleCreate}
               disabled={!newName.trim() || creating}
               className="px-3 py-1.5 text-sm font-medium text-white bg-primary-500 rounded-lg hover:bg-primary-600 disabled:opacity-50 transition-colors">
-              {creating ? 'Creating...' : 'Create'}
+              {creating ? t('webhooks.creating') : t('common.create')}
             </button>
           </div>
         </div>
@@ -117,7 +119,7 @@ export default function TunnelList({
           <button
             onClick={() => setActionError(null)}
             className="text-coral-500 hover:text-coral-700 text-xs ml-2">
-            Dismiss
+            {t('common.dismiss')}
           </button>
         </div>
       )}
@@ -125,7 +127,7 @@ export default function TunnelList({
       {/* Tunnel list */}
       {tunnels.length === 0 && !loading && (
         <p className="text-sm text-stone-500 text-center py-8">
-          No tunnels yet. Create one to receive webhook events.
+          {t('webhooks.noTunnels')}
         </p>
       )}
 
@@ -171,6 +173,7 @@ function TunnelCard({
   onUnregisterEcho,
   onError,
 }: TunnelCardProps) {
+  const { t } = useT();
   const [copied, setCopied] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [toggling, setToggling] = useState(false);
@@ -193,7 +196,7 @@ function TunnelCard({
     try {
       await onDelete();
     } catch (err) {
-      onError(err instanceof Error ? err.message : 'Failed to delete tunnel');
+      onError(err instanceof Error ? err.message : t('webhooks.failedDeleteTunnel'));
     } finally {
       setDeleting(false);
     }
@@ -208,7 +211,7 @@ function TunnelCard({
         await onRegisterEcho();
       }
     } catch (err) {
-      onError(err instanceof Error ? err.message : 'Failed to toggle echo');
+      onError(err instanceof Error ? err.message : t('webhooks.failedToggleEcho'));
     } finally {
       setToggling(false);
     }
@@ -224,11 +227,11 @@ function TunnelCard({
               className={`inline-flex items-center px-1.5 py-0.5 text-xs rounded-full ${
                 tunnel.isActive ? 'bg-sage-100 text-sage-700' : 'bg-stone-100 text-stone-500'
               }`}>
-              {tunnel.isActive ? 'Active' : 'Inactive'}
+              {tunnel.isActive ? t('webhooks.active') : t('webhooks.inactive')}
             </span>
             {isEchoRegistered && (
               <span className="inline-flex items-center px-1.5 py-0.5 text-xs rounded-full bg-amber-50 text-amber-700">
-                Echo
+                {t('webhooks.echo')}
               </span>
             )}
             {isSkillRegistered && registration && (
@@ -242,13 +245,13 @@ function TunnelCard({
           )}
           <div className="mt-2 flex items-center gap-2">
             <code className="text-xs text-stone-500 bg-stone-50 px-2 py-1 rounded font-mono truncate max-w-[400px]">
-              {webhookUrl || 'Resolving backend URL…'}
+              {webhookUrl || t('webhooks.resolvingBackendUrl')}
             </code>
             <button
               onClick={handleCopy}
               disabled={!webhookUrl}
               className="text-xs text-primary-500 hover:text-primary-700 whitespace-nowrap disabled:text-stone-400 disabled:cursor-not-allowed">
-              {copied ? 'Copied!' : 'Copy'}
+              {copied ? t('common.copied') : t('common.copy')}
             </button>
           </div>
         </div>
@@ -263,14 +266,14 @@ function TunnelCard({
                   ? 'text-amber-600 hover:text-amber-700 hover:bg-amber-50'
                   : 'text-primary-600 hover:text-primary-700 hover:bg-primary-50'
               }`}>
-              {toggling ? '...' : isEchoRegistered ? 'Remove Echo' : 'Enable Echo'}
+              {toggling ? t('webhooks.toggling') : isEchoRegistered ? t('webhooks.removeEcho') : t('webhooks.enableEcho')}
             </button>
           )}
           <button
             onClick={handleDelete}
             disabled={deleting}
             className="px-2 py-1 text-xs text-coral-600 hover:text-coral-700 hover:bg-coral-50 rounded-lg transition-colors">
-            {deleting ? '...' : 'Delete'}
+            {deleting ? t('webhooks.toggling') : t('common.delete')}
           </button>
         </div>
       </div>

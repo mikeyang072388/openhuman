@@ -1,4 +1,5 @@
 import type { AcceptedCompletion } from '../../../../utils/tauriCommands';
+import { useT } from '../../../../lib/i18n/I18nContext';
 
 interface CompletionStyleSectionProps {
   enabled: boolean;
@@ -53,12 +54,13 @@ const CompletionStyleSection = ({
   onSaveConfig,
   onClearHistory,
 }: CompletionStyleSectionProps) => {
+  const { t } = useT();
   return (
     <>
       <section className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3">
-        <h3 className="text-sm font-semibold text-stone-900">Settings</h3>
+        <h3 className="text-sm font-semibold text-stone-900">{t('autocomplete.settings')}</h3>
         <label className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2">
-          <span className="text-sm text-stone-700">Enabled</span>
+          <span className="text-sm text-stone-700">{t('common.enabled')}</span>
           <input
             type="checkbox"
             checked={enabled}
@@ -66,7 +68,7 @@ const CompletionStyleSection = ({
           />
         </label>
         <label className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2">
-          <span className="text-sm text-stone-700">Accept With Tab</span>
+          <span className="text-sm text-stone-700">{t('autocomplete.acceptWithTab')}</span>
           <input
             type="checkbox"
             checked={acceptWithTab}
@@ -74,7 +76,7 @@ const CompletionStyleSection = ({
           />
         </label>
         <label className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2">
-          <span className="text-sm text-stone-700">Debounce (ms)</span>
+          <span className="text-sm text-stone-700">{t('autocomplete.settings.debounceMs')}</span>
           <input
             type="number"
             min={50}
@@ -86,7 +88,7 @@ const CompletionStyleSection = ({
           />
         </label>
         <label className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2">
-          <span className="text-sm text-stone-700">Max Chars</span>
+          <span className="text-sm text-stone-700">{t('autocomplete.settings.maxChars')}</span>
           <input
             type="number"
             min={32}
@@ -98,7 +100,7 @@ const CompletionStyleSection = ({
           />
         </label>
         <label className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2">
-          <span className="text-sm text-stone-700">Overlay TTL (ms)</span>
+          <span className="text-sm text-stone-700">{t('autocomplete.settings.overlayTtlMs')}</span>
           <input
             type="number"
             min={300}
@@ -110,20 +112,20 @@ const CompletionStyleSection = ({
           />
         </label>
         <label className="flex items-center justify-between rounded-xl border border-stone-200 bg-stone-50 px-3 py-2">
-          <span className="text-sm text-stone-700">Style Preset</span>
+          <span className="text-sm text-stone-700">{t('autocomplete.stylePreset')}</span>
           <select
             value={stylePreset}
             onChange={event => onSetStylePreset(event.target.value)}
             className="rounded border border-stone-300 bg-white px-2 py-1 text-xs text-stone-700">
-            <option value="balanced">Balanced</option>
-            <option value="concise">Concise</option>
-            <option value="formal">Formal</option>
-            <option value="casual">Casual</option>
-            <option value="custom">Custom</option>
+            <option value="balanced">{t('autocomplete.style.balanced')}</option>
+            <option value="concise">{t('autocomplete.style.concise')}</option>
+            <option value="formal">{t('autocomplete.style.formal')}</option>
+            <option value="casual">{t('autocomplete.style.casual')}</option>
+            <option value="custom">{t('autocomplete.style.custom')}</option>
           </select>
         </label>
         <div className="space-y-1">
-          <div className="text-xs text-stone-600">Style Instructions</div>
+          <div className="text-xs text-stone-600">{t('autocomplete.settings.styleInstructions')}</div>
           <textarea
             value={styleInstructions}
             onChange={event => onSetStyleInstructions(event.target.value)}
@@ -132,7 +134,7 @@ const CompletionStyleSection = ({
           />
         </div>
         <div className="space-y-1">
-          <div className="text-xs text-stone-600">Style Examples (one per line)</div>
+          <div className="text-xs text-stone-600">{t('autocomplete.settings.styleExamples')}</div>
           <textarea
             value={styleExamplesText}
             onChange={event => onSetStyleExamplesText(event.target.value)}
@@ -141,9 +143,7 @@ const CompletionStyleSection = ({
           />
         </div>
         <div className="space-y-1">
-          <div className="text-xs text-stone-600">
-            Disabled Apps (one bundle/app token per line)
-          </div>
+          <div className="text-xs text-stone-600">{t('autocomplete.disabledApps')}</div>
           <textarea
             value={disabledAppsText}
             onChange={event => onSetDisabledAppsText(event.target.value)}
@@ -156,27 +156,29 @@ const CompletionStyleSection = ({
           onClick={onSaveConfig}
           disabled={isSaving}
           className="rounded-lg border border-primary-500/60 bg-primary-50 px-3 py-2 text-sm text-primary-600 disabled:opacity-50">
-          {isSaving ? 'Saving…' : 'Save Autocomplete Settings'}
+          {isSaving ? t('autocomplete.saving') : t('autocomplete.saveSettings')}
         </button>
       </section>
 
       <section className="rounded-2xl border border-stone-200 bg-white p-4 space-y-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-stone-900">Personalization History</h3>
+          <h3 className="text-sm font-semibold text-stone-900">{t('autocomplete.history.title')}</h3>
           <button
             type="button"
             onClick={onClearHistory}
             disabled={isClearingHistory || historyEntries.length === 0}
             className="rounded-lg border border-red-500/60 bg-red-50 px-3 py-1.5 text-xs text-red-600 disabled:opacity-40">
-            {isClearingHistory ? 'Clearing…' : 'Clear History'}
+            {isClearingHistory ? t('autocomplete.history.clearing') : t('autocomplete.history.clearHistory')}
           </button>
         </div>
         <p className="text-xs text-stone-500">
           {isHistoryLoading
-            ? 'Loading…'
+            ? t('autocomplete.history.loading')
             : historyEntries.length === 0
-              ? 'No accepted completions yet. Accept suggestions with Tab to start personalising.'
-              : `${String(historyEntries.length)} accepted completion${historyEntries.length === 1 ? '' : 's'} stored — used to personalise future suggestions.`}
+              ? t('autocomplete.history.empty')
+              : historyEntries.length === 1
+                ? t('autocomplete.history.singular').replace('{n}', String(historyEntries.length))
+                : t('autocomplete.history.plural').replace('{n}', String(historyEntries.length))}
         </p>
         {historyEntries.length > 0 && (
           <div className="max-h-48 overflow-y-auto rounded-xl border border-stone-200 bg-stone-50 p-2 space-y-1">

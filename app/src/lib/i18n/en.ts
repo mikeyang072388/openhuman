@@ -498,6 +498,77 @@ const en: TranslationMap = {
   'settings.billing.browserOpenFailed':
     'The browser could not be opened automatically. Use the button above.',
 
+  // Settings: Billing -- Auto-Recharge
+  'settings.billing.autoRecharge.enableAutoRecharge': 'Enable Auto-Recharge',
+  'settings.billing.autoRecharge.autoRechargeDesc': 'Automatically top up when your balance runs low',
+  'settings.billing.autoRecharge.toggleAriaLabel': 'Toggle auto-recharge',
+  'settings.billing.autoRecharge.rechargeInProgress': 'Recharge in progress',
+  'settings.billing.autoRecharge.weeklyUsage': '{spent} of {limit} used this week',
+  'settings.billing.autoRecharge.lastRecharged': 'Last recharged',
+  'settings.billing.autoRecharge.lastRechargeFailed': 'Last recharge failed: {error}',
+  'settings.billing.autoRecharge.rechargeWhenBalanceBelow': 'Recharge when balance drops below',
+  'settings.billing.autoRecharge.addThisAmount': 'Add this amount',
+  'settings.billing.autoRecharge.weeklySpendingLimit': 'Weekly spending limit',
+  'settings.billing.autoRecharge.amountGreaterThanThreshold': 'Recharge amount should be greater than the trigger threshold.',
+  'settings.billing.autoRecharge.saving': 'Saving…',
+  'settings.billing.autoRecharge.saveSettings': 'Save Settings',
+  'settings.billing.autoRecharge.paymentMethods': 'Payment Methods',
+  'settings.billing.autoRecharge.addCardStripe': '+ Add card on Stripe',
+  'settings.billing.autoRecharge.noSavedCards': 'No saved cards. Add one to enable auto-recharge.',
+  'settings.billing.autoRecharge.defaultBadge': 'Default',
+  'settings.billing.autoRecharge.expires': 'Expires',
+  'settings.billing.autoRecharge.setDefault': 'Set default',
+
+  // Settings: Billing -- Subscription Plans
+  'settings.billing.plans.choosePlan': 'Choose a Subscription Plan',
+  'settings.billing.plans.comparePlans': 'Compare plans, switch billing cadence, and choose a payment method.',
+  'settings.billing.plans.payUsingCrypto': 'Pay using crypto?',
+  'settings.billing.plans.cryptoDescription': 'You can optionally choose to pay annually using BTC/ETH/USDC.',
+  'settings.billing.plans.monthly': 'Monthly',
+  'settings.billing.plans.annual': 'Annual',
+  'settings.billing.plans.paymentConfirmed': 'Payment confirmed! Your plan has been updated.',
+  'settings.billing.plans.waitingForPayment': 'Waiting for payment confirmation... Complete checkout in the browser window that opened.',
+  'settings.billing.plans.popular': 'Popular',
+  'settings.billing.plans.current': 'Current',
+  'settings.billing.plans.billedAnnually': 'Billed ${price}/yr',
+  'settings.billing.plans.savePercent': 'Save {percent}%',
+  'settings.billing.plans.currentPlan': 'Current Plan',
+  'settings.billing.plans.waiting': 'Waiting…',
+  'settings.billing.plans.upgrade': 'Upgrade',
+
+  // Settings: Billing -- History
+  'settings.billing.history.transactionHistory': 'Transaction History',
+  'settings.billing.history.creditLedgerDesc': 'A quick view of your credit ledger. All credits/debits are shown here.',
+  'settings.billing.history.openBillingPortal': 'Open billing portal',
+  'settings.billing.history.posted': 'Posted',
+  'settings.billing.history.noRecentActivity': 'No recent billing activity is available yet.',
+
+  // Settings: Billing -- Pay-As-You-Go
+  'settings.billing.payg.yourCreditBalance': 'Your Credit Balance',
+  'settings.billing.payg.topUpDescription': 'You can top up your credits if you ever exhaust your monthly budget or hit rate limits. Credits are consumed after any included subscription budget is exhausted.',
+  'settings.billing.payg.available': 'Available',
+  'settings.billing.payg.promotionalCredits': 'Promotional Credits',
+  'settings.billing.payg.topUpBalance': 'Top-up Balance',
+  'settings.billing.payg.unableToLoadBalance': 'Unable to load balance.',
+  'settings.billing.payg.chooseTopUpAmount': 'Choose a Top-up Amount',
+  'settings.billing.payg.choosePresetOrCustom': 'Choose one of the preset amounts above or enter your own charge amount.',
+  'settings.billing.payg.opening': 'Opening…',
+  'settings.billing.payg.topUpCredits': 'Top Up Credits',
+  'settings.billing.payg.customAmount': 'Custom amount',
+  'settings.billing.payg.enterAmount': 'Enter amount',
+  'settings.billing.payg.chargeCustomAmount': 'Charge custom amount',
+
+  // Settings: Billing -- Inference Budget
+  'settings.billing.budget.inferenceBudget': 'Inference Budget',
+  'settings.billing.budget.loading': 'Loading…',
+  'settings.billing.budget.remainingBudget': '{remaining} / {total} remaining',
+  'settings.billing.budget.noRecurringBudget': 'No recurring plan budget',
+  'settings.billing.budget.hourCap': '10-hour cap: {current} / {total}',
+  'settings.billing.budget.cycleEnds': 'Cycle ends',
+  'settings.billing.budget.exhaustedMessage': 'Included subscription usage is exhausted. Top up credits to continue using AI features without waiting for the next cycle.',
+  'settings.billing.budget.noBudgetMessage': 'Your current plan does not include a recurring weekly inference budget. Usage is paid from available credits instead.',
+  'settings.billing.budget.unableToLoadUsage': 'Unable to load usage data',
+
   // Settings: Tools
   'settings.tools.chooseCapabilities':
     'Choose which capabilities OpenHuman can use on your behalf.',
@@ -1497,6 +1568,111 @@ const en: TranslationMap = {
   'voice.previewFailed': 'Voice preview failed',
   'voice.previewFailedFallback':
     'Voice preview failed: {error}. Reply speech will fall back to the default voice on the next reply.',
+
+  // Skills: Create
+  'skills.create.title': 'New skill',
+  'skills.create.subtitle': 'Scaffolds a SKILL.md with the supplied frontmatter.',
+  'skills.create.name': 'Name',
+  'skills.create.namePlaceholder': 'e.g. Trade Journal',
+  'skills.create.slug': 'Slug:',
+  'skills.create.description': 'Description',
+  'skills.create.descriptionPlaceholder': 'What does this skill do?',
+  'skills.create.scope': 'Scope',
+  'skills.create.scopeUserHint':
+    'Written to ~/.openhuman/skills/<slug>/SKILL.md — available across all workspaces.',
+  'skills.create.scopeProjectHint':
+    'Written to <workspace>/.openhuman/skills/<slug>/SKILL.md — requires workspace trust.',
+  'skills.create.license': 'License',
+  'skills.create.licensePlaceholder': 'MIT',
+  'skills.create.author': 'Author',
+  'skills.create.authorPlaceholder': 'Your name',
+  'skills.create.tags': 'Tags',
+  'skills.create.commaSeparated': '(comma-separated)',
+  'skills.create.tagsPlaceholder': 'trading, research',
+  'skills.create.allowedTools': 'Allowed tools',
+  'skills.create.allowedToolsPlaceholder': 'node_exec, fetch',
+  'skills.create.allowedToolsHint': 'Rendered into the SKILL.md frontmatter as allowed-tools:.',
+  'skills.create.errorTitle': 'Could not create skill',
+  'skills.create.creating': 'Creating...',
+  'skills.create.submit': 'Create skill',
+
+  // Skills: Install
+  'skills.install.title': 'Install skill from URL',
+  'skills.install.subtitle':
+    'Fetches a single SKILL.md over HTTPS and installs it under .openhuman/skills/. HTTPS only; private and loopback hosts are blocked.',
+  'skills.install.urlLabel': 'Skill URL',
+  'skills.install.urlPlaceholder':
+    'https://raw.githubusercontent.com/owner/repo/main/SKILL.md',
+  'skills.install.urlInvalid':
+    'URL must be a well-formed https:// link.',
+  'skills.install.urlHint':
+    'Direct link to a .md file. github.com/.../blob/... URLs auto-rewrite to raw.githubusercontent.com.',
+  'skills.install.timeout': 'Timeout',
+  'skills.install.secondsOptional': '(seconds, optional)',
+  'skills.install.timeoutInvalid': 'Must be an integer between 1 and 600.',
+  'skills.install.timeoutHint':
+    'Defaults to 60 seconds. Values outside 1–600 are clamped server-side.',
+  'skills.install.fetching':
+    'Fetching SKILL.md... this can take up to the timeout you configured.',
+  'skills.install.success': 'Install complete',
+  'skills.install.discoveredOne': 'Discovered 1 new skill.',
+  'skills.install.discoveredMany': 'Discovered {count} new skills.',
+  'skills.install.noNewIds':
+    'Skill installed, but no new skill ids appeared — the catalog may already contain a skill with the same slug.',
+  'skills.install.fetchLog': 'Fetch log',
+  'skills.install.parseWarnings': 'Parse warnings',
+  'skills.install.rawError': 'Raw error',
+  'skills.install.done': 'Done',
+  'skills.install.installing': 'Installing...',
+  'skills.install.submit': 'Install',
+  'skills.install.errorUrlRejected': 'URL rejected',
+  'skills.install.errorUrlRejectedHint':
+    'Only public HTTPS URLs are allowed. Private, loopback, and metadata hosts are blocked.',
+  'skills.install.errorUrlForm': 'URL form not supported',
+  'skills.install.errorUrlFormHint':
+    'Only direct .md links work. For GitHub, link to a file (github.com/owner/repo/blob/…/SKILL.md) — tree and repo roots are not installed.',
+  'skills.install.errorTooLarge': 'SKILL.md too large',
+  'skills.install.errorTooLargeHint':
+    'The SKILL.md must be under 1 MiB. Split bundled resources into references/ or scripts/ files instead of inlining them.',
+  'skills.install.errorTimedOut': 'Fetch timed out',
+  'skills.install.errorTimedOutHint':
+    'The remote host did not respond in time. Try again or raise the timeout (1–600 s).',
+  'skills.install.errorFetchFailed': 'Fetch failed',
+  'skills.install.errorFetchFailedHint':
+    'The request did not complete successfully. Check the URL points at a reachable public file, and that the host returned a 2xx response.',
+  'skills.install.errorParse': 'SKILL.md did not parse',
+  'skills.install.errorParseHint':
+    'The frontmatter must be valid YAML with non-empty name and description fields, terminated by ---.',
+  'skills.install.errorAlreadyInstalled': 'Skill already installed',
+  'skills.install.errorAlreadyInstalledHint':
+    'A skill with this slug already exists in the workspace. Remove it first or change the frontmatter metadata.id / name.',
+  'skills.install.errorWriteFailed': 'Could not write SKILL.md',
+  'skills.install.errorWriteFailedHint':
+    'The workspace skills directory was not writable. Check filesystem permissions for <workspace>/.openhuman/skills/.',
+  'skills.install.errorGeneric': 'Could not install skill',
+  'skills.install.errorGenericHint':
+    'The backend returned an error. The raw message is shown below.',
+
+  // Skills: Uninstall
+  'skills.uninstall.title': 'Uninstall {name}?',
+  'skills.uninstall.warning':
+    'This permanently deletes the skill directory and all its bundled resources. The agent will stop seeing it at the next turn.',
+  'skills.uninstall.errorTitle': 'Could not uninstall',
+  'skills.uninstall.uninstalling': 'Uninstalling...',
+  'skills.uninstall.confirm': 'Uninstall',
+
+  // Skills: Detail
+  'skills.detail.closeAria': 'Close skill details',
+  'skills.detail.author': 'Author',
+  'skills.detail.tags': 'Tags',
+  'skills.detail.allowedTools': 'Allowed tools',
+  'skills.detail.location': 'Location',
+  'skills.detail.warnings': 'Warnings',
+  'skills.detail.bundledResources': 'Bundled resources ({count})',
+  'skills.detail.noResources': 'No bundled resources.',
+
+  // Skills: Search
+  'skills.searchSkills': 'Search skills...',
 };
 
 export default en;

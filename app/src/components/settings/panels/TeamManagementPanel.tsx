@@ -63,7 +63,7 @@ const TeamManagementPanel = () => {
       setError(
         err && typeof err === 'object' && 'error' in err
           ? String(err.error)
-          : 'Failed to update team'
+          : t('team.failedToUpdate')
       );
     } finally {
       setIsUpdating(false);
@@ -82,7 +82,7 @@ const TeamManagementPanel = () => {
       setError(
         err && typeof err === 'object' && 'error' in err
           ? String(err.error)
-          : 'Failed to delete team'
+          : t('team.failedToDelete')
       );
       setIsDeleting(false);
     }
@@ -125,7 +125,7 @@ const TeamManagementPanel = () => {
   return (
     <div className="">
       <SettingsHeader
-        title={`Manage ${team.name}`}
+        title={t('team.manageTeamName').replace('{name}', team.name)}
         showBackButton={true}
         onBack={navigateBack}
         breadcrumbs={breadcrumbs}
@@ -144,8 +144,9 @@ const TeamManagementPanel = () => {
               <div>
                 <h3 className="text-sm font-semibold text-stone-900">{team.name}</h3>
                 <p className="text-xs text-stone-500">
-                  {team.subscription.plan} Plan • Created{' '}
-                  {new Date(team.createdAt).toLocaleDateString()}
+                  {t('team.planAndCreated')
+                    .replace('{plan}', team.subscription.plan)
+                    .replace('{date}', new Date(team.createdAt).toLocaleDateString())}
                 </p>
               </div>
             </div>
@@ -154,7 +155,7 @@ const TeamManagementPanel = () => {
           {/* Management Options */}
           <div className="space-y-1">
             <h3 className="text-xs font-medium text-stone-500 uppercase tracking-wider px-1 mb-3">
-              Team Management
+              {t('team.management')}
             </h3>
 
             {/* Members */}
@@ -175,8 +176,8 @@ const TeamManagementPanel = () => {
                   />
                 </svg>
                 <div>
-                  <div className="font-medium text-sm text-stone-900">Members</div>
-                  <p className="text-xs text-stone-500">Manage team members and roles</p>
+                  <div className="font-medium text-sm text-stone-900">{t('team.members')}</div>
+                  <p className="text-xs text-stone-500">{t('team.manageMembersDesc')}</p>
                 </div>
               </div>
               <svg
@@ -211,8 +212,8 @@ const TeamManagementPanel = () => {
                   />
                 </svg>
                 <div>
-                  <div className="font-medium text-sm text-stone-900">Invites</div>
-                  <p className="text-xs text-stone-500">Generate and manage invite codes</p>
+                  <div className="font-medium text-sm text-stone-900">{t('invites.title')}</div>
+                  <p className="text-xs text-stone-500">{t('team.manageInvitesDesc')}</p>
                 </div>
               </div>
               <svg
@@ -247,8 +248,8 @@ const TeamManagementPanel = () => {
                   />
                 </svg>
                 <div>
-                  <div className="font-medium text-sm text-stone-900">Team Settings</div>
-                  <p className="text-xs text-stone-500">Edit team name and settings</p>
+                  <div className="font-medium text-sm text-stone-900">{t('team.settings')}</div>
+                  <p className="text-xs text-stone-500">{t('team.editNameDesc')}</p>
                 </div>
               </div>
               <svg
@@ -284,8 +285,8 @@ const TeamManagementPanel = () => {
                     />
                   </svg>
                   <div>
-                    <div className="font-medium text-sm text-coral-400">Delete Team</div>
-                    <p className="text-xs text-stone-500">Permanently delete this team</p>
+                    <div className="font-medium text-sm text-coral-400">{t('team.deleteTeam')}</div>
+                    <p className="text-xs text-stone-500">{t('team.deleteTeamDesc')}</p>
                   </div>
                 </div>
                 <svg
@@ -308,7 +309,7 @@ const TeamManagementPanel = () => {
           {isEditModalOpen && (
             <div className="fixed inset-0 bg-stone-900/40 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-6 w-full max-w-md border border-stone-200">
-                <h3 className="text-sm font-semibold text-stone-900 mb-4">Edit Team Settings</h3>
+                <h3 className="text-sm font-semibold text-stone-900 mb-4">{t('team.editSettings')}</h3>
 
                 {error && (
                   <div className="rounded-xl bg-coral-500/10 border border-coral-500/20 p-3 mb-4">
@@ -319,7 +320,7 @@ const TeamManagementPanel = () => {
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-stone-700 mb-2">
-                      Team Name
+                      {t('team.teamName')}
                     </label>
                     <input
                       type="text"
@@ -327,7 +328,7 @@ const TeamManagementPanel = () => {
                       onChange={e => setEditTeamName(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && handleUpdateTeam()}
                       className="w-full px-3 py-2 text-sm bg-stone-50 border border-stone-200 rounded-xl text-stone-900 placeholder-stone-400 focus:outline-none focus:border-primary-500/50"
-                      placeholder="Enter team name"
+                      placeholder={t('team.enterTeamName')}
                     />
                   </div>
 
@@ -336,13 +337,13 @@ const TeamManagementPanel = () => {
                       onClick={() => setIsEditModalOpen(false)}
                       disabled={isUpdating}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors disabled:opacity-50">
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       onClick={handleUpdateTeam}
                       disabled={isUpdating || !editTeamName.trim()}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-primary-500 hover:bg-primary-600 text-white transition-colors disabled:opacity-50">
-                      {isUpdating ? 'Saving...' : 'Save Changes'}
+                      {isUpdating ? t('team.saving') : t('team.saveChanges')}
                     </button>
                   </div>
                 </div>
@@ -354,7 +355,7 @@ const TeamManagementPanel = () => {
           {isDeleteModalOpen && (
             <div className="fixed inset-0 bg-stone-900/40 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-2xl p-6 w-full max-w-md border border-stone-200">
-                <h3 className="text-sm font-semibold text-stone-900 mb-4">Delete Team</h3>
+                <h3 className="text-sm font-semibold text-stone-900 mb-4">{t('team.deleteTeam')}</h3>
 
                 {error && (
                   <div className="rounded-xl bg-coral-500/10 border border-coral-500/20 p-3 mb-4">
@@ -365,11 +366,10 @@ const TeamManagementPanel = () => {
                 <div className="space-y-4">
                   <div className="text-sm text-stone-400">
                     <p>
-                      Are you sure you want to delete{' '}
-                      <strong className="text-stone-900">{teamEntry?.team.name}</strong>?
+                      {t('team.confirmDelete').replace('{name}', teamEntry?.team.name ?? '')}
                     </p>
                     <p className="mt-2 text-coral-400">
-                      This action cannot be undone. All team data will be permanently removed.
+                      {t('team.deleteWarning')}
                     </p>
                   </div>
 
@@ -378,13 +378,13 @@ const TeamManagementPanel = () => {
                       onClick={() => setIsDeleteModalOpen(false)}
                       disabled={isDeleting}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 transition-colors disabled:opacity-50">
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       onClick={handleDeleteTeam}
                       disabled={isDeleting}
                       className="flex-1 px-4 py-2 text-sm font-medium rounded-xl bg-coral-500 hover:bg-coral-600 text-white transition-colors disabled:opacity-50">
-                      {isDeleting ? 'Deleting...' : 'Delete Team'}
+                      {isDeleting ? t('team.deleting') : t('team.deleteTeam')}
                     </button>
                   </div>
                 </div>

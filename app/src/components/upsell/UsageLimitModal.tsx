@@ -1,3 +1,4 @@
+import { useT } from '../../lib/i18n/I18nContext';
 import type { PlanTier } from '../../types/api';
 import { BILLING_DASHBOARD_URL } from '../../utils/links';
 import { openUrl } from '../../utils/openUrl';
@@ -9,19 +10,6 @@ interface UsageLimitModalProps {
   isBudgetExhausted: boolean;
   resetTime?: string | null;
   currentTier: PlanTier;
-}
-
-function formatResetTime(isoStr: string): string {
-  const ms = new Date(isoStr).getTime() - Date.now();
-  if (ms <= 0) return 'now';
-  const mins = Math.ceil(ms / 60_000);
-  if (mins < 60) return `in ${mins}m`;
-  const hours = Math.floor(mins / 60);
-  const remMins = mins % 60;
-  if (hours < 24) return remMins > 0 ? `in ${hours}h ${remMins}m` : `in ${hours}h`;
-  const days = Math.floor(hours / 24);
-  const remHours = hours % 24;
-  return remHours > 0 ? `in ${days}d ${remHours}h` : `in ${days}d`;
 }
 
 function getNextPlan(currentTier: PlanTier) {
@@ -37,13 +25,32 @@ export default function UsageLimitModal({
   resetTime,
   currentTier,
 }: UsageLimitModalProps) {
+  const { t } = useT();
   const nextPlan = getNextPlan(currentTier);
+
+  const formatResetTime = (isoStr: string): string => {
+    const ms = new Date(isoStr).getTime() - Date.now();
+    if (ms <= 0) return t('usage.now');
+    const mins = Math.ceil(ms / 60_000);
+    if (mins < 60) return t('usage.inMinutes').replace('{n}', String(mins));
+    const hours = Math.floor(mins / 60);
+    const remMins = mins % 60;
+    if (hours < 24)
+      return remMins > 0
+        ? t('usage.inHoursMinutes').replace('{n}', String(hours)).replace('{m}', String(remMins))
+        : t('usage.inHours').replace('{n}', String(hours));
+    const days = Math.floor(hours / 24);
+    const remHours = hours % 24;
+    return remHours > 0
+      ? t('usage.inDaysHours').replace('{n}', String(days)).replace('{h}', String(remHours))
+      : t('usage.inDays').replace('{n}', String(days));
+  };
 
   if (!open) return null;
 
   const bodyText = isBudgetExhausted
-    ? `You've hit your weekly limit.${resetTime ? ` It resets ${formatResetTime(resetTime)}.` : ''} Upgrade your plan or top up credits to avoid limits.`
-    : `You've hit your 10-hour inference rate limit.${resetTime ? ` It resets ${formatResetTime(resetTime)}.` : ''} Upgrade for higher limits.`;
+    ? `${t('usage.weeklyLimitHit')}${resetTime ? ` ${t('usage.resets').replace('{time}', formatResetTime(resetTime))}` : ''} ${t('usage.upgradeToAvoid')}`
+    : `${t('usage.rateLimitHit')}${resetTime ? ` ${t('usage.resets').replace('{time}', formatResetTime(resetTime))}` : ''} ${t('usage.upgradeForHigher')}`;
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black/30 backdrop-blur-sm flex items-center justify-center">
@@ -63,7 +70,7 @@ export default function UsageLimitModal({
               />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold text-stone-900">Usage Limit Reached</h2>
+          <h2 className="text-lg font-semibold text-stone-900">{t('usage.limitReached')}</h2>
         </div>
 
         <p className="text-sm text-stone-600 text-center mb-4">{bodyText}</p>
@@ -71,15 +78,15 @@ export default function UsageLimitModal({
         {nextPlan && (
           <div className="rounded-xl bg-stone-50 border border-stone-200 p-3 mb-5">
             <p className="text-xs font-medium text-stone-700 mb-1">
-              {nextPlan.name} plan includes:
+              {t('usage.planIncludes').replace('{name}', nextPlan.name)}
             </p>
             <ul className="space-y-0.5">
               <li className="text-xs text-stone-600">
-                ${nextPlan.fiveHourCapUsd.toFixed(2)} per 10-hour window
+                {t('usage.per10HourWindow').replace('${amount}', nextPlan.fiveHourCapUsd.toFixed(2))}
               </li>
               {nextPlan.weeklyBudgetUsd > 0 && (
                 <li className="text-xs text-stone-600">
-                  ${nextPlan.weeklyBudgetUsd}/week included inference
+                  {t('usage.perWeekInference').replace('${amount}', String(nextPlan.weeklyBudgetUsd))}
                 </li>
               )}
             </ul>
@@ -93,12 +100,12 @@ export default function UsageLimitModal({
               void openUrl(BILLING_DASHBOARD_URL);
             }}
             className="w-full py-2.5 rounded-xl bg-primary-600 hover:bg-primary-500 text-white text-sm font-medium transition-colors">
-            Upgrade Plan
+            {t('usage.upgradePlan')}
           </button>
           <button
             onClick={onClose}
             className="w-full py-2 text-sm text-stone-500 hover:text-stone-700 transition-colors">
-            Not Now
+            {t('usage.notNow')}
           </button>
         </div>
       </div>

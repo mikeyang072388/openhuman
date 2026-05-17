@@ -190,7 +190,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       setSttReady(sttAssetOk && voiceResponse.stt_available);
       setError(null);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to load voice settings';
+      const message = err instanceof Error ? err.message : t('voice.failedToLoad');
       setError(message);
     } finally {
       setIsLoading(false);
@@ -243,7 +243,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
 
       await loadData(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to save voice settings';
+      const message = err instanceof Error ? err.message : t('voice.failedToSave');
       setError(message);
     } finally {
       setIsSaving(false);
@@ -274,7 +274,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       setNotice(t('voice.serverStarted'));
       await loadData(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to start voice server';
+      const message = err instanceof Error ? err.message : t('voice.failedToStart');
       setError(message);
     } finally {
       setIsStarting(false);
@@ -290,7 +290,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       setNotice(t('voice.serverStopped'));
       await loadData(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to stop voice server';
+      const message = err instanceof Error ? err.message : t('voice.failedToStop');
       setError(message);
     } finally {
       setIsStopping(false);
@@ -320,11 +320,11 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       if (process.env.NODE_ENV !== 'production') {
         console.debug('[VoicePanel:providers] saved', snapshot);
       }
-      setNotice('Voice providers saved.');
+      setNotice(t('voice.providersSaved'));
       // Force a reload so the rest of the panel reflects the new state.
       await loadData(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to save voice providers';
+      const message = err instanceof Error ? err.message : t('voice.failedToSaveProviders');
       setError(message);
     } finally {
       setIsSavingProviders(false);
@@ -417,7 +417,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       previewAudioRef.current = audio;
       await audio.play();
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Voice preview failed';
+      const message = err instanceof Error ? err.message : t('voice.previewFailed');
       setMascotVoicePreviewError(message);
     } finally {
       setIsPreviewingMascotVoice(false);
@@ -440,13 +440,13 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
     // polled status table, which lags behind by at most one 2s tick.
     if (status?.state === 'installing') {
       const pct = typeof status.progress === 'number' ? `${status.progress}%` : '…';
-      return `Installing ${pct}`;
+      return t('voice.installingPct').replace('{pct}', pct);
     }
-    if (busy) return 'Installing…';
-    if (status?.state === 'installed') return 'Reinstall locally';
-    if (status?.state === 'broken') return 'Repair';
-    if (status?.state === 'error') return 'Retry locally';
-    return 'Install locally';
+    if (busy) return t('voice.installing');
+    if (status?.state === 'installed') return t('voice.reinstallLocally');
+    if (status?.state === 'broken') return t('voice.repair');
+    if (status?.state === 'error') return t('voice.retryLocally');
+    return t('voice.installLocally');
   };
 
   const handleInstallWhisper = async () => {
@@ -460,11 +460,11 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       setWhisperInstall(result);
       setNotice(
         result.state === 'installed'
-          ? 'Whisper is ready.'
-          : `Whisper install started (${result.stage ?? 'queued'})`
+          ? t('voice.whisperReady')
+          : t('voice.whisperInstallStarted').replace('{stage}', result.stage ?? 'queued')
       );
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to install Whisper';
+      const message = err instanceof Error ? err.message : t('voice.failedToInstallWhisper');
       setError(message);
     } finally {
       setIsInstallingWhisper(false);
@@ -483,11 +483,11 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
       setPiperInstall(result);
       setNotice(
         result.state === 'installed'
-          ? 'Piper is ready.'
-          : `Piper install started (${result.stage ?? 'queued'})`
+          ? t('voice.piperReady')
+          : t('voice.piperInstallStarted').replace('{stage}', result.stage ?? 'queued')
       );
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to install Piper';
+      const message = err instanceof Error ? err.message : t('voice.failedToInstallPiper');
       setError(message);
     } finally {
       setIsInstallingPiper(false);
@@ -515,26 +515,24 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
             className="bg-stone-50 rounded-lg border border-stone-200 p-4 space-y-4"
             data-testid="voice-providers-section">
             <div>
-              <h3 className="text-sm font-semibold text-stone-900">Voice Providers</h3>
+              <h3 className="text-sm font-semibold text-stone-900">{t('voice.providers')}</h3>
               <p className="text-xs text-stone-500 mt-1">
-                Choose where transcription and synthesis run. Use the Install locally buttons to
-                download the binaries and models into your workspace — no manual{' '}
-                <code>WHISPER_BIN</code> or <code>PIPER_BIN</code> setup required.
+                {t('voice.providersDesc')}
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <label className="block space-y-1">
-                <span className="text-xs font-medium text-stone-600">Speech-to-Text Provider</span>
+                <span className="text-xs font-medium text-stone-600">{t('voice.sttProvider')}</span>
                 <select
-                  aria-label="STT provider"
+                  aria-label={t('voice.sttProviderAria')}
                   data-testid="stt-provider-select"
                   value={sttProvider || 'cloud'}
                   disabled={isSavingProviders}
                   onChange={e => onSttProviderChange(e.target.value as 'cloud' | 'whisper')}
                   className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-1 focus:ring-primary-400">
-                  <option value="cloud">Cloud (Whisper proxy)</option>
+                  <option value="cloud">{t('voice.sttCloudOption')}</option>
                   <option value="whisper" disabled={!whisperReady}>
-                    Local Whisper{whisperReady ? '' : ' (install required)'}
+                    {t('voice.sttLocalOption')}{whisperReady ? '' : t('voice.sttLocalInstallRequired')}
                   </option>
                 </select>
                 <div className="flex items-center gap-2 pt-1">
@@ -545,8 +543,8 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                     disabled={isInstallingWhisper || whisperInstall?.state === 'installing'}
                     title={
                       whisperReady
-                        ? 'Whisper is installed. Click to reinstall.'
-                        : 'Download whisper.cpp and the GGML model into your workspace.'
+                        ? t('voice.whisperReinstallTitle')
+                        : t('voice.whisperInstallTitle')
                     }
                     className={`px-2.5 py-1 text-[11px] rounded-md text-white disabled:opacity-60 ${
                       whisperReady
@@ -567,18 +565,18 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                     {whisperInstall?.state === 'installing' && whisperInstall.stage
                       ? whisperInstall.stage
                       : whisperReady
-                        ? 'Installed'
+                        ? t('voice.installed')
                         : whisperInstall?.state === 'error'
-                          ? (whisperInstall.error_detail ?? 'Install failed')
-                          : 'Not installed'}
+                          ? (whisperInstall.error_detail ?? t('voice.installFailed'))
+                          : t('voice.notInstalled')}
                   </span>
                 </div>
               </label>
               {sttProvider === 'whisper' && (
                 <label className="block space-y-1">
-                  <span className="text-xs font-medium text-stone-600">Whisper Model</span>
+                  <span className="text-xs font-medium text-stone-600">{t('voice.whisperModel')}</span>
                   <select
-                    aria-label="Whisper model"
+                    aria-label={t('voice.whisperModelAria')}
                     data-testid="stt-model-select"
                     value={sttModel || 'medium'}
                     disabled={isSavingProviders}
@@ -610,17 +608,17 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                 </label>
               )}
               <label className="block space-y-1">
-                <span className="text-xs font-medium text-stone-600">Text-to-Speech Provider</span>
+                <span className="text-xs font-medium text-stone-600">{t('voice.ttsProvider')}</span>
                 <select
-                  aria-label="TTS provider"
+                  aria-label={t('voice.ttsProviderAria')}
                   data-testid="tts-provider-select"
                   value={ttsProvider || 'cloud'}
                   disabled={isSavingProviders}
                   onChange={e => onTtsProviderChange(e.target.value as 'cloud' | 'piper')}
                   className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-1 focus:ring-primary-400">
-                  <option value="cloud">Cloud (ElevenLabs proxy)</option>
+                  <option value="cloud">{t('voice.ttsCloudOption')}</option>
                   <option value="piper" disabled={!piperReady}>
-                    Local Piper{piperReady ? '' : ' (install required)'}
+                    {t('voice.ttsLocalOption')}{piperReady ? '' : t('voice.ttsLocalInstallRequired')}
                   </option>
                 </select>
                 <div className="flex items-center gap-2 pt-1">
@@ -631,8 +629,8 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                     disabled={isInstallingPiper || piperInstall?.state === 'installing'}
                     title={
                       piperReady
-                        ? 'Piper is installed. Click to reinstall.'
-                        : 'Download Piper and the bundled en_US-lessac-medium voice into your workspace.'
+                        ? t('voice.piperReinstallTitle')
+                        : t('voice.piperInstallTitle')
                     }
                     className={`px-2.5 py-1 text-[11px] rounded-md text-white disabled:opacity-60 ${
                       piperReady
@@ -653,18 +651,18 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                     {piperInstall?.state === 'installing' && piperInstall.stage
                       ? piperInstall.stage
                       : piperReady
-                        ? 'Installed'
+                        ? t('voice.installed')
                         : piperInstall?.state === 'error'
-                          ? (piperInstall.error_detail ?? 'Install failed')
-                          : 'Not installed'}
+                          ? (piperInstall.error_detail ?? t('voice.installFailed'))
+                          : t('voice.notInstalled')}
                   </span>
                 </div>
               </label>
               {ttsProvider === 'piper' && (
                 <label className="block space-y-1">
-                  <span className="text-xs font-medium text-stone-600">Piper Voice</span>
+                  <span className="text-xs font-medium text-stone-600">{t('voice.piperVoice')}</span>
                   <select
-                    aria-label="Piper voice"
+                    aria-label={t('voice.piperVoiceAria')}
                     data-testid="tts-voice-select"
                     value={
                       PIPER_VOICE_PRESETS.some(v => v.id === ttsVoice) ? ttsVoice : '__custom__'
@@ -695,11 +693,11 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                         {v.label}
                       </option>
                     ))}
-                    <option value="__custom__">Other (type below)…</option>
+                    <option value="__custom__">{t('voice.piperCustomOption')}</option>
                   </select>
                   {!PIPER_VOICE_PRESETS.some(v => v.id === ttsVoice) && (
                     <input
-                      aria-label="Piper voice id (custom)"
+                      aria-label={t('voice.piperCustomAria')}
                       data-testid="tts-voice-input"
                       value={ttsVoice}
                       placeholder="en_US-lessac-medium"
@@ -720,10 +718,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                     />
                   )}
                   <p className="text-[11px] text-stone-500 mt-0.5">
-                    Voices come from{' '}
-                    <code className="font-mono">huggingface.co/rhasspy/piper-voices</code>.
-                    Switching voices may require an Install/Reinstall click to download the new{' '}
-                    <code>.onnx</code>.
+                    {t('voice.piperVoiceHint')}
                   </p>
                 </label>
               )}
@@ -743,19 +738,16 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
           <section className="space-y-3" data-testid="mascot-voice-section">
             <div className="bg-stone-50 rounded-lg border border-stone-200 p-4 space-y-4">
               <div>
-                <h3 className="text-sm font-semibold text-stone-900">Mascot Voice</h3>
+                <h3 className="text-sm font-semibold text-stone-900">{t('voice.mascotVoice')}</h3>
                 <p className="text-xs text-stone-500 mt-1">
-                  Pick the ElevenLabs voice the mascot uses for spoken replies. Switch among the
-                  curated presets, paste any voice id you have access to under{' '}
-                  <strong>Other…</strong>, or hit <strong>Reset</strong> to fall back to the shipped
-                  default.
+                  {t('voice.mascotVoiceDesc')}
                 </p>
               </div>
 
               <label className="block space-y-1">
-                <span className="text-xs font-medium text-stone-600">Voice preset</span>
+                <span className="text-xs font-medium text-stone-600">{t('voice.mascotVoicePreset')}</span>
                 <select
-                  aria-label="Mascot voice preset"
+                  aria-label={t('voice.mascotVoicePresetAria')}
                   data-testid="mascot-voice-select"
                   value={isCustomMascotVoice ? '__custom__' : effectiveMascotVoiceId}
                   onChange={e => onMascotVoicePresetChange(e.target.value)}
@@ -765,19 +757,19 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                       {v.label}
                     </option>
                   ))}
-                  <option value="__custom__">Other (paste voice id)…</option>
+                  <option value="__custom__">{t('voice.mascotCustomOption')}</option>
                 </select>
               </label>
 
               {isCustomMascotVoice && (
                 <label className="block space-y-1">
-                  <span className="text-xs font-medium text-stone-600">Custom voice id</span>
+                  <span className="text-xs font-medium text-stone-600">{t('voice.mascotCustomVoiceId')}</span>
                   <div className="flex gap-2">
                     <input
-                      aria-label="Custom ElevenLabs voice id"
+                      aria-label={t('voice.mascotCustomVoiceIdAria')}
                       data-testid="mascot-voice-input"
                       value={mascotVoiceDraft}
-                      placeholder="e.g. 21m00Tcm4TlvDq8ikWAM"
+                      placeholder={t('voice.mascotCustomVoiceIdPlaceholder')}
                       onChange={e => setMascotVoiceDraft(e.target.value)}
                       className="flex-1 rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-primary-400"
                     />
@@ -791,9 +783,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                     </button>
                   </div>
                   <p className="text-[11px] text-stone-500">
-                    Find voice ids at <code className="font-mono">api.elevenlabs.io/v1/voices</code>{' '}
-                    or your ElevenLabs dashboard. Only the id is stored — your API key stays on the
-                    backend.
+                    {t('voice.mascotCustomVoiceIdHint')}
                   </p>
                 </label>
               )}

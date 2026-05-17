@@ -470,6 +470,77 @@ const zhCN: TranslationMap = {
   'settings.billing.browserNotOpen': '如果浏览器未打开，请使用上方按钮。',
   'settings.billing.browserOpenFailed': '无法自动打开浏览器。请使用上方按钮。',
 
+  // Settings: Billing -- Auto-Recharge
+  'settings.billing.autoRecharge.enableAutoRecharge': '启用自动充值',
+  'settings.billing.autoRecharge.autoRechargeDesc': '当余额不足时自动充值',
+  'settings.billing.autoRecharge.toggleAriaLabel': '切换自动充值',
+  'settings.billing.autoRecharge.rechargeInProgress': '充值进行中',
+  'settings.billing.autoRecharge.weeklyUsage': '{spent} / {limit} 本周已用',
+  'settings.billing.autoRecharge.lastRecharged': '上次充值',
+  'settings.billing.autoRecharge.lastRechargeFailed': '上次充值失败：{error}',
+  'settings.billing.autoRecharge.rechargeWhenBalanceBelow': '当余额低于以下值时充值',
+  'settings.billing.autoRecharge.addThisAmount': '充值金额',
+  'settings.billing.autoRecharge.weeklySpendingLimit': '每周消费限额',
+  'settings.billing.autoRecharge.amountGreaterThanThreshold': '充值金额应大于触发阈值。',
+  'settings.billing.autoRecharge.saving': '保存中…',
+  'settings.billing.autoRecharge.saveSettings': '保存设置',
+  'settings.billing.autoRecharge.paymentMethods': '支付方式',
+  'settings.billing.autoRecharge.addCardStripe': '+ 在 Stripe 添加卡片',
+  'settings.billing.autoRecharge.noSavedCards': '没有已保存的卡片。添加一张以启用自动充值。',
+  'settings.billing.autoRecharge.defaultBadge': '默认',
+  'settings.billing.autoRecharge.expires': '有效期至',
+  'settings.billing.autoRecharge.setDefault': '设为默认',
+
+  // Settings: Billing -- Subscription Plans
+  'settings.billing.plans.choosePlan': '选择订阅方案',
+  'settings.billing.plans.comparePlans': '比较方案、切换计费周期并选择支付方式。',
+  'settings.billing.plans.payUsingCrypto': '使用加密货币支付？',
+  'settings.billing.plans.cryptoDescription': '你可以选择使用 BTC/ETH/USDC 按年支付。',
+  'settings.billing.plans.monthly': '按月',
+  'settings.billing.plans.annual': '按年',
+  'settings.billing.plans.paymentConfirmed': '支付已确认！你的方案已更新。',
+  'settings.billing.plans.waitingForPayment': '等待支付确认... 请在打开的浏览器窗口中完成结账。',
+  'settings.billing.plans.popular': '热门',
+  'settings.billing.plans.current': '当前',
+  'settings.billing.plans.billedAnnually': '按年计费 ${price}/年',
+  'settings.billing.plans.savePercent': '节省 {percent}%',
+  'settings.billing.plans.currentPlan': '当前方案',
+  'settings.billing.plans.waiting': '等待中…',
+  'settings.billing.plans.upgrade': '升级',
+
+  // Settings: Billing -- History
+  'settings.billing.history.transactionHistory': '交易记录',
+  'settings.billing.history.creditLedgerDesc': '你的配额账本快速概览。所有入账/出账记录均在此显示。',
+  'settings.billing.history.openBillingPortal': '打开账单门户',
+  'settings.billing.history.posted': '已入账',
+  'settings.billing.history.noRecentActivity': '暂无最近的账单活动。',
+
+  // Settings: Billing -- Pay-As-You-Go
+  'settings.billing.payg.yourCreditBalance': '你的配额余额',
+  'settings.billing.payg.topUpDescription': '如果你的月度预算耗尽或达到速率限制，可以充值配额。配额在任何已包含的订阅预算用完后开始消耗。',
+  'settings.billing.payg.available': '可用余额',
+  'settings.billing.payg.promotionalCredits': '促销配额',
+  'settings.billing.payg.topUpBalance': '充值余额',
+  'settings.billing.payg.unableToLoadBalance': '无法加载余额。',
+  'settings.billing.payg.chooseTopUpAmount': '选择充值金额',
+  'settings.billing.payg.choosePresetOrCustom': '选择上方预设金额或输入自定义充值金额。',
+  'settings.billing.payg.opening': '正在打开…',
+  'settings.billing.payg.topUpCredits': '充值配额',
+  'settings.billing.payg.customAmount': '自定义金额',
+  'settings.billing.payg.enterAmount': '输入金额',
+  'settings.billing.payg.chargeCustomAmount': '充值自定义金额',
+
+  // Settings: Billing -- Inference Budget
+  'settings.billing.budget.inferenceBudget': '推理预算',
+  'settings.billing.budget.loading': '加载中…',
+  'settings.billing.budget.remainingBudget': '{remaining} / {total} 剩余',
+  'settings.billing.budget.noRecurringBudget': '无定期套餐预算',
+  'settings.billing.budget.hourCap': '10 小时上限：{current} / {total}',
+  'settings.billing.budget.cycleEnds': '周期结束于',
+  'settings.billing.budget.exhaustedMessage': '已包含的订阅用量已用完。充值配额以继续使用 AI 功能，无需等待下一个周期。',
+  'settings.billing.budget.noBudgetMessage': '你当前的方案不包含定期每周推理预算。使用量将从可用配额中扣除。',
+  'settings.billing.budget.unableToLoadUsage': '无法加载用量数据',
+
   // Settings: Tools
   'settings.tools.chooseCapabilities': '选择 OpenHuman 可代表你使用的能力。',
   'settings.tools.saveChanges': '保存更改',
@@ -1432,6 +1503,107 @@ const zhCN: TranslationMap = {
   'voice.previewFailed': '语音试听失败',
   'voice.previewFailedFallback':
     '语音试听失败：{error}。回复语音将在下次回复时回退到默认语音。',
+
+  // Skills: Create
+  'skills.create.title': '新建技能',
+  'skills.create.subtitle': '基于提供的 frontmatter 搭建 SKILL.md 文件。',
+  'skills.create.name': '名称',
+  'skills.create.namePlaceholder': '例如：交易日志',
+  'skills.create.slug': '标识符：',
+  'skills.create.description': '描述',
+  'skills.create.descriptionPlaceholder': '这个技能是做什么的？',
+  'skills.create.scope': '作用范围',
+  'skills.create.scopeUserHint':
+    '写入到 ~/.openhuman/skills/<标识符>/SKILL.md — 在所有工作区中可用。',
+  'skills.create.scopeProjectHint':
+    '写入到 <工作区>/.openhuman/skills/<标识符>/SKILL.md — 需要工作区信任。',
+  'skills.create.license': '许可证',
+  'skills.create.licensePlaceholder': 'MIT',
+  'skills.create.author': '作者',
+  'skills.create.authorPlaceholder': '你的名字',
+  'skills.create.tags': '标签',
+  'skills.create.commaSeparated': '（逗号分隔）',
+  'skills.create.tagsPlaceholder': '交易, 研究',
+  'skills.create.allowedTools': '允许的工具',
+  'skills.create.allowedToolsPlaceholder': 'node_exec, fetch',
+  'skills.create.allowedToolsHint': '渲染到 SKILL.md 的 frontmatter 中作为 allowed-tools:。',
+  'skills.create.errorTitle': '无法创建技能',
+  'skills.create.creating': '创建中...',
+  'skills.create.submit': '创建技能',
+
+  // Skills: Install
+  'skills.install.title': '从 URL 安装技能',
+  'skills.install.subtitle':
+    '通过 HTTPS 获取单个 SKILL.md 文件并安装到 .openhuman/skills/ 下。仅支持 HTTPS；私有和回环地址被阻止。',
+  'skills.install.urlLabel': '技能 URL',
+  'skills.install.urlPlaceholder':
+    'https://raw.githubusercontent.com/owner/repo/main/SKILL.md',
+  'skills.install.urlInvalid': 'URL 必须是格式正确的 https:// 链接。',
+  'skills.install.urlHint':
+    '指向 .md 文件的直接链接。github.com/.../blob/... 格式的 URL 会自动重写为 raw.githubusercontent.com。',
+  'skills.install.timeout': '超时时间',
+  'skills.install.secondsOptional': '（秒，可选）',
+  'skills.install.timeoutInvalid': '必须是 1 到 600 之间的整数。',
+  'skills.install.timeoutHint': '默认为 60 秒。超出 1–600 范围的值会在服务端被限制。',
+  'skills.install.fetching': '正在获取 SKILL.md... 这可能需要等待你所设置的超时时间。',
+  'skills.install.success': '安装完成',
+  'skills.install.discoveredOne': '发现了 1 个新技能。',
+  'skills.install.discoveredMany': '发现了 {count} 个新技能。',
+  'skills.install.noNewIds':
+    '技能已安装，但没有出现新的技能 ID — 目录中可能已存在相同标识符的技能。',
+  'skills.install.fetchLog': '获取日志',
+  'skills.install.parseWarnings': '解析警告',
+  'skills.install.rawError': '原始错误',
+  'skills.install.done': '完成',
+  'skills.install.installing': '安装中...',
+  'skills.install.submit': '安装',
+  'skills.install.errorUrlRejected': 'URL 被拒绝',
+  'skills.install.errorUrlRejectedHint':
+    '仅允许公共 HTTPS URL。私有、回环和元数据主机被阻止。',
+  'skills.install.errorUrlForm': 'URL 格式不支持',
+  'skills.install.errorUrlFormHint':
+    '仅支持直接的 .md 链接。对于 GitHub，请链接到文件（github.com/owner/repo/blob/…/SKILL.md）— 树和仓库根目录不会被安装。',
+  'skills.install.errorTooLarge': 'SKILL.md 过大',
+  'skills.install.errorTooLargeHint':
+    'SKILL.md 必须小于 1 MiB。请将捆绑资源拆分到 references/ 或 scripts/ 文件中，而不是内联它们。',
+  'skills.install.errorTimedOut': '获取超时',
+  'skills.install.errorTimedOutHint':
+    '远程主机未及时响应。请重试或增加超时时间（1–600 秒）。',
+  'skills.install.errorFetchFailed': '获取失败',
+  'skills.install.errorFetchFailedHint':
+    '请求未成功完成。请检查 URL 是否指向可访问的公共文件，以及主机是否返回了 2xx 响应。',
+  'skills.install.errorParse': 'SKILL.md 解析失败',
+  'skills.install.errorParseHint':
+    'frontmatter 必须是有效的 YAML 格式，且包含非空的 name 和 description 字段，以 --- 结尾。',
+  'skills.install.errorAlreadyInstalled': '技能已安装',
+  'skills.install.errorAlreadyInstalledHint':
+    '工作区中已存在具有相同标识符的技能。请先移除它，或更改 frontmatter 中的 metadata.id / name。',
+  'skills.install.errorWriteFailed': '无法写入 SKILL.md',
+  'skills.install.errorWriteFailedHint':
+    '工作区技能目录不可写。请检查 <workspace>/.openhuman/skills/ 的文件系统权限。',
+  'skills.install.errorGeneric': '无法安装技能',
+  'skills.install.errorGenericHint': '后端返回了一个错误。原始消息如下所示。',
+
+  // Skills: Uninstall
+  'skills.uninstall.title': '卸载 {name}？',
+  'skills.uninstall.warning':
+    '这将永久删除技能目录及其所有捆绑资源。助手将在下一轮次中停止识别它。',
+  'skills.uninstall.errorTitle': '无法卸载',
+  'skills.uninstall.uninstalling': '卸载中...',
+  'skills.uninstall.confirm': '卸载',
+
+  // Skills: Detail
+  'skills.detail.closeAria': '关闭技能详情',
+  'skills.detail.author': '作者',
+  'skills.detail.tags': '标签',
+  'skills.detail.allowedTools': '允许的工具',
+  'skills.detail.location': '位置',
+  'skills.detail.warnings': '警告',
+  'skills.detail.bundledResources': '捆绑资源（{count}）',
+  'skills.detail.noResources': '没有捆绑资源。',
+
+  // Skills: Search
+  'skills.searchSkills': '搜索技能...',
 };
 
 export default zhCN;

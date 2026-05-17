@@ -68,7 +68,7 @@ const WebhooksDebugPanel = () => {
       );
     } catch (loadError) {
       setError(
-        loadError instanceof Error ? loadError.message : 'Failed to load webhook debug data'
+        loadError instanceof Error ? loadError.message : t('webhooks.debug.loadFailed')
       );
     } finally {
       setLoading(false);
@@ -124,7 +124,7 @@ const WebhooksDebugPanel = () => {
   );
 
   const handleClearLogs = useCallback(async () => {
-    const confirmed = window.confirm('Clear all captured webhook debug logs?');
+    const confirmed = window.confirm(t('webhooks.debug.clearConfirm'));
     if (!confirmed) return;
 
     setClearing(true);
@@ -133,7 +133,7 @@ const WebhooksDebugPanel = () => {
       await openhumanWebhooksClearLogs();
       await loadData();
     } catch (clearError) {
-      setError(clearError instanceof Error ? clearError.message : 'Failed to clear webhook logs');
+      setError(clearError instanceof Error ? clearError.message : t('webhooks.debug.clearFailed'));
     } finally {
       setClearing(false);
     }
@@ -156,19 +156,20 @@ const WebhooksDebugPanel = () => {
             onClick={() => void loadData()}
             disabled={loading}
             className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50">
-            {loading ? 'Loading...' : 'Refresh'}
+            {loading ? t('common.loading') : t('common.refresh')}
           </button>
           <button
             type="button"
             onClick={() => void handleClearLogs()}
             disabled={clearing || logs.length === 0}
             className="rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 font-medium text-stone-700 hover:bg-stone-100 disabled:opacity-50">
-            {clearing ? 'Clearing...' : 'Clear Logs'}
+            {clearing ? t('webhooks.debug.clearing') : t('webhooks.debug.clearLogs')}
           </button>
           <span className="text-stone-500">
-            {registrations.length} registered &middot; {logs.length} captured &middot;{' '}
+            {registrations.length} {t('webhooks.debug.registered')} &middot; {logs.length}{' '}
+            {t('webhooks.debug.captured')} &middot;{' '}
             <span className={isLive ? 'text-sage-600' : 'text-stone-400'}>
-              {isLive ? 'live' : 'disconnected'}
+              {isLive ? t('webhooks.debug.live') : t('webhooks.debug.disconnected')}
             </span>
           </span>
         </div>
@@ -181,16 +182,17 @@ const WebhooksDebugPanel = () => {
 
         {lastEvent && (
           <div className="text-xs text-stone-500">
-            Last event: <span className="font-medium text-stone-700">{lastEvent.event_type}</span>{' '}
+            {t('webhooks.debug.lastEvent')}{' '}
+            <span className="font-medium text-stone-700">{lastEvent.event_type}</span>{' '}
             at {formatDateTime(lastEvent.timestamp)}
           </div>
         )}
 
         {/* Registrations */}
         <section className="space-y-2">
-          <h3 className="text-sm font-semibold text-stone-900">Registered Webhooks</h3>
+          <h3 className="text-sm font-semibold text-stone-900">{t('webhooks.debug.registeredWebhooks')}</h3>
           {registrations.length === 0 ? (
-            <p className="text-xs text-stone-400">No active registrations.</p>
+            <p className="text-xs text-stone-400">{t('webhooks.debug.noActiveRegistrations')}</p>
           ) : (
             <div className="space-y-2">
               {registrations.map(registration => (
@@ -213,7 +215,7 @@ const WebhooksDebugPanel = () => {
                   <div className="mt-1 text-[11px] text-stone-500 font-mono break-all">
                     {backendUrl
                       ? tunnelsApi.ingressUrl(backendUrl, registration.tunnel_uuid)
-                      : 'Resolving backend URL…'}
+                      : t('webhooks.debug.resolvingBackendUrl')}
                   </div>
                 </div>
               ))}
@@ -223,9 +225,9 @@ const WebhooksDebugPanel = () => {
 
         {/* Captured Requests */}
         <section className="space-y-2">
-          <h3 className="text-sm font-semibold text-stone-900">Captured Requests</h3>
+          <h3 className="text-sm font-semibold text-stone-900">{t('webhooks.debug.capturedRequests')}</h3>
           {logs.length === 0 ? (
-            <p className="text-xs text-stone-400">No webhook requests captured yet.</p>
+            <p className="text-xs text-stone-400">{t('webhooks.debug.noRequestsCaptured')}</p>
           ) : (
             <div className="space-y-2">
               {logs.map(entry => (
@@ -245,7 +247,7 @@ const WebhooksDebugPanel = () => {
                     <span className="text-[10px] text-stone-500">{entry.status_code ?? '...'}</span>
                   </div>
                   <div className="mt-1 text-[11px] text-stone-500">
-                    {entry.tunnel_name} {entry.skill_id ? `· ${entry.skill_id}` : '· unrouted'} ·{' '}
+                    {entry.tunnel_name} {entry.skill_id ? `· ${entry.skill_id}` : `· ${t('webhooks.debug.unrouted')}`} ·{' '}
                     {formatDateTime(entry.updated_at)}
                   </div>
                 </button>
@@ -267,10 +269,10 @@ const WebhooksDebugPanel = () => {
                       {selectedLog.stage}
                     </span>
                     <span className="rounded-full bg-stone-200 px-2 py-0.5 text-stone-600">
-                      {selectedLog.status_code ?? 'pending'}
+                      {selectedLog.status_code ?? t('webhooks.debug.pending')}
                     </span>
                     <span className="rounded-full bg-stone-200 px-2 py-0.5 text-stone-600">
-                      {selectedLog.skill_id || 'unrouted'}
+                      {selectedLog.skill_id || t('webhooks.debug.unrouted')}
                     </span>
                   </div>
 
@@ -281,27 +283,27 @@ const WebhooksDebugPanel = () => {
                   )}
 
                   <PayloadBlock
-                    title="Request Headers"
+                    title={t('webhooks.debug.requestHeaders')}
                     value={prettyJson(selectedLog.request_headers)}
                   />
                   <PayloadBlock
-                    title="Query Params"
+                    title={t('webhooks.debug.queryParams')}
                     value={prettyJson(selectedLog.request_query)}
                   />
                   <PayloadBlock
-                    title="Request Body"
-                    value={decodeBase64Preview(selectedLog.request_body) || '[empty]'}
+                    title={t('webhooks.debug.requestBody')}
+                    value={decodeBase64Preview(selectedLog.request_body) || t('webhooks.debug.emptyPayload')}
                   />
                   <PayloadBlock
-                    title="Response Headers"
+                    title={t('webhooks.debug.responseHeaders')}
                     value={prettyJson(selectedLog.response_headers)}
                   />
                   <PayloadBlock
-                    title="Response Body"
-                    value={decodeBase64Preview(selectedLog.response_body) || '[empty]'}
+                    title={t('webhooks.debug.responseBody')}
+                    value={decodeBase64Preview(selectedLog.response_body) || t('webhooks.debug.emptyPayload')}
                   />
                   {selectedLog.raw_payload != null && (
-                    <PayloadBlock title="Raw Payload" value={prettyJson(selectedLog.raw_payload)} />
+                    <PayloadBlock title={t('webhooks.debug.rawPayload')} value={prettyJson(selectedLog.raw_payload)} />
                   )}
                 </div>
               )}

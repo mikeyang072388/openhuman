@@ -95,7 +95,7 @@ const RewardsCouponSection = () => {
       const message =
         error && typeof error === 'object' && 'error' in error
           ? String((error as { error: unknown }).error)
-          : 'Could not load reward codes right now.';
+          : t('rewards.coupon.loadError');
       log('[load] failed: %s', message);
       setLoadError(message);
     } finally {
@@ -141,7 +141,7 @@ const RewardsCouponSection = () => {
       const message =
         error && typeof error === 'object' && 'error' in error
           ? String((error as { error: unknown }).error)
-          : 'Could not apply that reward code.';
+          : t('rewards.coupon.redeemError');
       log('[redeem] failed: %s', message);
       setSubmitError(message);
     } finally {
@@ -251,17 +251,17 @@ const RewardsCouponSection = () => {
 
           {redeemedCoupons.length === 0 && !loading && !loadError ? (
             <p className="text-sm text-stone-500 rounded-xl border border-dashed border-stone-200 px-4 py-6 text-center">
-              No reward codes redeemed yet.
+              {t('rewards.coupon.noRedemptions')}
             </p>
           ) : redeemedCoupons.length > 0 ? (
             <div className="overflow-x-auto rounded-xl border border-stone-200">
               <table className="min-w-full text-sm text-left">
                 <thead className="bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
                   <tr>
-                    <th className="px-3 py-2 font-medium">Code</th>
-                    <th className="px-3 py-2 font-medium">Reward</th>
-                    <th className="px-3 py-2 font-medium">Status</th>
-                    <th className="px-3 py-2 font-medium">Redeemed</th>
+                    <th className="px-3 py-2 font-medium">{t('rewards.coupon.column.code')}</th>
+                    <th className="px-3 py-2 font-medium">{t('rewards.coupon.column.reward')}</th>
+                    <th className="px-3 py-2 font-medium">{t('rewards.coupon.column.status')}</th>
+                    <th className="px-3 py-2 font-medium">{t('rewards.coupon.column.redeemed')}</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-stone-100">
