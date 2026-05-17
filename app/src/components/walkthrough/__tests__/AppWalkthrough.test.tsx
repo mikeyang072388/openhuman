@@ -521,26 +521,26 @@ describe('WalkthroughTooltip', () => {
 describe('createWalkthroughSteps', () => {
   it('returns 10 steps', () => {
     const navigate = vi.fn();
-    const steps = createWalkthroughSteps(navigate);
+    const steps = createWalkthroughSteps(navigate, (k: string) => k);
     expect(steps).toHaveLength(10);
   });
 
   it('first step targets home-card', () => {
     const navigate = vi.fn();
-    const steps = createWalkthroughSteps(navigate);
+    const steps = createWalkthroughSteps(navigate, (k: string) => k);
     expect(steps[0].target).toBe('[data-walkthrough="home-card"]');
   });
 
   it('last step targets chat-agent-panel', () => {
     const navigate = vi.fn();
-    const steps = createWalkthroughSteps(navigate);
+    const steps = createWalkthroughSteps(navigate, (k: string) => k);
     const last = steps[steps.length - 1];
     expect(last.target).toBe('[data-walkthrough="chat-agent-panel"]');
   });
 
   it('all steps have a title and content', () => {
     const navigate = vi.fn();
-    const steps = createWalkthroughSteps(navigate);
+    const steps = createWalkthroughSteps(navigate, (k: string) => k);
     for (const step of steps) {
       expect(step.title).toBeTruthy();
       expect(step.content).toBeTruthy();
@@ -549,7 +549,7 @@ describe('createWalkthroughSteps', () => {
 
   it('cross-page steps have before functions', () => {
     const navigate = vi.fn();
-    const steps = createWalkthroughSteps(navigate);
+    const steps = createWalkthroughSteps(navigate, (k: string) => k);
 
     // Steps: 2=chat, 3=integrations, 4=channels, 5=intelligence, 6=settings, 7=home-return, 9=chat-welcome
     const crossPageIndices = [2, 3, 4, 5, 6, 7, 9];
@@ -560,7 +560,7 @@ describe('createWalkthroughSteps', () => {
 
   it('home-only steps do not have before functions', () => {
     const navigate = vi.fn();
-    const steps = createWalkthroughSteps(navigate);
+    const steps = createWalkthroughSteps(navigate, (k: string) => k);
 
     // Steps: 0=home-card, 1=home-cta, 8=tab-notifications (step 9 now has a before hook)
     const homeOnlyIndices = [0, 1, 8];
@@ -585,7 +585,7 @@ describe('createWalkthroughSteps', () => {
     document.body.appendChild(el);
 
     try {
-      const steps = createWalkthroughSteps(navigate);
+      const steps = createWalkthroughSteps(navigate, (k: string) => k);
       await (steps[idx].before as unknown as (() => Promise<void>) | undefined)?.();
       if (route) {
         expect(navigate).toHaveBeenCalledWith(route);
@@ -606,7 +606,7 @@ describe('createWalkthroughSteps', () => {
     document.body.appendChild(el);
 
     try {
-      const steps = createWalkthroughSteps(navigate);
+      const steps = createWalkthroughSteps(navigate, (k: string) => k);
       const lastStep = steps[steps.length - 1];
       await (lastStep.before as unknown as () => Promise<void>)();
 
@@ -632,7 +632,7 @@ describe('createWalkthroughSteps', () => {
     document.body.appendChild(el);
 
     try {
-      const steps = createWalkthroughSteps(navigate);
+      const steps = createWalkthroughSteps(navigate, (k: string) => k);
       const lastStep = steps[steps.length - 1];
       await (lastStep.before as unknown as () => Promise<void>)();
       expect(navigate).toHaveBeenCalledWith('/chat');

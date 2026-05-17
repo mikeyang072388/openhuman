@@ -13,6 +13,8 @@
 import { useEffect, useState } from 'react';
 import debug from 'debug';
 
+import { useT } from '../../lib/i18n/I18nContext';
+
 import { skillsApi } from '../../services/api/skillsApi';
 
 const log = debug('skills:resource-preview');
@@ -37,6 +39,7 @@ function formatBytes(bytes: number): string {
 }
 
 export default function SkillResourcePreview({ skillId, relativePath, onDismiss }: Props) {
+  const { t } = useT();
   const [state, setState] = useState<LoadState>({ status: 'loading' });
 
   useEffect(() => {
@@ -80,7 +83,7 @@ export default function SkillResourcePreview({ skillId, relativePath, onDismiss 
             log('dismiss skillId=%s path=%s', skillId, relativePath);
             onDismiss();
           }}
-          aria-label="Close preview"
+          aria-label={t('common.close')}
           className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md text-stone-400 transition-colors hover:bg-stone-100 hover:text-stone-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1">
           <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -100,7 +103,7 @@ export default function SkillResourcePreview({ skillId, relativePath, onDismiss 
             fill="none"
             viewBox="0 0 24 24"
             role="status"
-            aria-label="Loading">
+            aria-label={t('common.loading')}>
             <circle
               className="opacity-25"
               cx="12"

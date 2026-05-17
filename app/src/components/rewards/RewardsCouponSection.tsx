@@ -2,6 +2,7 @@ import createDebug from 'debug';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useUser } from '../../hooks/useUser';
+import { useT } from '../../lib/i18n/I18nContext';
 import { useCoreState } from '../../providers/CoreStateProvider';
 import {
   type CouponRedeemResult,
@@ -16,32 +17,38 @@ function formatUsd(amount: number): string {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount);
 }
 
-function formatDateTime(value: string | null): string {
-  if (!value) return 'Pending';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? 'Pending' : date.toLocaleString();
-}
-
-function redemptionStatus(coupon: RedeemedCoupon): string {
-  if (coupon.fulfilled) return 'Applied';
-  if (coupon.activationType === 'CONDITIONAL') return 'Pending action';
-  return 'Redeemed';
-}
-
 function redemptionStatusClass(coupon: RedeemedCoupon): string {
   if (coupon.fulfilled) return 'bg-sage-100 text-sage-700';
   if (coupon.activationType === 'CONDITIONAL') return 'bg-amber-50 text-amber-800';
   return 'bg-stone-100 text-stone-700';
 }
 
-function successMessage(result: CouponRedeemResult): string {
-  if (result.pending) {
-    return `${result.couponCode} accepted. ${formatUsd(result.amountUsd)} will unlock after the required action is completed.`;
-  }
-  return `${result.couponCode} redeemed. ${formatUsd(result.amountUsd)} was added to your credits.`;
-}
-
 const RewardsCouponSection = () => {
+  const { t } = useT();
+
+  const formatDateTime = (value: string | null): string => {
+    if (!value) return t('rewards.coupon.status.pending');
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? t('rewards.coupon.status.pending') : date.toLocaleString();
+  };
+
+  const redemptionStatus = (coupon: RedeemedCoupon): string => {
+    if (coupon.fulfilled) return t('rewards.coupon.status.applied');
+    if (coupon.activationType === 'CONDITIONAL') return t('rewards.coupon.status.pendingAction');
+    return t('rewards.coupon.status.redeemed');
+  };
+
+  const successMessage = (result: CouponRedeemResult): string => {
+    if (result.pending) {
+      return t('rewards.coupon.accepted')
+        .replace('{code}', result.couponCode)
+        .replace('{amount}', formatUsd(result.amountUsd));
+    }
+    return t('rewards.coupon.redeemedMsg')
+      .replace('{code}', result.couponCode)
+      .replace('{amount}', formatUsd(result.amountUsd));
+  };
+
   const { snapshot } = useCoreState();
   const { refetch } = useUser();
   const token = snapshot.sessionToken;
@@ -150,17 +157,16 @@ const RewardsCouponSection = () => {
     <>
       <section className="bg-white rounded-2xl shadow-soft border border-stone-200 p-6 space-y-5">
         <div className="space-y-2">
-          <h2 className="text-2xl font-semibold text-stone-900">Redeem a coupon code</h2>
+          <h2 className="text-2xl font-semibold text-stone-900">{t('rewards.coupon.title')}</h2>
           <p className="max-w-2xl text-sm text-stone-600">
-            Redeem promo or coupon codes here. Successful redemptions refresh your credits
-            immediately, and pending rewards stay visible in your history.
+            {t('rewards.coupon.description')}
           </p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
             <div className="text-xs font-medium uppercase tracking-wide text-stone-400">
-              Promo credits
+              {t('rewards.coupon.promoCredits')}
             </div>
             <div className="mt-2 text-2xl font-semibold text-stone-900">
               {creditBalance ? formatUsd(creditBalance.promotionBalanceUsd) : loading ? '…' : '—'}
@@ -168,7 +174,7 @@ const RewardsCouponSection = () => {
           </div>
           <div className="rounded-xl border border-stone-200 bg-stone-50 p-4">
             <div className="text-xs font-medium uppercase tracking-wide text-stone-400">
-              Redeemed codes
+              {t('rewards.coupon.redeemedCodes')}
             </div>
             <div className="mt-2 text-2xl font-semibold text-stone-900">
               {redeemedCoupons.length}
@@ -191,7 +197,7 @@ const RewardsCouponSection = () => {
                   void handleRedeem();
                 }
               }}
-              placeholder="Coupon code"
+              placeholder={t('rewards.coupon.placeholder')}
               disabled={submitLoading}
               className="flex-1 px-4 py-2.5 rounded-xl border border-stone-200 bg-white font-mono text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-primary-500/40"
             />
@@ -200,7 +206,7 @@ const RewardsCouponSection = () => {
               onClick={() => void handleRedeem()}
               disabled={submitLoading || !couponCode.trim()}
               className="rounded-xl bg-primary-600 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-700 disabled:opacity-50">
-              {submitLoading ? 'Redeeming...' : 'Redeem Code'}
+              {submitLoading ? t('rewards.coupon.redeeming') : t('rewards.coupon.redeemCode')}
             </button>
           </div>
           {submitSuccess ? (
@@ -220,7 +226,7 @@ const RewardsCouponSection = () => {
                 type="button"
                 onClick={() => void loadCouponState()}
                 className="ml-2 font-medium underline">
-                Retry
+                {t('common.retry')}
               </button>
             </div>
           ) : null}
@@ -229,18 +235,18 @@ const RewardsCouponSection = () => {
       <section className="bg-white rounded-2xl shadow-soft border border-stone-200 p-6 space-y-5">
         <div className="space-y-2">
           <div className="flex items-center justify-between gap-3">
-            <h3 className="text-sm font-semibold text-stone-900">Recent redemptions</h3>
+            <h3 className="text-sm font-semibold text-stone-900">{t('rewards.coupon.recentRedemptions')}</h3>
             <button
               type="button"
               onClick={() => void loadCouponState()}
               disabled={loading}
               className="text-xs font-medium text-stone-500 transition-colors hover:text-stone-700 disabled:opacity-50">
-              Refresh
+              {t('common.refresh')}
             </button>
           </div>
 
           {loading && redeemedCoupons.length === 0 ? (
-            <p className="text-sm text-stone-500">Loading reward history…</p>
+            <p className="text-sm text-stone-500">{t('rewards.coupon.loadingHistory')}</p>
           ) : null}
 
           {redeemedCoupons.length === 0 && !loading && !loadError ? (

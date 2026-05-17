@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { useT } from '../../../../lib/i18n/I18nContext';
 import { type CreditBalance } from '../../../../services/api/creditsApi';
 
 interface PayAsYouGoCardProps {
@@ -28,6 +29,8 @@ const PayAsYouGoCard = ({
   const [customTopUpAmount, setCustomTopUpAmount] = useState('');
   const customTopUpAmountValid = Number(customTopUpAmount) > 0;
 
+  const { t } = useT();
+
   const handleCustomTopUp = () => {
     if (!customTopUpAmountValid || isToppingUp) return;
     onTopUp(Number(customTopUpAmount));
@@ -37,28 +40,27 @@ const PayAsYouGoCard = ({
     <>
       <div className="rounded-lg bg-white p-6 shadow-[0_24px_70px_rgba(15,23,42,0.06)] ring-1 ring-stone-950/5">
         <h3 className="font-headline text-xl font-bold tracking-tight text-stone-950">
-          Your Credit Balance
+          {t('settings.billing.payg.yourCreditBalance')}
         </h3>
         <p className="mt-1 text-sm text-stone-500">
-          You can top up your credits if you ever exhaust your monthly budget or hit rate limits.
-          Credits are consumed after any included subscription budget is exhausted.
+          {t('settings.billing.payg.topUpDescription')}
         </p>
         {creditBalance ? (
           <div className="grid mt-4 gap-3 sm:grid-cols-3">
             <div>
-              <p className="text-sm font-semibold text-stone-400">Available</p>
+              <p className="text-sm font-semibold text-stone-400">{t('settings.billing.payg.available')}</p>
               <p className="mt-2 text-2xl font-bold tracking-tight text-stone-600">
                 ${availableCredits.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-stone-400">Promotional Credits</p>
+              <p className="text-sm font-semibold text-stone-400">{t('settings.billing.payg.promotionalCredits')}</p>
               <p className="mt-2 text-xl font-bold tracking-tight text-stone-600">
                 ${promoCredits.toFixed(2)}
               </p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-stone-400">Top-up Balance</p>
+              <p className="text-sm font-semibold text-stone-400">{t('settings.billing.payg.topUpBalance')}</p>
               <p className="mt-2 text-xl font-bold tracking-tight text-stone-600">
                 ${teamTopupCredits.toFixed(2)}
               </p>
@@ -71,15 +73,15 @@ const PayAsYouGoCard = ({
             ))}
           </div>
         ) : (
-          <p className="mt-5 text-sm text-stone-500">Unable to load balance.</p>
+          <p className="mt-5 text-sm text-stone-500">{t('settings.billing.payg.unableToLoadBalance')}</p>
         )}
       </div>
       <div className="rounded-lg bg-white p-6 shadow-[0_24px_70px_rgba(15,23,42,0.06)] ring-1 ring-stone-950/5">
         <h3 className="font-headline text-xl font-bold tracking-tight text-stone-950">
-          Choose a Top-up Amount
+          {t('settings.billing.payg.chooseTopUpAmount')}
         </h3>
         <p className="mt-1 text-sm text-stone-500">
-          Choose one of the preset amounts above or enter your own charge amount.
+          {t('settings.billing.payg.choosePresetOrCustom')}
         </p>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -90,9 +92,9 @@ const PayAsYouGoCard = ({
               disabled={isToppingUp}
               className="group rounded-2xl border border-primary-200/50 bg-primary-50/50 px-4 py-5 text-center transition-all hover:border-primary-200 disabled:cursor-not-allowed disabled:opacity-50">
               <div className="text-2xl font-bold tracking-tight text-primary-600">
-                {isToppingUp ? 'Opening…' : `$${amount.toFixed(2)}`}
+                {isToppingUp ? t('settings.billing.payg.opening') : `$${amount.toFixed(2)}`}
               </div>
-              <div className="mt-1 text-[11px] font-semibold text-stone-400">Top Up Credits</div>
+              <div className="mt-1 text-[11px] font-semibold text-stone-400">{t('settings.billing.payg.topUpCredits')}</div>
             </button>
           ))}
         </div>
@@ -103,7 +105,7 @@ const PayAsYouGoCard = ({
               <label
                 htmlFor="billing-custom-top-up"
                 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-stone-400">
-                Custom amount
+                {t('settings.billing.payg.customAmount')}
               </label>
               <div className="mt-2 flex items-center rounded-2xl bg-white px-4 ring-1 ring-stone-200 focus-within:ring-2 focus-within:ring-primary-500/20">
                 <span className="text-sm font-semibold text-stone-500">$</span>
@@ -118,19 +120,19 @@ const PayAsYouGoCard = ({
                   onKeyDown={e => {
                     if (e.key === 'Enter') handleCustomTopUp();
                   }}
-                  placeholder="Enter amount"
+                  placeholder={t('settings.billing.payg.enterAmount')}
                   className="w-full border-0 bg-transparent px-3 py-3 text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-0"
                 />
               </div>
               <p className="mt-2 text-xs text-stone-500">
-                Choose one of the preset amounts above or enter your own charge amount.
+                {t('settings.billing.payg.choosePresetOrCustom')}
               </p>
             </div>
             <button
               onClick={handleCustomTopUp}
               disabled={!customTopUpAmountValid || isToppingUp}
               className="rounded-2xl bg-stone-950 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-primary-600 disabled:cursor-not-allowed disabled:opacity-50 lg:self-end">
-              {isToppingUp ? 'Opening…' : 'Charge custom amount'}
+              {isToppingUp ? t('settings.billing.payg.opening') : t('settings.billing.payg.chargeCustomAmount')}
             </button>
           </div>
         </div>

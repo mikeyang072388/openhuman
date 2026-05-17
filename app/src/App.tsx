@@ -101,6 +101,14 @@ function AppShell() {
   const onboardingPending =
     !!snapshot.sessionToken && (DEV_FORCE_ONBOARDING || !snapshot.onboardingCompleted);
 
+  const locale = useAppSelector(state => state.locale.current);
+
+  // Keep <html lang> in sync with the current locale so assistive tech and
+  // browser translation prompts match the selected language.
+  useEffect(() => {
+    document.documentElement.lang = locale === 'zh-CN' ? 'zh-CN' : locale === 'id' ? 'id' : 'en';
+  }, [locale]);
+
   // Onboarding gate: while `onboarding_completed=false`, force any non-
   // onboarding route back to `/onboarding`. Once completed, bounce the
   // user off `/onboarding` so they don't get stuck on the stepper.

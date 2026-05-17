@@ -10,6 +10,8 @@
 import { useMemo } from 'react';
 import debug from 'debug';
 
+import { useT } from '../../lib/i18n/I18nContext';
+
 const log = debug('skills:resource-tree');
 
 interface Props {
@@ -24,18 +26,18 @@ interface ResourceGroup {
   items: string[];
 }
 
-const KNOWN_GROUPS: Array<{ prefix: string; label: string; key: string }> = [
-  { prefix: 'scripts/', label: 'Scripts', key: 'scripts' },
-  { prefix: 'references/', label: 'References', key: 'references' },
-  { prefix: 'assets/', label: 'Assets', key: 'assets' },
+const KNOWN_GROUPS: Array<{ prefix: string; tKey: string; key: string }> = [
+  { prefix: 'scripts/', tKey: 'skills.resources.scripts', key: 'scripts' },
+  { prefix: 'references/', tKey: 'skills.resources.references', key: 'references' },
+  { prefix: 'assets/', tKey: 'skills.resources.assets', key: 'assets' },
 ];
 
 function groupResources(resources: string[]): ResourceGroup[] {
   const buckets = new Map<string, ResourceGroup>();
   for (const known of KNOWN_GROUPS) {
-    buckets.set(known.key, { label: known.label, key: known.key, items: [] });
+    buckets.set(known.key, { label: known.tKey, key: known.key, items: [] });
   }
-  const other: ResourceGroup = { label: 'Other', key: 'other', items: [] };
+  const other: ResourceGroup = { label: 'skills.resources.other', key: 'other', items: [] };
 
   for (const resource of resources) {
     let matched = false;
@@ -70,10 +72,11 @@ function groupResources(resources: string[]): ResourceGroup[] {
 }
 
 export default function SkillResourceTree({ resources, selectedPath, onSelect }: Props) {
+  const { t } = useT();
   const groups = useMemo(() => groupResources(resources), [resources]);
 
   if (groups.length === 0) {
-    return <p className="text-xs text-stone-400 italic">No bundled resources.</p>;
+    return <p className="text-xs text-stone-400 italic">{t('skills.resources.noResources')}</p>;
   }
 
   return (
@@ -84,7 +87,7 @@ export default function SkillResourceTree({ resources, selectedPath, onSelect }:
           className="rounded-xl border border-stone-200 bg-stone-50/50 overflow-hidden">
           <div className="flex items-center justify-between border-b border-stone-200 bg-stone-50 px-3 py-1.5">
             <h4 className="text-[11px] font-semibold uppercase tracking-wide text-stone-600">
-              {group.label}
+              {t(group.label)}
             </h4>
             <span className="text-[10px] text-stone-400 font-mono">{group.items.length}</span>
           </div>

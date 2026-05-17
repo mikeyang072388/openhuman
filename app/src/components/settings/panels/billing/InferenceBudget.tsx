@@ -1,3 +1,4 @@
+import { useT } from '../../../../lib/i18n/I18nContext';
 import type { TeamUsage } from '../../../../services/api/creditsApi';
 
 interface InferenceBudgetProps {
@@ -5,16 +6,20 @@ interface InferenceBudgetProps {
   isLoadingCredits: boolean;
 }
 
-const InferenceBudget = ({ teamUsage, isLoadingCredits }: InferenceBudgetProps) => (
+const InferenceBudget = ({ teamUsage, isLoadingCredits }: InferenceBudgetProps) => {
+  const { t } = useT();
+  return (
   <div className="rounded-2xl border border-stone-200 bg-white p-3">
     <div className="flex items-center justify-between mb-2">
-      <h3 className="text-sm font-semibold text-stone-900">Inference Budget</h3>
-      {isLoadingCredits && <span className="text-[10px] text-stone-500">Loading…</span>}
+      <h3 className="text-sm font-semibold text-stone-900">{t('settings.billing.budget.inferenceBudget')}</h3>
+      {isLoadingCredits && <span className="text-[10px] text-stone-500">{t('settings.billing.budget.loading')}</span>}
       {teamUsage && !isLoadingCredits && (
         <span className="text-xs text-stone-400">
           {teamUsage.cycleBudgetUsd > 0
-            ? `$${(teamUsage.remainingUsd ?? 0).toFixed(2)} / $${(teamUsage.cycleBudgetUsd ?? 0).toFixed(2)} remaining`
-            : 'No recurring plan budget'}
+            ? t('settings.billing.budget.remainingBudget')
+                .replace('{remaining}', `$${(teamUsage.remainingUsd ?? 0).toFixed(2)}`)
+                .replace('{total}', `$${(teamUsage.cycleBudgetUsd ?? 0).toFixed(2)}`)
+            : t('settings.billing.budget.noRecurringBudget')}
         </span>
       )}
     </div>
@@ -41,35 +46,35 @@ const InferenceBudget = ({ teamUsage, isLoadingCredits }: InferenceBudgetProps) 
           <div className="mt-1 flex items-center justify-between">
             {((teamUsage.cycleLimit5hr ?? 0) > 0 || (teamUsage.fiveHourCapUsd ?? 0) > 0) && (
               <span className="text-[11px] text-stone-500">
-                10-hour cap: ${(teamUsage.cycleLimit5hr ?? 0).toFixed(2)} / $
-                {(teamUsage.fiveHourCapUsd ?? 0).toFixed(2)}
+                {t('settings.billing.budget.hourCap')
+                  .replace('{current}', `$${(teamUsage.cycleLimit5hr ?? 0).toFixed(2)}`)
+                  .replace('{total}', `$${(teamUsage.fiveHourCapUsd ?? 0).toFixed(2)}`)}
               </span>
             )}
             <span className="text-[11px] text-stone-500 ml-auto">
-              Cycle ends {new Date(teamUsage.cycleEndsAt).toLocaleDateString('en-US')}
+              {t('settings.billing.budget.cycleEnds')} {new Date(teamUsage.cycleEndsAt).toLocaleDateString('en-US')}
             </span>
           </div>
           {teamUsage.remainingUsd <= 0 && (
             <p className="text-[11px] text-coral-400 mt-1.5">
-              Included subscription usage is exhausted. Top up credits to continue using AI features
-              without waiting for the next cycle.
+              {t('settings.billing.budget.exhaustedMessage')}
             </p>
           )}
         </>
       ) : (
         <div className="rounded-xl border border-stone-200 bg-stone-50 px-3 py-2.5">
           <p className="text-[11px] text-stone-600">
-            Your current plan does not include a recurring weekly inference budget. Usage is paid
-            from available credits instead.
+            {t('settings.billing.budget.noBudgetMessage')}
           </p>
         </div>
       )
     ) : isLoadingCredits ? (
       <div className="h-1.5 w-full rounded-full bg-stone-200 animate-pulse" />
     ) : (
-      <p className="text-xs text-stone-500">Unable to load usage data</p>
+      <p className="text-xs text-stone-500">{t('settings.billing.budget.unableToLoadUsage')}</p>
     )}
   </div>
-);
+  );
+};
 
 export default InferenceBudget;
