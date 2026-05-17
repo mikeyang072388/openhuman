@@ -648,7 +648,7 @@ export default function ComposioConnectModal({
               <div className="flex items-center gap-2 text-sm text-sage-700">
                 <div className="w-2 h-2 rounded-full bg-sage-500" />
                 <div>
-                  {toolkit.name} is connected. &nbsp;
+                  {t('composio.modal.connected').replace('{name}', toolkit.name)}{' '}&nbsp;
                   {activeConnection && deriveConnectionLabel(activeConnection) && (
                     <span className="text-[11px] text-stone-400 font-mono">
                       ({deriveConnectionLabel(activeConnection)})
@@ -674,24 +674,24 @@ export default function ComposioConnectModal({
                   type="button"
                   onClick={() => void handleDisconnect()}
                   className="w-full rounded-xl border border-coral-200 bg-coral-50 text-coral-700 text-sm font-medium py-2.5 hover:bg-coral-100 transition-colors">
-                  Disconnect
+                  {t('skills.disconnect')}
                 </button>
                 <button
                   type="button"
                   onClick={onClose}
                   className="w-full rounded-xl bg-primary-500 text-white text-sm font-medium py-2.5 hover:bg-primary-600 transition-colors">
-                  Close
+                  {t('common.close')}
                 </button>
               </div>
             </>
           )}
 
-          {phase === 'disconnecting' && <p className="text-sm text-stone-500">Disconnecting…</p>}
+          {phase === 'disconnecting' && <p className="text-sm text-stone-500">{t('composio.modal.disconnecting')}</p>}
 
           {phase === 'error' && (
             <>
               <div className="rounded-xl border border-coral-200 bg-coral-50 p-3">
-                <p className="text-sm text-coral-700">{error ?? 'Something went wrong.'}</p>
+                <p className="text-sm text-coral-700">{error ?? t('composio.error.somethingWentWrong')}</p>
               </div>
               <button
                 type="button"
@@ -700,7 +700,7 @@ export default function ComposioConnectModal({
                   setError(null);
                 }}
                 className="w-full rounded-xl border border-stone-200 bg-white text-stone-700 text-sm font-medium py-2 hover:bg-stone-50 transition-colors">
-                Dismiss
+                {t('common.dismiss')}
               </button>
             </>
           )}
@@ -714,21 +714,21 @@ export default function ComposioConnectModal({
 
 // ── Scope toggles ───────────────────────────────────────────────────
 
-const SCOPE_ROWS: Array<{ key: keyof ComposioUserScopePref; label: string; hint: string }> = [
+const SCOPE_ROWS: Array<{ key: keyof ComposioUserScopePref; tKey: string; hintKey: string }> = [
   {
     key: 'read',
-    label: 'Read',
-    hint: 'Allow listing, fetching, searching (e.g. read emails / pages).',
+    tKey: 'composio.scope.read',
+    hintKey: 'composio.scope.readHint',
   },
   {
     key: 'write',
-    label: 'Write',
-    hint: 'Allow sending, creating, updating (e.g. send emails, create pages).',
+    tKey: 'composio.scope.write',
+    hintKey: 'composio.scope.writeHint',
   },
   {
     key: 'admin',
-    label: 'Admin',
-    hint: 'Allow destructive or permission-changing actions (delete, share, etc.).',
+    tKey: 'composio.scope.admin',
+    hintKey: 'composio.scope.adminHint',
   },
 ];
 
@@ -740,6 +740,7 @@ interface ScopeTogglesProps {
 }
 
 function ScopeToggles({ scopes, savingScope, onToggle, error }: ScopeTogglesProps) {
+  const { t } = useT();
   // Render skeleton placeholders while we wait on the initial load so
   // the modal layout doesn't jump when the pref arrives.
   const loading = scopes === null;
@@ -748,9 +749,9 @@ function ScopeToggles({ scopes, savingScope, onToggle, error }: ScopeTogglesProp
     <div className="border-t border-stone-100 pt-3 mt-1 space-y-2">
       <div className="flex items-baseline justify-between">
         <h3 className="text-xs font-semibold text-stone-700 uppercase tracking-wide">
-          Permissions
+          {t('composio.scope.permissions')}
         </h3>
-        <p className="text-[10px] text-stone-400">Read + Write enabled by default</p>
+        <p className="text-[10px] text-stone-400">{t('composio.scope.defaultHint')}</p>
       </div>
       <ul className="space-y-1.5">
         {SCOPE_ROWS.map(row => {
@@ -761,14 +762,18 @@ function ScopeToggles({ scopes, savingScope, onToggle, error }: ScopeTogglesProp
               key={row.key}
               className="flex items-start justify-between gap-3 rounded-lg px-2 py-1.5 hover:bg-stone-50">
               <div className="min-w-0 flex-1">
-                <span className="text-sm font-medium text-stone-900">{row.label}</span>
-                <p className="text-[11px] text-stone-400 leading-snug">{row.hint}</p>
+                <span className="text-sm font-medium text-stone-900">{t(row.tKey)}</span>
+                <p className="text-[11px] text-stone-400 leading-snug">{t(row.hintKey)}</p>
               </div>
               <button
                 type="button"
                 role="switch"
                 aria-checked={enabled}
-                aria-label={`${enabled ? 'Disable' : 'Enable'} ${row.label} scope`}
+                aria-label={
+                  enabled
+                    ? t('composio.scope.disableAria').replace('{scope}', t(row.tKey))
+                    : t('composio.scope.enableAria').replace('{scope}', t(row.tKey))
+                }
                 disabled={loading || savingScope !== null}
                 onClick={() => onToggle(row.key)}
                 className={`relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50 ${
@@ -811,12 +816,13 @@ function AtlassianSubdomainInput({
   onChange,
   autoFocus,
 }: AtlassianSubdomainInputProps) {
+  const { t } = useT();
   return (
     <div className="space-y-1.5">
       <label
         htmlFor="atlassian-subdomain-input"
         className="block text-xs font-medium text-stone-700">
-        Atlassian subdomain
+        {t('composio.modal.atlassianSubdomain')}
         <span className="ml-1 text-coral-500">*</span>
       </label>
       <div className="flex items-center rounded-xl border border-stone-200 bg-white focus-within:border-primary-400 focus-within:ring-2 focus-within:ring-primary-100 overflow-hidden">
@@ -826,7 +832,7 @@ function AtlassianSubdomainInput({
           value={value}
           autoFocus={autoFocus}
           onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
-          placeholder="your-subdomain"
+          placeholder={t('composio.modal.atlassianPlaceholder')}
           aria-describedby="atlassian-subdomain-hint"
           aria-invalid={!!error}
           className="flex-1 min-w-0 px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 bg-transparent focus:outline-none"
@@ -844,8 +850,7 @@ function AtlassianSubdomainInput({
         </p>
       ) : (
         <p id="atlassian-subdomain-hint" className="text-[11px] leading-relaxed text-stone-400">
-          Enter the short subdomain only — e.g. <span className="font-mono">acme</span> for{' '}
-          <span className="font-mono">acme.atlassian.net</span>. Do not paste the full URL.
+          {t('composio.modal.atlassianHint')}
         </p>
       )}
     </div>

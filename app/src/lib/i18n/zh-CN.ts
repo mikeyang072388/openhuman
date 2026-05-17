@@ -1604,6 +1604,179 @@ const zhCN: TranslationMap = {
 
   // Skills: Search
   'skills.searchSkills': '搜索技能...',
+
+  // Webhooks Debug Panel
+  'webhooks.debug.loadFailed': '加载 Webhook 调试数据失败',
+  'webhooks.debug.clearConfirm': '确定要清除所有已捕获的 Webhook 调试日志吗？',
+  'webhooks.debug.clearFailed': '清除 Webhook 日志失败',
+  'webhooks.debug.clearing': '清除中...',
+  'webhooks.debug.clearLogs': '清除日志',
+  'webhooks.debug.registered': '已注册',
+  'webhooks.debug.captured': '已捕获',
+  'webhooks.debug.live': '在线',
+  'webhooks.debug.disconnected': '已断开',
+  'webhooks.debug.lastEvent': '最近事件：',
+  'webhooks.debug.registeredWebhooks': '已注册的 Webhook',
+  'webhooks.debug.noActiveRegistrations': '暂无活跃注册。',
+  'webhooks.debug.resolvingBackendUrl': '正在解析后端 URL…',
+  'webhooks.debug.capturedRequests': '已捕获的请求',
+  'webhooks.debug.noRequestsCaptured': '尚未捕获任何 Webhook 请求。',
+  'webhooks.debug.unrouted': '未路由',
+  'webhooks.debug.pending': '等待中',
+  'webhooks.debug.requestHeaders': '请求头',
+  'webhooks.debug.queryParams': '查询参数',
+  'webhooks.debug.requestBody': '请求体',
+  'webhooks.debug.emptyPayload': '[空]',
+  'webhooks.debug.responseHeaders': '响应头',
+  'webhooks.debug.responseBody': '响应体',
+  'webhooks.debug.rawPayload': '原始负载',
+
+  // Skills Resources
+  'skills.resources.scripts': '脚本',
+  'skills.resources.references': '参考资料',
+  'skills.resources.assets': '资源文件',
+  'skills.resources.other': '其他',
+  'skills.resources.noResources': '没有捆绑资源。',
+  'skills.resources.loadingPreview': '正在加载预览…',
+  'skills.resources.previewFailed': '预览失败',
+
+  // Autocomplete Debug
+  'autocomplete.debug.runtime': '运行时',
+  'autocomplete.debug.platformSupported': '平台支持',
+  'autocomplete.debug.enabled': '已启用',
+  'autocomplete.debug.running': '运行中',
+  'autocomplete.debug.phase': '阶段',
+  'autocomplete.debug.debounce': '防抖延迟',
+  'autocomplete.debug.model': '模型',
+  'autocomplete.debug.app': '应用',
+  'autocomplete.debug.lastError': '最近错误',
+  'autocomplete.debug.currentSuggestion': '当前建议',
+  'autocomplete.debug.unknown': '未知',
+  'autocomplete.debug.notAvailable': '不适用',
+  'autocomplete.debug.none': '无',
+  'autocomplete.debug.refreshing': '刷新中…',
+  'autocomplete.debug.refreshStatus': '刷新状态',
+  'autocomplete.debug.test': '测试',
+  'autocomplete.debug.contextOverride': '上下文覆盖（可选）',
+  'autocomplete.debug.getSuggestion': '获取建议',
+  'autocomplete.debug.acceptSuggestion': '采纳建议',
+  'autocomplete.debug.debugFocus': '调试焦点',
+  'autocomplete.debug.liveLogs': '实时日志',
+  'autocomplete.debug.noLogs': '暂无日志。',
+
+  // Autocomplete Settings (additional)
+  'autocomplete.settings.debounceMs': '防抖延迟（毫秒）',
+  'autocomplete.settings.maxChars': '最大字符数',
+  'autocomplete.settings.overlayTtlMs': '弹窗显示时长（毫秒）',
+  'autocomplete.settings.styleInstructions': '风格指令',
+  'autocomplete.settings.styleExamples': '风格示例（每行一个）',
+
+  // Autocomplete History
+  'autocomplete.history.title': '个性化历史记录',
+  'autocomplete.history.clearing': '清除中…',
+  'autocomplete.history.clearHistory': '清除历史记录',
+  'autocomplete.history.loading': '加载中…',
+  'autocomplete.history.empty':
+    '暂无已采纳的补全。用 Tab 键采纳建议即可开始个性化训练。',
+  'autocomplete.history.singular':
+    '已存储 {n} 条已采纳的补全 — 用于个性化未来的建议。',
+  'autocomplete.history.plural':
+    '已存储 {n} 条已采纳的补全 — 用于个性化未来的建议。',
+
+  // Team Management (additional)
+  'team.manageTeamName': '管理 {name}',
+  'team.planAndCreated': '{plan} 套餐 • 创建于 {date}',
+  'team.manageMembersDesc': '管理团队成员与角色',
+  'team.manageInvitesDesc': '生成并管理邀请码',
+  'team.settings': '团队设置',
+  'team.editNameDesc': '编辑团队名称与设置',
+  'team.deleteTeam': '删除团队',
+  'team.deleteTeamDesc': '永久删除此团队',
+  'team.editSettings': '编辑团队设置',
+  'team.enterTeamName': '输入团队名称',
+  'team.saving': '保存中...',
+  'team.saveChanges': '保存更改',
+  'team.confirmDelete': '确定要删除 {name} 吗？',
+  'team.deleteWarning':
+    '此操作不可撤销。所有团队数据将被永久删除。',
+  'team.deleting': '删除中...',
+  'team.failedToUpdate': '更新团队失败',
+  'team.failedToDelete': '删除团队失败',
+
+  // Composio Error Messages
+  'composio.error.missingRequiredField':
+    '缺少必填字段。请提供缺失的信息后重试。',
+  'composio.error.somethingWentWrong': '出了点问题。',
+  'composio.error.authFailed': '授权失败。',
+  'composio.error.oauthTimeout':
+    '等待 OAuth 完成超时。请重试，或检查浏览器是否完成了授权流程。',
+  'composio.error.connectionFailed': '连接失败（状态：{status}）。',
+  'composio.error.wabaIdRequired':
+    '请输入你的 WhatsApp Business Account ID (WABA ID) 以继续。',
+  'composio.error.atlassianSubdomainRequired':
+    '请输入你的 Atlassian 子域名以继续。',
+  'composio.error.invalidSubdomain':
+    '请仅输入简短子域名（例如 "acme"），而非完整 URL。只能包含字母、数字和连字符。',
+  'composio.error.needsAdditionalConfig':
+    '此连接需要额外配置。请联系支持人员获取帮助。',
+  'composio.error.couldNotLoadScopes': '无法加载权限范围偏好：{msg}',
+  'composio.error.couldNotSaveScope': '无法保存 {key} 权限范围：{msg}',
+  'composio.error.disconnectFailed': '断开连接失败：{msg}',
+
+  // Composio Modal
+  'composio.modal.manageToolkit': '管理 {name}',
+  'composio.modal.connectToolkit': '连接 {name}',
+  'composio.modal.connectDescription':
+    '连接你的 {name} 账户。我们将打开浏览器窗口，你在其中授权访问，应用将自动检测到连接。',
+  'composio.modal.permissionInfo':
+    '{name} 可提供 {permissionLabel}。连接后，OpenHuman 的智能体权限可通过下方的读取、写入和管理开关来控制。',
+  'composio.modal.wabaIdLabel': 'WhatsApp Business Account ID (WABA ID)',
+  'composio.modal.wabaIdPlaceholder': '例如 123456789012345',
+  'composio.modal.wabaIdHint':
+    '通过 GET /me/businesses 查找，然后使用 GET /{business_id}/owned_whatsapp_business_accounts，配合你的 Meta 访问令牌。',
+  'composio.modal.connectButton': '连接 {name}',
+  'composio.modal.needsSubdomainDesc':
+    '要连接 {name}，请输入你的 Atlassian 子域名（例如 acme 对应 acme.atlassian.net）并重试。',
+  'composio.modal.retryConnection': '重试连接',
+  'composio.modal.requestingUrl': '正在请求连接 URL…',
+  'composio.modal.waitingOAuth': '等待 {name} OAuth 完成…',
+  'composio.modal.reopenBrowser': '重新打开浏览器',
+  'composio.modal.completeSignIn':
+    '在浏览器中完成登录。连接激活后，此窗口将自动更新。',
+  'composio.modal.connected': '{name} 已连接。',
+  'composio.modal.disconnecting': '断开中…',
+  'composio.modal.atlassianSubdomain': 'Atlassian 子域名',
+  'composio.modal.atlassianPlaceholder': '你的子域名',
+  'composio.modal.atlassianHint':
+    '请仅输入简短子域名 — 例如 acme 对应 acme.atlassian.net。不要粘贴完整的 URL。',
+
+  // Composio Scope Toggles
+  'composio.scope.permissions': '权限',
+  'composio.scope.defaultHint': '默认启用读取 + 写入',
+  'composio.scope.read': '读取',
+  'composio.scope.readHint': '允许列出、获取、搜索（例如阅读邮件/文档页面）。',
+  'composio.scope.write': '写入',
+  'composio.scope.writeHint': '允许发送、创建、更新（例如发送邮件、创建文档页面）。',
+  'composio.scope.admin': '管理',
+  'composio.scope.adminHint': '允许执行破坏性或修改权限的操作（删除、分享等）。',
+  'composio.scope.disableAria': '禁用 {scope} 权限',
+  'composio.scope.enableAria': '启用 {scope} 权限',
+
+  // Prompt Injection Guard
+  'promptInjection.override.ignorePrevious':
+    '检测到尝试覆盖现有指令的行为。',
+  'promptInjection.override.roleHijack': '检测到角色或策略劫持尝试。',
+  'promptInjection.exfiltrate.systemPrompt':
+    '检测到要求泄露隐藏提示/指令的请求。',
+  'promptInjection.exfiltrate.secrets': '检测到要求获取敏感凭据的请求。',
+  'promptInjection.override.obfuscatedInstruction':
+    '检测到混淆的指令覆盖短语。',
+  'promptInjection.exfiltrate.intent': '检测到以外泄为目的的提示意图。',
+  'promptInjection.obfuscation.base64Like': '包含类似 Base64 混淆的内容。',
+  'promptInjection.blockMessage':
+    '此消息看起来像是提示注入攻击，很可能被服务端安全检查拦截。',
+  'promptInjection.reviewMessage':
+    '此消息可能不安全，可能会被服务端安全检查拒绝。请重新措辞。',
 };
 
 export default zhCN;

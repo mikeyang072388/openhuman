@@ -597,12 +597,12 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                       );
                     }}
                     className="w-full rounded-md border border-stone-200 bg-white px-3 py-2 text-sm text-stone-900 focus:outline-none focus:ring-1 focus:ring-primary-400">
-                    <option value="tiny">Tiny (39 MB, fastest)</option>
-                    <option value="base">Base (74 MB)</option>
-                    <option value="small">Small (244 MB)</option>
-                    <option value="medium">Medium (769 MB, recommended)</option>
+                    <option value="tiny">{t('voice.whisperModelTiny')}</option>
+                    <option value="base">{t('voice.whisperModelBase')}</option>
+                    <option value="small">{t('voice.whisperModelSmall')}</option>
+                    <option value="medium">{t('voice.whisperModelMedium')}</option>
                     <option value="whisper-large-v3-turbo">
-                      Large v3 Turbo (1.5 GB, best accuracy)
+                      {t('voice.whisperModelLarge')}
                     </option>
                   </select>
                 </label>
@@ -779,7 +779,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                       onClick={onMascotVoiceSavePaste}
                       disabled={mascotVoiceDraft.trim() === (storedMascotVoiceId ?? '').trim()}
                       className="px-3 py-1.5 text-xs rounded-md bg-primary-600 hover:bg-primary-700 disabled:opacity-60 text-white">
-                      Save
+                      {t('common.save')}
                     </button>
                   </div>
                   <p className="text-[11px] text-stone-500">
@@ -795,7 +795,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                   onClick={() => void onMascotVoicePreview()}
                   disabled={isPreviewingMascotVoice}
                   className="px-3 py-1.5 text-xs rounded-md bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white">
-                  {isPreviewingMascotVoice ? 'Previewing…' : 'Preview voice'}
+                  {isPreviewingMascotVoice ? t('voice.previewing') : t('voice.previewVoice')}
                 </button>
                 <button
                   type="button"
@@ -804,17 +804,17 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                   disabled={storedMascotVoiceId == null}
                   title={
                     storedMascotVoiceId == null
-                      ? 'Already using the shipped default voice'
-                      : 'Restore the shipped default mascot voice'
+                      ? t('voice.alreadyDefault')
+                      : t('voice.restoreDefault')
                   }
                   className="px-3 py-1.5 text-xs rounded-md border border-stone-300 hover:border-stone-400 disabled:opacity-60 text-stone-700">
-                  Reset to default
+                  {t('voice.resetToDefault')}
                 </button>
                 <span
                   data-testid="mascot-voice-current"
                   className="ml-1 text-[11px] text-stone-500 truncate max-w-[18rem]"
                   title={effectiveMascotVoiceId}>
-                  current: <code className="font-mono">{effectiveMascotVoiceId}</code>
+                  {t('voice.currentVoice')} <code className="font-mono">{effectiveMascotVoiceId}</code>
                 </span>
               </div>
 
@@ -822,8 +822,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
                 <div
                   data-testid="mascot-voice-preview-error"
                   className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
-                  Voice preview failed: {mascotVoicePreviewError}. Reply speech will fall back to
-                  the default voice on the next reply.
+                  {t('voice.previewFailedFallback').replace('{error}', mascotVoicePreviewError)}
                 </div>
               )}
             </div>
@@ -958,8 +957,7 @@ const VoicePanel = ({ embedded = false }: VoicePanelProps = {}) => {
 
             {disabled && (
               <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-                Voice dictation is disabled until the local STT model is downloaded. Use the{' '}
-                <strong>Voice Providers</strong> section above to install Whisper.
+                {t('voice.sttDisabledMessage')}
               </div>
             )}
 

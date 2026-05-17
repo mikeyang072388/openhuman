@@ -1673,6 +1673,181 @@ const en: TranslationMap = {
 
   // Skills: Search
   'skills.searchSkills': 'Search skills...',
+
+  // Webhooks Debug Panel
+  'webhooks.debug.loadFailed': 'Failed to load webhook debug data',
+  'webhooks.debug.clearConfirm': 'Clear all captured webhook debug logs?',
+  'webhooks.debug.clearFailed': 'Failed to clear webhook logs',
+  'webhooks.debug.clearing': 'Clearing...',
+  'webhooks.debug.clearLogs': 'Clear Logs',
+  'webhooks.debug.registered': 'registered',
+  'webhooks.debug.captured': 'captured',
+  'webhooks.debug.live': 'live',
+  'webhooks.debug.disconnected': 'disconnected',
+  'webhooks.debug.lastEvent': 'Last event:',
+  'webhooks.debug.registeredWebhooks': 'Registered Webhooks',
+  'webhooks.debug.noActiveRegistrations': 'No active registrations.',
+  'webhooks.debug.resolvingBackendUrl': 'Resolving backend URL…',
+  'webhooks.debug.capturedRequests': 'Captured Requests',
+  'webhooks.debug.noRequestsCaptured': 'No webhook requests captured yet.',
+  'webhooks.debug.unrouted': 'unrouted',
+  'webhooks.debug.pending': 'pending',
+  'webhooks.debug.requestHeaders': 'Request Headers',
+  'webhooks.debug.queryParams': 'Query Params',
+  'webhooks.debug.requestBody': 'Request Body',
+  'webhooks.debug.emptyPayload': '[empty]',
+  'webhooks.debug.responseHeaders': 'Response Headers',
+  'webhooks.debug.responseBody': 'Response Body',
+  'webhooks.debug.rawPayload': 'Raw Payload',
+
+  // Skills Resources
+  'skills.resources.scripts': 'Scripts',
+  'skills.resources.references': 'References',
+  'skills.resources.assets': 'Assets',
+  'skills.resources.other': 'Other',
+  'skills.resources.noResources': 'No bundled resources.',
+  'skills.resources.loadingPreview': 'Loading preview…',
+  'skills.resources.previewFailed': 'Preview failed',
+
+  // Autocomplete Debug
+  'autocomplete.debug.runtime': 'Runtime',
+  'autocomplete.debug.platformSupported': 'Platform supported',
+  'autocomplete.debug.enabled': 'Enabled',
+  'autocomplete.debug.running': 'Running',
+  'autocomplete.debug.phase': 'Phase',
+  'autocomplete.debug.debounce': 'Debounce',
+  'autocomplete.debug.model': 'Model',
+  'autocomplete.debug.app': 'App',
+  'autocomplete.debug.lastError': 'Last error',
+  'autocomplete.debug.currentSuggestion': 'Current suggestion',
+  'autocomplete.debug.unknown': 'unknown',
+  'autocomplete.debug.notAvailable': 'n/a',
+  'autocomplete.debug.none': 'none',
+  'autocomplete.debug.refreshing': 'Refreshing…',
+  'autocomplete.debug.refreshStatus': 'Refresh Status',
+  'autocomplete.debug.test': 'Test',
+  'autocomplete.debug.contextOverride': 'Context Override (optional)',
+  'autocomplete.debug.getSuggestion': 'Get Suggestion',
+  'autocomplete.debug.acceptSuggestion': 'Accept Suggestion',
+  'autocomplete.debug.debugFocus': 'Debug Focus',
+  'autocomplete.debug.liveLogs': 'Live Logs',
+  'autocomplete.debug.noLogs': 'No logs yet.',
+
+  // Autocomplete Settings (additional)
+  'autocomplete.settings.debounceMs': 'Debounce (ms)',
+  'autocomplete.settings.maxChars': 'Max Chars',
+  'autocomplete.settings.overlayTtlMs': 'Overlay TTL (ms)',
+  'autocomplete.settings.styleInstructions': 'Style Instructions',
+  'autocomplete.settings.styleExamples': 'Style Examples (one per line)',
+
+  // Autocomplete History
+  'autocomplete.history.title': 'Personalization History',
+  'autocomplete.history.clearing': 'Clearing…',
+  'autocomplete.history.clearHistory': 'Clear History',
+  'autocomplete.history.loading': 'Loading…',
+  'autocomplete.history.empty':
+    'No accepted completions yet. Accept suggestions with Tab to start personalising.',
+  'autocomplete.history.singular':
+    '{n} accepted completion stored — used to personalise future suggestions.',
+  'autocomplete.history.plural':
+    '{n} accepted completions stored — used to personalise future suggestions.',
+
+  // Team Management (additional)
+  'team.manageTeamName': 'Manage {name}',
+  'team.planAndCreated': '{plan} Plan • Created {date}',
+  'team.manageMembersDesc': 'Manage team members and roles',
+  'team.manageInvitesDesc': 'Generate and manage invite codes',
+  'team.settings': 'Team Settings',
+  'team.editNameDesc': 'Edit team name and settings',
+  'team.deleteTeam': 'Delete Team',
+  'team.deleteTeamDesc': 'Permanently delete this team',
+  'team.editSettings': 'Edit Team Settings',
+  'team.enterTeamName': 'Enter team name',
+  'team.saving': 'Saving...',
+  'team.saveChanges': 'Save Changes',
+  'team.confirmDelete': 'Are you sure you want to delete {name}?',
+  'team.deleteWarning':
+    'This action cannot be undone. All team data will be permanently removed.',
+  'team.deleting': 'Deleting...',
+  'team.failedToUpdate': 'Failed to update team',
+  'team.failedToDelete': 'Failed to delete team',
+
+  // Composio Error Messages
+  'composio.error.missingRequiredField':
+    'A required field is missing. Please provide the missing details and try again.',
+  'composio.error.somethingWentWrong': 'Something went wrong.',
+  'composio.error.authFailed': 'Authorization failed.',
+  'composio.error.oauthTimeout':
+    'Timed out waiting for OAuth to complete. Please retry or check that the browser finished the flow.',
+  'composio.error.connectionFailed': 'Connection failed (status: {status}).',
+  'composio.error.wabaIdRequired':
+    'Please enter your WhatsApp Business Account ID (WABA ID) to continue.',
+  'composio.error.atlassianSubdomainRequired':
+    'Please enter your Atlassian subdomain to continue.',
+  'composio.error.invalidSubdomain':
+    'Enter the short subdomain only (e.g. "acme"), not the full URL. It should contain only letters, numbers, and hyphens.',
+  'composio.error.needsAdditionalConfig':
+    'This connection requires additional configuration. Please contact support for assistance.',
+  'composio.error.couldNotLoadScopes': "Couldn't load scope preferences: {msg}",
+  'composio.error.couldNotSaveScope': "Couldn't save {key} scope: {msg}",
+  'composio.error.disconnectFailed': 'Disconnect failed: {msg}',
+
+  // Composio Modal
+  'composio.modal.manageToolkit': 'Manage {name}',
+  'composio.modal.connectToolkit': 'Connect {name}',
+  'composio.modal.connectDescription':
+    "Connect your {name} account. We'll open a browser window, you approve access there, and this app will detect the connection automatically.",
+  'composio.modal.permissionInfo':
+    "{name} can expose {permissionLabel}. After you connect, OpenHuman's own agent permissions are controlled below as read, write, and admin toggles.",
+  'composio.modal.wabaIdLabel': 'WhatsApp Business Account ID (WABA ID)',
+  'composio.modal.wabaIdPlaceholder': 'e.g. 123456789012345',
+  'composio.modal.wabaIdHint':
+    'Find it via GET /me/businesses then GET /{business_id}/owned_whatsapp_business_accounts using your Meta access token.',
+  'composio.modal.connectButton': 'Connect {name}',
+  'composio.modal.needsSubdomainDesc':
+    'To connect {name}, enter your Atlassian subdomain (e.g. acme for acme.atlassian.net) and try again.',
+  'composio.modal.retryConnection': 'Retry connection',
+  'composio.modal.requestingUrl': 'Requesting connect URL…',
+  'composio.modal.waitingOAuth': 'Waiting for {name} OAuth to complete…',
+  'composio.modal.reopenBrowser': 'Reopen browser',
+  'composio.modal.completeSignIn':
+    'Complete the sign-in in your browser. This window will update when the connection is active.',
+  'composio.modal.connected': '{name} is connected.',
+  'composio.modal.disconnecting': 'Disconnecting…',
+  'composio.modal.atlassianSubdomain': 'Atlassian subdomain',
+  'composio.modal.atlassianPlaceholder': 'your-subdomain',
+  'composio.modal.atlassianHint':
+    'Enter the short subdomain only — e.g. acme for acme.atlassian.net. Do not paste the full URL.',
+
+  // Composio Scope Toggles
+  'composio.scope.permissions': 'Permissions',
+  'composio.scope.defaultHint': 'Read + Write enabled by default',
+  'composio.scope.read': 'Read',
+  'composio.scope.readHint': 'Allow listing, fetching, searching (e.g. read emails / pages).',
+  'composio.scope.write': 'Write',
+  'composio.scope.writeHint':
+    'Allow sending, creating, updating (e.g. send emails, create pages).',
+  'composio.scope.admin': 'Admin',
+  'composio.scope.adminHint':
+    'Allow destructive or permission-changing actions (delete, share, etc.).',
+  'composio.scope.disableAria': 'Disable {scope} scope',
+  'composio.scope.enableAria': 'Enable {scope} scope',
+
+  // Prompt Injection Guard
+  'promptInjection.override.ignorePrevious':
+    'Looks like an attempt to override existing instructions.',
+  'promptInjection.override.roleHijack': 'Looks like a role or policy hijack attempt.',
+  'promptInjection.exfiltrate.systemPrompt':
+    'Looks like a request to reveal hidden prompts/instructions.',
+  'promptInjection.exfiltrate.secrets': 'Looks like a request for sensitive credentials.',
+  'promptInjection.override.obfuscatedInstruction':
+    'Detected obfuscated instruction-override phrase.',
+  'promptInjection.exfiltrate.intent': 'Detected exfiltration-focused prompt intent.',
+  'promptInjection.obfuscation.base64Like': 'Contains base64-like obfuscated content.',
+  'promptInjection.blockMessage':
+    'This message looks like a prompt-injection attempt and will likely be blocked by server-side security checks.',
+  'promptInjection.reviewMessage':
+    'This message may be unsafe and could be rejected by server-side security checks. Please rephrase.',
 };
 
 export default en;

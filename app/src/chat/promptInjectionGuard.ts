@@ -24,27 +24,27 @@ const BASE64_RE = /[A-Za-z0-9+/]{24,}={0,2}/;
 const RULES: Rule[] = [
   {
     code: 'override.ignore_previous',
-    message: 'Looks like an attempt to override existing instructions.',
+    message: 'promptInjection.override.ignorePrevious',
     score: 0.44,
     regex:
       /(ignore|disregard|forget|bypass)\s+(all\s+)?(previous|prior|above|system)\s+(instructions|rules|constraints|prompts?)/i,
   },
   {
     code: 'override.role_hijack',
-    message: 'Looks like a role or policy hijack attempt.',
+    message: 'promptInjection.override.roleHijack',
     score: 0.3,
     regex: /(you\s+are\s+now|act\s+as|developer\s+mode|jailbreak|unrestricted\s+mode|dan)/i,
   },
   {
     code: 'exfiltrate.system_prompt',
-    message: 'Looks like a request to reveal hidden prompts/instructions.',
+    message: 'promptInjection.exfiltrate.systemPrompt',
     score: 0.42,
     regex:
       /(reveal|show|print|dump|leak|display)\s+((the|your)\s+)?(system|developer|hidden)\s+(prompt|instructions|rules|message)/i,
   },
   {
     code: 'exfiltrate.secrets',
-    message: 'Looks like a request for sensitive credentials.',
+    message: 'promptInjection.exfiltrate.secrets',
     score: 0.42,
     regex:
       /(api\s*key|secret|token|password|private\s+key|credentials?|session\s+cookie|jwt|bearer)/i,
@@ -111,21 +111,21 @@ export function checkPromptInjection(input: string): PromptInjectionCheck {
     score += 0.46;
     reasons.push({
       code: 'override.obfuscated_instruction',
-      message: 'Detected obfuscated instruction-override phrase.',
+      message: 'promptInjection.override.obfuscatedInstruction',
     });
   }
   if (normalized.hasExfiltrationIntent) {
     score += 0.24;
     reasons.push({
       code: 'exfiltration.intent',
-      message: 'Detected exfiltration-focused prompt intent.',
+      message: 'promptInjection.exfiltrate.intent',
     });
   }
   if (BASE64_RE.test(normalized.lowered)) {
     score += 0.08;
     reasons.push({
       code: 'obfuscation.base64_like',
-      message: 'Contains base64-like obfuscated content.',
+      message: 'promptInjection.obfuscation.base64Like',
     });
   }
 
@@ -148,10 +148,10 @@ export function checkPromptInjection(input: string): PromptInjectionCheck {
 
 export function promptGuardMessage(check: PromptInjectionCheck): string {
   if (check.verdict === 'block') {
-    return 'This message looks like a prompt-injection attempt and will likely be blocked by server-side security checks.';
+    return 'promptInjection.blockMessage';
   }
   if (check.verdict === 'review') {
-    return 'This message may be unsafe and could be rejected by server-side security checks. Please rephrase.';
+    return 'promptInjection.reviewMessage';
   }
   return '';
 }
